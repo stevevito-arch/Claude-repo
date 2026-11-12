@@ -128,7 +128,9 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       (snapshot?.studies ?? []).map((s) => ({
         study: s,
         group: statusGroup(s.status),
-        haystack: [s.id, s.title, s.acronym, s.sponsor, ...s.interventions].join(' ').toLowerCase(),
+        haystack: [s.id, s.title, s.acronym, s.sponsor, ...s.interventions, ...(s.aliases ?? []), ...(s.drugNotes ?? []).map((n) => n.what)]
+          .join(' ')
+          .toLowerCase(),
       })),
     [snapshot],
   )
@@ -197,7 +199,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by drug, sponsor, title, or NCT ID…"
+            placeholder="Search by drug name or code, target, sponsor, or NCT ID…"
             aria-label="Search registered studies"
             className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
             style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)', color: 'var(--text-primary)' }}
@@ -291,6 +293,9 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
 function StudyRow({ study, featured, onOpenFeatured }: { study: RegistryStudy; featured: boolean; onOpenFeatured: () => void }) {
   const group = statusGroup(study.status)
   const end = study.completion ?? study.primaryCompletion
+  // Registry "other names" not already shown in a curated note above.
+  const curatedNames = new Set((study.drugNotes ?? []).flatMap((n) => n.names.map((x) => x.toLowerCase())))
+  const otherNames = (study.aliases ?? []).filter((a) => !curatedNames.has(a.toLowerCase()))
   const meta = [
     study.sponsor,
     study.enrollment != null ? `${study.enrollment.toLocaleString()} ${study.enrollmentActual ? 'enrolled' : 'planned'}` : null,
@@ -348,6 +353,25 @@ function StudyRow({ study, featured, onOpenFeatured }: { study: RegistryStudy; f
         <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           <span style={{ color: 'var(--text-muted)' }}>Intervention: </span>
           {study.interventions.join(', ')}
+        </p>
+      )}
+      {(study.drugNotes ?? []).map((note) => (
+        <p key={note.codes[0]} className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+            {note.codes[0]}
+            {note.names.length > 0 && ` = ${note.names.join(', ')}`}
+          </span>
+          {': '}
+          {note.what}.{' '}
+          <a href={note.source} target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
+            Source
+          </a>
+        </p>
+      ))}
+      {otherNames.length > 0 && (
+        <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <span style={{ color: 'var(--text-muted)' }}>Also listed as: </span>
+          {otherNames.join(', ')}
         </p>
       )}
       {study.whyStopped && group === 'Stopped early' && (

@@ -1,3 +1,11 @@
+// See scripts/drug-aliases.json.
+export interface DrugNote {
+  codes: string[]
+  names: string[]
+  what: string
+  source: string
+}
+
 // One study from public/data/als-registry.json (see scripts/fetch-registry.mjs).
 export interface RegistryStudy {
   id: string
@@ -8,6 +16,10 @@ export interface RegistryStudy {
   type: 'INTERVENTIONAL' | 'OBSERVATIONAL' | 'EXPANDED_ACCESS' | string
   phase: string | null
   interventions: string[]
+  /** Other names for the interventions: the registry's own plus curated ones. */
+  aliases: string[]
+  /** Curated, sourced descriptions of drugs the registry names only by code. */
+  drugNotes: DrugNote[]
   interventionTypes: string[]
   sponsor: string | null
   sponsorClass: string | null

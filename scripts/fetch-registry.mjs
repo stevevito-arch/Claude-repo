@@ -7,14 +7,15 @@
 // Exits non-zero (leaving the existing file untouched) if the API fails, so CI
 // can fall back to the committed snapshot.
 
-import { writeFile, mkdir } from 'node:fs/promises'
+import { readFile, writeFile, mkdir } from 'node:fs/promises'
 
 const API = 'https://clinicaltrials.gov/api/v2/studies'
 const OUT = new URL('../public/data/als-registry.json', import.meta.url)
+const ALIASES = new URL('./drug-aliases.json', import.meta.url)
 
 const FIELDS = [
   'NCTId', 'BriefTitle', 'OfficialTitle', 'Acronym', 'OverallStatus', 'WhyStopped', 'Phase', 'StudyType',
-  'Condition', 'Keyword', 'InterventionName', 'InterventionType', 'LeadSponsorName', 'LeadSponsorClass',
+  'Condition', 'Keyword', 'InterventionName', 'InterventionType', 'InterventionOtherName', 'LeadSponsorName', 'LeadSponsorClass',
   'StartDate', 'PrimaryCompletionDate', 'CompletionDate', 'EnrollmentCount', 'EnrollmentType',
   'HasResults', 'LocationCountry',
 ].join(',')
@@ -53,6 +54,26 @@ async function fetchAll(cond) {
   return studies
 }
 
+// Hand-curated, sourced names for drugs the registry knows only by a company
+// code (see scripts/drug-aliases.json). A study gets an entry's names when one
+// of its interventions starts with one of the entry's codes.
+const curated = JSON.parse(await readFile(ALIASES, 'utf8')).aliases
+const norm = (x) => x.toLowerCase().replace(/[^a-z0-9]/g, '')
+// Lowercase with every run of punctuation/space turned into one space, so
+// "NPT520-34 (125 mg)" reads "npt520 34 125 mg" and still starts with "npt520 34".
+const spaced = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+function startsWithCode(name, code) {
+  const n = spaced(name), c = spaced(code)
+  // "NB-4746 High dose" matches NB-4746; "NP0012" does not match NP001.
+  if (n.startsWith(c) && !/[0-9]/.test(n.charAt(c.length))) return true
+  // Same code written with different separators, e.g. "ISIS-333611".
+  return norm(name) === norm(code)
+}
+function curatedFor(interventionNames) {
+  return curated.filter((entry) => entry.codes.some((code) => interventionNames.some((name) => startsWithCode(name, code))))
+}
+const NOT_A_NAME = /placebo|vehicle|sham|saline|matching|control/i
+
 const PHASE_LABEL = { EARLY_PHASE1: 'Early Phase 1', PHASE1: 'Phase 1', PHASE2: 'Phase 2', PHASE3: 'Phase 3', PHASE4: 'Phase 4' }
 
 function slim(s) {
@@ -62,6 +83,14 @@ function slim(s) {
   const de = p.designModule ?? {}
   const interventions = p.armsInterventionsModule?.interventions ?? []
   const phases = (de.phases ?? []).filter((x) => PHASE_LABEL[x])
+  const names = [...new Set(interventions.map((i) => i.name))]
+  const entries = curatedFor(names)
+  const lowerNames = new Set(names.map(norm))
+  // Search terms: the registry's own "other names" plus curated names.
+  const aliases = [...new Set([
+    ...interventions.filter((i) => !NOT_A_NAME.test(i.name)).flatMap((i) => i.otherNames ?? []),
+    ...entries.flatMap((e) => e.names),
+  ])].filter((a) => !NOT_A_NAME.test(a) && !lowerNames.has(norm(a))).slice(0, 8)
   return {
     id: id.nctId,
     title: id.briefTitle,
@@ -71,7 +100,10 @@ function slim(s) {
     type: p.designModule?.studyType ?? 'UNKNOWN',
     // "Phase 1/Phase 2" style combined phases are kept as one label.
     phase: phases.length ? phases.map((x) => PHASE_LABEL[x]).join('/').replace(/\/Phase /g, '/') : null,
-    interventions: [...new Set(interventions.map((i) => i.name))].slice(0, 6),
+    interventions: names.slice(0, 6),
+    aliases,
+    // Short, sourced description of what each code-named drug is.
+    drugNotes: entries.map((e) => ({ codes: e.codes, names: e.names, what: e.what, source: e.source })),
     interventionTypes: [...new Set(interventions.map((i) => i.type))],
     sponsor: p.sponsorCollaboratorsModule?.leadSponsor?.name ?? null,
     sponsorClass: p.sponsorCollaboratorsModule?.leadSponsor?.class ?? null,
