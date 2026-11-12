@@ -66,13 +66,13 @@ export const trials: Trial[] = [
     preclinical:
       'ASO-mediated FUS knockdown reduced cytoplasmic FUS aggregation and extended survival in FUS-ALS animal models. FUS-ALS accounts for roughly 1% of ALS cases and often strikes young patients aggressively, so the first human data came from a compassionate-use, investigator-initiated case series (published in The Lancet, 2025), which reported reduced FUS protein and neurofilament levels and slowed progression in several patients treated early in their disease course.',
     design:
-      'Global, multicenter, randomized, double-blind, placebo-controlled Phase 1–3 trial of ulefnersen given intrathecally, with the primary analysis at Day 505, followed by an open-label extension that is still running. The number of participants was not given in the topline announcement.',
+      'Global, multicenter, randomized, double-blind, placebo-controlled Phase 1–3 trial of ulefnersen given intrathecally, with the primary analysis at Day 505, followed by an open-label extension that is still running. The registry lists 89 participants enrolled.',
     primaryEndpoint: 'Joint rank analysis combining time to death or permanent ventilation, time to rescue, and change in ALSFRS-R from baseline to Day 505',
-    enrollmentTarget: null,
-    startDate: '2021-03',
-    estimatedPrimaryCompletion: null,
+    enrollmentTarget: 89,
+    startDate: '2021-06',
+    estimatedPrimaryCompletion: '2026-06',
     estimatedTimeframeNote:
-      'Topline results were reported on 22 September 2026. Full data (effect sizes, confidence intervals, participant numbers) have not yet been presented. Ionis and Otsuka plan to review the results with the FDA and discuss expedited submission pathways with other regulators; no submission date has been given. Ulefnersen has FDA Fast Track designation for FUS-ALS.',
+      'The primary completion date was reached in June 2026 and topline results were reported on 22 September 2026. Full data (effect sizes, confidence intervals) have not yet been presented; the registry estimates study completion, including the extension, in March 2028. Ionis and Otsuka plan to review the results with the FDA and discuss expedited submission pathways with other regulators; no submission date has been given. Ulefnersen has FDA Fast Track designation for FUS-ALS.',
     results: [
       {
         date: '2025-05',
@@ -84,7 +84,7 @@ export const trials: Trial[] = [
       {
         date: '2026-09-22',
         headline: 'Phase 3 met its primary endpoint',
-        detail: 'Ulefnersen showed a statistically significant benefit over placebo on the prespecified joint rank analysis of function and survival (p=0.0005), with statistically significant improvements on secondary endpoints including serum neurofilament light, and a favorable safety and tolerability profile. It is the first FUS-ALS trial to meet its primary endpoint. The topline release did not include effect sizes or participant numbers.',
+        detail: 'Ulefnersen showed a statistically significant benefit over placebo on the prespecified joint rank analysis of function and survival (p=0.0005), with statistically significant improvements on secondary endpoints including serum neurofilament light, and a favorable safety and tolerability profile. It is the first FUS-ALS trial to meet its primary endpoint. The topline release did not include effect sizes.',
         sourceUrl: 'https://ir.ionis.com/news-releases/news-release-details/ionis-announces-positive-topline-results-phase-3-fusion-study',
         sourceLabel: 'Ionis press release',
       },
@@ -116,10 +116,10 @@ export const trials: Trial[] = [
       'Randomized, placebo-controlled Phase 3. Part A is an observational natural-history run-in; carriers who reach a protocol-defined NfL threshold while still presymptomatic move into Part B, a 2-year randomized, double-blind, placebo-controlled treatment phase. Sites in 14 countries.',
     primaryEndpoint: 'Percentage of participants with emergence of clinically manifest ALS within 24 months of Part B baseline',
     enrollmentTarget: 158,
-    startDate: '2021-04',
+    startDate: '2021-05',
     estimatedPrimaryCompletion: '2027-08',
     estimatedTimeframeNote:
-      'Recruitment closed in March 2025 with 158 participants listed. Registry listings give an estimated primary completion of August 2027 and study completion of April 2028. No ATLAS results have been reported; Biogen described the study as ongoing in December 2025.',
+      'Recruitment closed in March 2025 with 158 participants enrolled. The registry gives an estimated primary completion of August 2027 and study completion of May 2028. No ATLAS results have been reported; Biogen described the study as ongoing in December 2025.',
     results: [],
     isPlatformArm: false,
     sources: [
@@ -151,7 +151,7 @@ export const trials: Trial[] = [
     startDate: null,
     estimatedPrimaryCompletion: null,
     estimatedTimeframeNote:
-      'Enrollment has not started. The FDA cleared the trial in May 2025, and in its August 2026 update BrainStorm said it was still completing the steps needed to open enrollment, which it has said depends on securing financing (the company raised $2 million in February 2026 and lists going-concern risk). No start date or primary completion date has been given, and no later update was found as of November 2026.',
+      'Enrollment has not started. The FDA cleared the trial in May 2025, and in its August 2026 update BrainStorm said it was still completing the steps needed to open enrollment, which it has said depends on securing financing (the company raised $2 million in February 2026 and lists going-concern risk). No start date has been given, and no later update was found as of November 2026. The registry record has not been updated since May 2025 and still lists a mid-2025 start and a November 2028 primary completion, so treat those dates as out of date.',
     results: [
       {
         date: '2020-2021',
@@ -233,7 +233,7 @@ export const trials: Trial[] = [
       'Regimen I randomizes participants 3:1 to daily oral NUZ-001 or matching placebo for a 36-week randomized phase, followed by a 36-week active-treatment extension. Dosing began in February 2026; the sample size was raised from 160 to 240 in May 2026 because enrollment ran faster than expected.',
     primaryEndpoint: 'ALS disease progression on NUZ-001 versus placebo over the 36-week randomized phase',
     enrollmentTarget: 240,
-    startDate: '2026-02',
+    startDate: '2026-02-25',
     estimatedPrimaryCompletion: '2027-07',
     estimatedTimeframeNote:
       'Enrollment for Regimen I completed on 17 July 2026, in under five months. Neurizon expects topline efficacy and safety results by late Q2 2027; the registry lists an estimated primary completion of July 2027. No successor regimen had been announced as of November 2026.',
