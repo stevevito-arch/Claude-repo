@@ -19,12 +19,28 @@ interface RawStudiesResponse {
   studies?: RawStudy[]
 }
 
+// The registry reports status as an enum (e.g. ACTIVE_NOT_RECRUITING); the
+// dashboard's badges and filters use the human-readable labels.
+const STATUS_LABELS: Record<string, string> = {
+  RECRUITING: 'Recruiting',
+  ACTIVE_NOT_RECRUITING: 'Active, not recruiting',
+  NOT_YET_RECRUITING: 'Not yet recruiting',
+  ENROLLING_BY_INVITATION: 'Enrolling by invitation',
+}
+
+function statusLabel(raw: string | undefined): string {
+  if (!raw) return 'Unknown'
+  if (STATUS_LABELS[raw]) return STATUS_LABELS[raw]
+  const words = raw.toLowerCase().replace(/_/g, ' ')
+  return words.charAt(0).toUpperCase() + words.slice(1)
+}
+
 function parseStudy(study: RawStudy): LiveTrialStatus | null {
   const nctId = study.protocolSection?.identificationModule?.nctId
   if (!nctId) return null
   return {
     nctId,
-    overallStatus: study.protocolSection?.statusModule?.overallStatus ?? 'Unknown',
+    overallStatus: statusLabel(study.protocolSection?.statusModule?.overallStatus),
     enrollmentCount: study.protocolSection?.designModule?.enrollmentInfo?.count ?? null,
     lastUpdatePostDate: study.protocolSection?.statusModule?.lastUpdatePostDateStruct?.date ?? null,
     primaryCompletionDate: study.protocolSection?.statusModule?.primaryCompletionDateStruct?.date ?? null,

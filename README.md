@@ -4,7 +4,7 @@ A dashboard for tracking notable ongoing amyotrophic lateral sclerosis (ALS) cli
 
 ## Data model
 
-- `src/data/trials.ts` — hand-curated snapshot of ~8 notable ongoing trials plus recently concluded readouts, researched from public sources (ClinicalTrials.gov, sponsor press releases, peer-reviewed literature). Each entry cites its sources.
+- `src/data/trials.ts` — hand-curated snapshot of notable ongoing trials plus readouts from the past three years, researched from public sources (ClinicalTrials.gov, sponsor press releases, peer-reviewed literature). Each entry cites its sources.
 - `src/lib/clinicalTrialsApi.ts` + `useLiveTrialStatuses` — on load (and on demand via "Refresh live status"), the app queries the public [ClinicalTrials.gov API v2](https://clinicaltrials.gov/data-api/api) client-side for each trial's NCT ID and overlays live `overallStatus`, `enrollmentCount`, and `primaryCompletionDate` onto the curated card/detail view. If that request fails (offline, network policy, API changes) the UI falls back to the curated snapshot silently — there is always something reasonable to show.
 
 ## Running locally

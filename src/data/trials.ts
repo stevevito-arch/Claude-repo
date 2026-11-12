@@ -1,6 +1,7 @@
 import type { ConcludedReadout, Trial } from '../types/trial'
 
-const DATA_AS_OF = '2026-08-01'
+// Date of the last research pass over the curated content below.
+export const DATA_AS_OF = '2026-11-12'
 
 export const trials: Trial[] = [
   {
@@ -13,24 +14,32 @@ export const trials: Trial[] = [
     target: 'Sigma-1 receptor (S1R) agonist',
     phase: 'Phase 3',
     status: 'Recruiting',
-    population: 'Early, rapidly progressive ALS',
+    population: 'Early, rapidly progressive ALS (definite or probable ALS, within 18 months of symptom onset)',
     background:
       'Pridopidine is a highly selective sigma-1 receptor (S1R) agonist taken orally. S1R sits at the mitochondria-associated membranes of the endoplasmic reticulum, where it regulates calcium signaling between the ER and mitochondria, the unfolded-protein/ER-stress response, and general protein homeostasis. In ALS, motor neurons are thought to die in part because of chronic ER stress and disrupted calcium and protein handling, so activating S1R is intended to restore that homeostasis and support neuron survival rather than target a specific genetic cause.',
     preclinical:
-      'Pridopidine showed neuroprotective effects in SOD1 mouse models of ALS, including preserved motor neuron counts and delayed onset of motor symptoms. Mechanistic work tied these effects to S1R-dependent modulation of BDNF signaling and reduced ER-stress markers. A post-hoc analysis of the pridopidine arm (Regimen D) of the HEALEY ALS Platform Trial suggested a treatment signal concentrated in patients with fast-progressing disease, which shaped enrollment criteria for PREVAiLS.',
+      'Pridopidine showed neuroprotective effects in SOD1 mouse models of ALS, including preserved motor neuron counts and delayed onset of motor symptoms. Mechanistic work tied these effects to S1R-dependent modulation of BDNF signaling and reduced ER-stress markers. In the HEALEY ALS Platform Trial (Regimen D) pridopidine did not meet its primary endpoint in the overall population; a subgroup analysis suggested a treatment signal in patients with rapidly progressing disease early in its course, and PREVAiLS is designed to test whether that signal holds up.',
     design:
-      'Randomized, double-blind, placebo-controlled, 3:2 (drug:placebo) in ~500 participants across roughly 60 global sites. A 48-week double-blind phase is followed by a 48-week open-label extension in which all participants receive pridopidine.',
-    primaryEndpoint: 'Change from baseline in ALS Functional Rating Scale-Revised (ALSFRS-R)',
+      'Randomized, double-blind, placebo-controlled, 3:2 (drug:placebo) in about 500 participants at up to 60 centers in 13 countries. A 48-week double-blind phase is followed by a 48-week open-label extension in which all participants receive pridopidine.',
+    primaryEndpoint: 'Change from baseline in ALSFRS-R, adjusted for mortality, at 48 weeks',
     enrollmentTarget: 500,
     startDate: '2026-02-01',
     estimatedPrimaryCompletion: '2028-03',
-    estimatedTimeframeNote: 'Primary completion estimated March 2028; study completion (incl. open-label extension) estimated March 2029.',
+    estimatedTimeframeNote:
+      'About 60% enrolled as of late October 2026 and enrolling in all regions. Primary completion is estimated for March 2028, with results expected in 2028; study completion including the open-label extension is estimated for March 2029.',
     results: [
       {
         date: '2026-03-30',
         headline: 'First participant enrolled',
-        detail: 'Prilenia and Ferrer announced the first participant was dosed in PREVAiLS, formally starting the pivotal trial after FDA clearance.',
+        detail: 'Prilenia and Ferrer announced the first participant was enrolled in PREVAiLS at Mass General Brigham, formally starting the pivotal trial after FDA clearance in December 2025.',
         sourceUrl: 'https://news.prilenia.com/press-releases/press-release-details/2026/Prilenia-and-Ferrer-Announce-First-Participant-Enrolled-in-the-PREVAiLS-Phase-3-Study-of-Pridopidine-in-ALS/default.aspx',
+        sourceLabel: 'Prilenia Therapeutics press release',
+      },
+      {
+        date: '2026-10',
+        headline: 'Enrollment about 60% complete',
+        detail: 'Ahead of the NEALS Consortium 2026 annual meeting, Prilenia and Ferrer said PREVAiLS was approximately 60% enrolled. No efficacy data from the trial have been reported; it remains blinded.',
+        sourceUrl: 'https://news.prilenia.com/press-releases/press-release-details/2026/Prilenia-and-Ferrer-to-Share-New-Pridopidine-Data-and-PREVAiLS-Study-Updates-at-the-NEALS-Consortium-2026-Annual-Meeting/default.aspx',
         sourceLabel: 'Prilenia Therapeutics press release',
       },
     ],
@@ -44,25 +53,26 @@ export const trials: Trial[] = [
   {
     id: 'fusion-jacifusen',
     nctId: 'NCT04768972',
-    name: 'FUSION: A Study of Jacifusen (ulefnersen / ION363) in Patients with FUS-ALS',
+    name: 'FUSION: A Phase 1–3 Study of Ulefnersen (ION363, formerly jacifusen) in FUS-ALS',
     shortName: 'FUSION',
-    sponsor: 'Ionis Pharmaceuticals',
+    sponsor: 'Ionis Pharmaceuticals / Otsuka',
     modality: 'Antisense oligonucleotide',
     target: 'FUS mRNA',
     phase: 'Phase 3',
-    status: 'Enrolling by invitation',
+    status: 'Active, not recruiting',
     population: 'FUS-mutation ALS (FUS-ALS), an ultra-rare, typically juvenile/young-onset, fast-progressing form',
     background:
-      'FUS-ALS is caused by mutations in the FUS gene that cause the FUS protein to mislocalize out of the nucleus and aggregate in the cytoplasm of motor neurons, a toxic gain-of-function process. Jacifusen is an antisense oligonucleotide (ASO) gapmer designed to bind FUS mRNA and trigger its degradation via RNase H1, lowering both mRNA and toxic protein levels — the same ASO strategy used successfully against SOD1 with tofersen, adapted to a different, faster-progressing genetic subtype.',
+      'FUS-ALS is caused by mutations in the FUS gene that cause the FUS protein to mislocalize out of the nucleus and aggregate in the cytoplasm of motor neurons, a toxic gain-of-function process. Ulefnersen (previously called jacifusen) is an antisense oligonucleotide (ASO) designed to bind FUS mRNA and trigger its degradation via RNase H1, lowering both mRNA and toxic protein levels — the same ASO strategy used against SOD1 with tofersen, adapted to a different, faster-progressing genetic subtype.',
     preclinical:
-      'ASO-mediated FUS knockdown reduced cytoplasmic FUS aggregation and extended survival in FUS-ALS animal models. Because FUS-ALS affects only roughly 1% of ALS cases and often strikes young patients extremely aggressively, early human data came from a compassionate-use, investigator-initiated case series (published in The Lancet, 2025) rather than a conventional dose-finding trial, and showed reduced FUS protein/neurofilament levels and slowed progression in several patients treated early in their disease course.',
+      'ASO-mediated FUS knockdown reduced cytoplasmic FUS aggregation and extended survival in FUS-ALS animal models. FUS-ALS accounts for roughly 1% of ALS cases and often strikes young patients aggressively, so the first human data came from a compassionate-use, investigator-initiated case series (published in The Lancet, 2025), which reported reduced FUS protein and neurofilament levels and slowed progression in several patients treated early in their disease course.',
     design:
-      'Open-label, non-randomized Phase 3 (given disease rarity, no placebo arm) delivering jacifusen intrathecally, building directly on the compassionate-use case series. Enrollment is coordinated through referral given the small, geographically dispersed patient population.',
-    primaryEndpoint: 'Safety/tolerability and change in ALSFRS-R and CSF/plasma neurofilament light (NfL)',
+      'Global, multicenter, randomized, double-blind, placebo-controlled Phase 1–3 trial of ulefnersen given intrathecally, with the primary analysis at Day 505, followed by an open-label extension that is still running. The number of participants was not given in the topline announcement.',
+    primaryEndpoint: 'Joint rank analysis combining time to death or permanent ventilation, time to rescue, and change in ALSFRS-R from baseline to Day 505',
     enrollmentTarget: null,
     startDate: '2021-03',
     estimatedPrimaryCompletion: null,
-    estimatedTimeframeNote: 'No fixed public readout date; being a rolling, rare-disease enrollment trial, results are expected to be reported via periodic case-series/conference updates rather than a single trial completion date.',
+    estimatedTimeframeNote:
+      'Topline results were reported on 22 September 2026. Full data (effect sizes, confidence intervals, participant numbers) have not yet been presented. Ionis and Otsuka plan to review the results with the FDA and discuss expedited submission pathways with other regulators; no submission date has been given. Ulefnersen has FDA Fast Track designation for FUS-ALS.',
     results: [
       {
         date: '2025-05',
@@ -71,10 +81,18 @@ export const trials: Trial[] = [
         sourceUrl: 'https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(25)01038-4/abstract',
         sourceLabel: 'The Lancet case series',
       },
+      {
+        date: '2026-09-22',
+        headline: 'Phase 3 met its primary endpoint',
+        detail: 'Ulefnersen showed a statistically significant benefit over placebo on the prespecified joint rank analysis of function and survival (p=0.0005), with statistically significant improvements on secondary endpoints including serum neurofilament light, and a favorable safety and tolerability profile. It is the first FUS-ALS trial to meet its primary endpoint. The topline release did not include effect sizes or participant numbers.',
+        sourceUrl: 'https://ir.ionis.com/news-releases/news-release-details/ionis-announces-positive-topline-results-phase-3-fusion-study',
+        sourceLabel: 'Ionis press release',
+      },
     ],
     isPlatformArm: false,
     sources: [
       { label: 'ClinicalTrials.gov study record', url: 'https://clinicaltrials.gov/study/NCT04768972' },
+      { label: 'NeurologyLive: Ulefnersen meets primary end point in FUSION', url: 'https://www.neurologylive.com/view/ulefnersen-meets-primary-end-point-phase-3-fusion-trial-fus-als' },
       { label: 'The Lancet: Jacifusen for FUS-ALS case series', url: 'https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(25)01038-4/abstract' },
     ],
     dataAsOf: DATA_AS_OF,
@@ -91,20 +109,22 @@ export const trials: Trial[] = [
     status: 'Active, not recruiting',
     population: 'Presymptomatic carriers of high-penetrance, rapidly progressive SOD1 variants with elevated plasma neurofilament light (NfL)',
     background:
-      'Tofersen (marketed as QALSODY after 2023 accelerated approval) is an ASO that lowers SOD1 mRNA/protein in people who already have symptomatic SOD1-ALS. ATLAS asks a different, prevention-oriented question: can starting tofersen before symptoms even begin — in genetically confirmed carriers who show early biomarker evidence of nerve injury (rising plasma NfL) — delay or prevent the onset of clinically manifest ALS altogether.',
+      'Tofersen (marketed as QALSODY after 2023 accelerated approval) is an ASO that lowers SOD1 mRNA/protein in people who already have symptomatic SOD1-ALS. ATLAS asks a different, prevention-oriented question: can starting tofersen before symptoms even begin — in genetically confirmed carriers who show early biomarker evidence of nerve injury (rising plasma NfL) — delay or prevent the onset of clinically manifest ALS altogether. The FDA has designated ATLAS as the confirmatory study for QALSODY’s accelerated approval.',
     preclinical:
       'SOD1 mutations cause a toxic gain-of-function in the SOD1 enzyme that drives motor neuron degeneration; lowering mutant SOD1 protein slows disease in SOD1 animal models, and NfL rise precedes clinical symptom onset in both animal models and human carrier cohorts, providing the biomarker rationale for early intervention.',
     design:
-      'Randomized, placebo-controlled Phase 3 with an initial observational natural-history "run-in" period to confirm biomarker-defined disease activity, followed by a 2-year randomized, double-blind, placebo-controlled treatment phase at sites in 14 countries.',
-    primaryEndpoint: 'Time to clinically manifest ALS (proportion of participants who develop clinical disease)',
-    enrollmentTarget: null,
+      'Randomized, placebo-controlled Phase 3. Part A is an observational natural-history run-in; carriers who reach a protocol-defined NfL threshold while still presymptomatic move into Part B, a 2-year randomized, double-blind, placebo-controlled treatment phase. Sites in 14 countries.',
+    primaryEndpoint: 'Percentage of participants with emergence of clinically manifest ALS within 24 months of Part B baseline',
+    enrollmentTarget: 158,
     startDate: '2021-04',
-    estimatedPrimaryCompletion: '2026',
-    estimatedTimeframeNote: 'More than 50% enrolled as of the most recent public update; primary completion estimated in 2026, with readout likely to be reported to the community in stages given the run-in/observation design.',
+    estimatedPrimaryCompletion: '2027-08',
+    estimatedTimeframeNote:
+      'Recruitment closed in March 2025 with 158 participants listed. Registry listings give an estimated primary completion of August 2027 and study completion of April 2028. No ATLAS results have been reported; Biogen described the study as ongoing in December 2025.',
     results: [],
     isPlatformArm: false,
     sources: [
       { label: 'ClinicalTrials.gov study record', url: 'https://clinicaltrials.gov/study/NCT04856982' },
+      { label: 'NEALS trial listing', url: 'https://neals.org/als-trials/NCT04856982' },
       { label: 'ATLAS study design paper (PubMed)', url: 'https://pubmed.ncbi.nlm.nih.gov/35585374/' },
     ],
     dataAsOf: DATA_AS_OF,
@@ -119,7 +139,7 @@ export const trials: Trial[] = [
     target: 'Autologous MSC-NTF (neurotrophic-factor secreting mesenchymal stem cells)',
     phase: 'Phase 3b',
     status: 'Not yet recruiting',
-    population: 'ALS patients eligible for autologous cell collection and intrathecal dosing',
+    population: 'Early symptomatic ALS with moderate disease presentation; patients must be eligible for autologous cell collection and intrathecal dosing',
     background:
       'Debamestrocel (NurOwn) is made from a patient’s own bone-marrow-derived mesenchymal stem cells, which are expanded and chemically induced ex vivo to secrete a cocktail of neurotrophic factors (including BDNF, GDNF, VEGF and HGF), then re-injected intrathecally so the factors are released locally around the spinal cord. The goal is to support and protect surviving motor neurons rather than address a specific mutation, making it a candidate regardless of a patient’s underlying genetic cause.',
     preclinical:
@@ -130,7 +150,8 @@ export const trials: Trial[] = [
     enrollmentTarget: 200,
     startDate: null,
     estimatedPrimaryCompletion: null,
-    estimatedTimeframeNote: 'Sites are on standby and manufacturing/operational preparations are underway as of mid-2026; dosing had not yet begun as of the most recent company update, so no primary completion date is posted yet.',
+    estimatedTimeframeNote:
+      'Enrollment has not started. The FDA cleared the trial in May 2025, and in its August 2026 update BrainStorm said it was still completing the steps needed to open enrollment, which it has said depends on securing financing (the company raised $2 million in February 2026 and lists going-concern risk). No start date or primary completion date has been given, and no later update was found as of November 2026.',
     results: [
       {
         date: '2020-2021',
@@ -143,7 +164,7 @@ export const trials: Trial[] = [
     isPlatformArm: false,
     sources: [
       { label: 'BrainStorm: FDA clears Phase 3b NurOwn trial', url: 'https://ir.brainstorm-cell.com/2025-05-19-BrainStorm-Receives-FDA-Clearance-to-Initiate-Phase-3b-Trial-of-NurOwn-R-for-ALS' },
-      { label: 'BrainStorm Q1 2026 corporate update', url: 'https://www.prnewswire.com/news-releases/brainstorm-cell-therapeutics-announces-first-quarter-2026-financial-results-and-provides-corporate-update-302773613.html' },
+      { label: 'BrainStorm Q2 2026 corporate update', url: 'https://brainstorm-cell.com/news/brainstorm-cell-therapeutics-announces-second-quarter-2026-financial-results-and-provides-corporate/' },
     ],
     dataAsOf: DATA_AS_OF,
   },
@@ -161,14 +182,15 @@ export const trials: Trial[] = [
     background:
       'CNM-Au8 is an oral suspension of catalytically active, clean-surfaced gold nanocrystals. Rather than binding a single receptor, the nanocrystals catalyze intracellular energy-producing (NAD+/NADH) and antioxidant redox reactions inside neurons and oligodendrocytes, aiming to shore up the energy metabolism of stressed motor neurons and support remyelination.',
     preclinical:
-      'In preclinical models CNM-Au8 increased neuronal ATP production, reduced oxidative stress markers, and promoted survival of stressed neurons as well as oligodendrocyte maturation/remyelination, the basis for testing it as a general neuroprotective/metabolic-support agent in ALS.',
+      'In preclinical models CNM-Au8 increased neuronal ATP production, reduced oxidative stress markers, and promoted survival of stressed neurons as well as oligodendrocyte maturation/remyelination, the basis for testing it as a general neuroprotective/metabolic-support agent in ALS. In the clinic, the two randomized trials so far missed their primary endpoints: CNM-Au8 did not significantly slow progression in the HEALEY ALS Platform Trial, and RESCUE-ALS missed its primary neurophysiological endpoint. The case for approval rests on biomarker (NfL) and survival analyses from those trials, their open-label extensions and an expanded access program.',
     design:
-      'Planned randomized, 2:1 (drug:placebo), ~690-participant confirmatory Phase 3 trial over 108 weeks, intended as the post-approval confirmatory study tied to an accelerated-approval submission based on biomarker data.',
-    primaryEndpoint: 'Delayed time to death or death-equivalent event (permanent assisted ventilation), via covariate-adjusted Cox proportional hazards model',
+      'Planned randomized, 2:1 (drug:placebo), ~690-participant confirmatory Phase 3 trial over 108 weeks, intended as the confirmatory study tied to an accelerated-approval submission based on biomarker data.',
+    primaryEndpoint: 'Survival: time to death or death-equivalent event (permanent assisted ventilation)',
     enrollmentTarget: 690,
     startDate: null,
     estimatedPrimaryCompletion: null,
-    estimatedTimeframeNote: 'First dosing anticipated in the first half of 2026, following a Q1 2026 NDA submission under the accelerated approval pathway and FDA Type C meeting; an NCT ID had not yet been posted as of the most recent public update.',
+    estimatedTimeframeNote:
+      'Clene submitted an NDA seeking accelerated approval of CNM-Au8 in October 2026; an FDA decision on whether to accept the filing had not been reported as of November 2026. The start of RESTORE-ALS has slipped repeatedly and is now planned for the second quarter of 2027. No NCT ID has been found for the trial.',
     results: [
       {
         date: '2025',
@@ -176,6 +198,13 @@ export const trials: Trial[] = [
         detail: 'Clene reported statistically significant reductions in plasma neurofilament light (NfL) and GFAP in more advanced real-world ALS patients, which the company is using to support an accelerated-approval filing; a completed, positive confirmatory Phase 3 readout is still outstanding.',
         sourceUrl: 'https://www.biospace.com/press-releases/clene-announces-statistically-significant-als-biomarker-results-supporting-accelerated-approval-pathway-for-cnm-au8',
         sourceLabel: 'Clene Inc. press release',
+      },
+      {
+        date: '2026-10',
+        headline: 'NDA submitted for accelerated approval',
+        detail: 'Following an FDA meeting in May 2026, Clene submitted an NDA for CNM-Au8 in ALS based on NfL biomarker and clinical data from the HEALEY ALS Platform Trial and its open-label extension, RESCUE-ALS, and the NIH-sponsored expanded access protocol. The randomized trials behind the filing did not meet their primary efficacy endpoints.',
+        sourceUrl: 'https://practicalneurology.com/news/clene-submits-fda-application-seeking-accelerated-approval-of-cnm-au8-as-treatment-for-those-with-als/2488749/',
+        sourceLabel: 'Practical Neurology',
       },
     ],
     isPlatformArm: false,
@@ -186,71 +215,66 @@ export const trials: Trial[] = [
     dataAsOf: DATA_AS_OF,
   },
   {
-    id: 'astrals-vhb937',
-    nctId: 'NCT06643481',
-    name: 'ASTRALS: A Study to Learn About the Effects of VHB937 in People with ALS',
-    shortName: 'ASTRALS',
-    sponsor: 'Novartis',
-    modality: 'Monoclonal antibody',
-    target: 'TREM2 agonist (microglial receptor)',
-    phase: 'Phase 2',
-    status: 'Recruiting',
-    population: 'Early-stage ALS (within 2 years of symptom onset)',
-    background:
-      'VHB937 is a humanized agonist monoclonal antibody against TREM2 (Triggering Receptor Expressed on Myeloid cells 2), a receptor on microglia, the brain and spinal cord’s resident immune cells. Rather than acting on motor neurons directly, VHB937 is designed to make microglia more effective at clearing damaged cells and debris and more protective of surrounding neurons — a neuroinflammation-modulating strategy rather than a neuron-intrinsic one.',
-    preclinical:
-      'Preclinical work showed TREM2 activation increases microglial phagocytic clearance of damaged cellular material and improves neuron survival in neurodegeneration models, motivating a TREM2-agonist antibody approach across neurodegenerative diseases including ALS and Alzheimer’s.',
-    design:
-      'Multicenter, randomized, double-blind, placebo-controlled, parallel-group Phase 2 study with a 40-week double-blind core treatment period followed by an open-label extension.',
-    primaryEndpoint: 'Safety, tolerability, and change in ALSFRS-R',
-    enrollmentTarget: null,
-    startDate: '2024-10-17',
-    estimatedPrimaryCompletion: null,
-    estimatedTimeframeNote: 'Trial is in the recruiting/dosing phase of its 40-week core period as of the latest update; no public primary-completion date reported yet.',
-    results: [],
-    isPlatformArm: false,
-    sources: [
-      { label: 'ClinicalTrials.gov study record', url: 'https://clinicaltrials.gov/study/NCT06643481' },
-      { label: 'MND Association: VHB937 (ASTRALS)', url: 'https://www.mndassociation.org/research/clinical-trials/treatment-trials/vhb937-astrals' },
-    ],
-    dataAsOf: DATA_AS_OF,
-  },
-  {
     id: 'healey-platform-regimen-i',
-    nctId: 'NCT04297683',
+    nctId: 'NCT07410806',
     name: 'HEALEY ALS Platform Trial — Regimen I (NUZ-001)',
     shortName: 'HEALEY — Regimen I',
-    sponsor: 'Sean M. Healey & AMG Center for ALS at Mass General / multiple industry partners',
+    sponsor: 'Sean M. Healey & AMG Center for ALS at Mass General Brigham / Neurizon Therapeutics',
     modality: 'Platform trial',
-    target: 'Varies by regimen; current arm investigates NUZ-001',
+    target: 'Varies by regimen; the current regimen tests the oral therapy NUZ-001',
     phase: 'Phase 2/3',
-    status: 'Recruiting',
-    population: 'ALS patients meeting master-protocol eligibility; shared placebo group across concurrent regimens',
+    status: 'Active, not recruiting',
+    population: 'ALS patients meeting master-protocol eligibility',
     background:
-      'The HEALEY ALS Platform Trial is a master-protocol "platform" design that tests multiple investigational drugs simultaneously against a single shared placebo group, then swaps in new drug regimens as earlier ones read out — dramatically cutting the time and number of patients needed to screen candidate ALS therapies compared with running separate standalone trials. It is not a single therapy but an evaluation engine: eight regimens (A through I) have entered the platform to date, spanning complement inhibition, oral small molecules, cell-energetics agents, and more.',
+      'The HEALEY ALS Platform Trial is a master-protocol "platform" design that tests multiple investigational drugs against a shared placebo group, then swaps in new drug regimens as earlier ones read out — cutting the time and number of patients needed to screen candidate ALS therapies compared with running separate standalone trials. It is not a single therapy but an evaluation engine: regimens A through I have entered the platform to date, spanning complement inhibition, oral small molecules, cell-energetics agents, and more. Regimen I is the first run under the updated "Next Generation" master protocol.',
     preclinical:
       'Preclinical rationale is regimen-specific (each arm brings its own mechanism and animal-model data); the platform infrastructure itself — shared placebo, adaptive statistics, common biomarker/imaging core — is what is standardized across arms.',
     design:
-      'Adaptive, multi-arm multi-stage platform trial. The newest arm, Regimen I (NUZ-001), began enrolling its first participants in February 2026.',
-    primaryEndpoint: 'Regimen-specific; typically a joint-rank/combined-outcome analysis of ALSFRS-R decline and survival over 24 weeks',
-    enrollmentTarget: null,
-    startDate: '2020-01',
-    estimatedPrimaryCompletion: null,
-    estimatedTimeframeNote: 'Regimen I enrollment began February 2026; individual-arm readouts typically follow roughly 24 weeks of treatment per participant, staggered as each arm fills.',
+      'Regimen I randomizes participants 3:1 to daily oral NUZ-001 or matching placebo for a 36-week randomized phase, followed by a 36-week active-treatment extension. Dosing began in February 2026; the sample size was raised from 160 to 240 in May 2026 because enrollment ran faster than expected.',
+    primaryEndpoint: 'ALS disease progression on NUZ-001 versus placebo over the 36-week randomized phase',
+    enrollmentTarget: 240,
+    startDate: '2026-02',
+    estimatedPrimaryCompletion: '2027-07',
+    estimatedTimeframeNote:
+      'Enrollment for Regimen I completed on 17 July 2026, in under five months. Neurizon expects topline efficacy and safety results by late Q2 2027; the registry lists an estimated primary completion of July 2027. No successor regimen had been announced as of November 2026.',
     results: [
       { date: '2024-09', headline: 'Regimen A (zilucoplan) stopped early for futility', detail: 'The complement C5 inhibitor zilucoplan showed a low probability of meaningfully slowing disease progression and its arm was stopped early.', sourceUrl: 'https://www.massgeneral.org/news/press-release/healey-als-platform-trial-update-ilucoplan-arm-stopped-early-for-futility', sourceLabel: 'Mass General Brigham press release' },
-      { date: '2025', headline: 'Regimen G (DNL343) missed its primary endpoint', detail: 'The eIF2B agonist DNL343 (186 drug vs 139 placebo) did not meet the primary ALSFRS-R/survival endpoint at 24 weeks, though it was reported safe and well tolerated.', sourceUrl: 'https://www.neurologylive.com/view/dnl343-falls-short-primary-end-point-phase-2-3-healey-als-platform-trial', sourceLabel: 'NeurologyLive' },
+      { date: '2025-01', headline: 'Regimen G (DNL343) missed its primary endpoint', detail: 'The eIF2B agonist DNL343 (186 drug vs 139 placebo) did not meet the primary ALSFRS-R/survival endpoint at 24 weeks, though it was reported safe and well tolerated.', sourceUrl: 'https://www.neurologylive.com/view/dnl343-falls-short-primary-end-point-phase-2-3-healey-als-platform-trial', sourceLabel: 'NeurologyLive' },
+      { date: '2026-07-17', headline: 'Regimen I (NUZ-001) enrollment completed', detail: 'The Healey & AMG Center announced that Regimen I was fully enrolled with 240 participants less than five months after first dosing, the fastest enrollment in the platform’s history. The regimen remains blinded; no efficacy data have been reported.', sourceUrl: 'https://www.massgeneral.org/neurology/als/news/enrollment-for-regimen-i-in-healey-als-platform-trial-nuz-001-complete', sourceLabel: 'Mass General Brigham press release' },
     ],
     isPlatformArm: true,
     sources: [
+      { label: 'ClinicalTrials.gov Regimen I record', url: 'https://clinicaltrials.gov/study/NCT07410806' },
       { label: 'ClinicalTrials.gov master protocol record', url: 'https://clinicaltrials.gov/study/NCT04297683' },
-      { label: 'Mass General: HEALEY Platform Trial news', url: 'https://www.massgeneral.org/neurology/als/research/platform-trial-news' },
+      { label: 'Neurizon: enrolment completed, topline accelerated', url: 'https://www.biospace.com/press-releases/healey-als-platform-trial-regimen-i-enrolment-completed-topline-results-for-nuz-001-accelerated-to-q2-cy2027' },
     ],
     dataAsOf: DATA_AS_OF,
   },
 ]
 
 export const concludedReadouts: ConcludedReadout[] = [
+  {
+    id: 'ulefnersen-fusion',
+    name: 'Ulefnersen (FUSION, FUS-ALS)',
+    sponsor: 'Ionis Pharmaceuticals / Otsuka',
+    modality: 'Antisense oligonucleotide',
+    outcome: 'Positive',
+    summary: 'Antisense oligonucleotide lowering FUS; the randomized, placebo-controlled Phase 3 met its primary endpoint, a joint rank analysis of function and survival (p=0.0005), with supportive secondary endpoints including serum NfL. Effect sizes and full data have not yet been presented; the open-label extension and regulatory discussions continue (see the FUSION card above).',
+    date: '2026-09',
+    sourceUrl: 'https://ir.ionis.com/news-releases/news-release-details/ionis-announces-positive-topline-results-phase-3-fusion-study',
+    sourceLabel: 'Ionis press release',
+  },
+  {
+    id: 'vhb937-astrals',
+    name: 'VHB937 / lifonebart (ASTRALS)',
+    sponsor: 'Novartis',
+    modality: 'Monoclonal antibody',
+    outcome: 'Negative / discontinued',
+    summary: 'TREM2-agonist antibody meant to make microglia more protective of motor neurons; the 251-participant, 40-week Phase 2 trial in early ALS missed its primary and secondary endpoints and Novartis discontinued development in ALS. Detailed results are due at the International Symposium on ALS/MND in December 2026; a Phase 2 trial in Alzheimer’s disease continues.',
+    date: '2026-09',
+    sourceUrl: 'https://www.fiercebiotech.com/biotech/novartis-ends-als-program-after-phase-2-flop-adding-rd-woes',
+    sourceLabel: 'Fierce Biotech',
+  },
   {
     id: 'dnl343',
     name: 'DNL343 (HEALEY Regimen G)',

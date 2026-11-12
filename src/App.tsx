@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { trials, concludedReadouts } from './data/trials'
+import { trials, concludedReadouts, DATA_AS_OF } from './data/trials'
 import type { Modality, Trial, TrialPhase, TrialStatus } from './types/trial'
 import { useLiveTrialStatuses } from './lib/useLiveTrialStatuses'
 import { StatTile } from './components/StatTile'
@@ -69,7 +69,7 @@ function App() {
       </header>
 
       <div className="mb-6">
-        <LiveSyncBar state={syncState} lastSyncedAt={lastSyncedAt} onRefresh={refresh} dataAsOf="2026-08-01" />
+        <LiveSyncBar state={syncState} lastSyncedAt={lastSyncedAt} onRefresh={refresh} dataAsOf={DATA_AS_OF} />
       </div>
 
       <div className="mb-6 flex flex-col gap-3 sm:flex-row">
@@ -117,11 +117,10 @@ function App() {
 
       <section className="mt-12">
         <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-          Recently concluded readouts
+          Recent readouts
         </h2>
         <p className="mt-1 mb-4 text-xs" style={{ color: 'var(--text-secondary)' }}>
-          For context: notable ALS trials that read out or were discontinued recently, shown alongside the ongoing
-          programs above.
+          Notable ALS trials that reported results or were discontinued in the past three years, newest first.
         </p>
         <ConcludedList readouts={concludedReadouts} />
       </section>
