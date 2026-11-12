@@ -15,6 +15,8 @@ export default defineConfig(({ command }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+      // Precache the registry catalog too, so the installed app can browse it offline.
+      workbox: { globPatterns: ['**/*.{js,css,html,png,svg,json}'] },
       manifest: {
         name: 'ALS Clinical Trials Dashboard',
         short_name: 'ALS Trials',

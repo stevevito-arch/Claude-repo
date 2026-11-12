@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { trials, concludedReadouts, DATA_AS_OF } from './data/trials'
 import type { Modality, Trial, TrialPhase, TrialStatus } from './types/trial'
 import { useLiveTrialStatuses } from './lib/useLiveTrialStatuses'
@@ -8,6 +8,13 @@ import { TrialCard } from './components/TrialCard'
 import { TrialDetail } from './components/TrialDetail'
 import { LiveSyncBar } from './components/LiveSyncBar'
 import { ConcludedList } from './components/ConcludedList'
+import { RegistryCatalog } from './components/RegistryCatalog'
+
+type View = 'featured' | 'all'
+
+function viewFromHash(): View {
+  return window.location.hash === '#all' ? 'all' : 'featured'
+}
 
 function toggleInSet<T>(set: Set<T>, value: T): Set<T> {
   const next = new Set(set)
@@ -22,8 +29,23 @@ function App() {
   const [activePhases, setActivePhases] = useState<Set<TrialPhase>>(new Set())
   const [activeStatuses, setActiveStatuses] = useState<Set<TrialStatus>>(new Set())
   const [selectedTrial, setSelectedTrial] = useState<Trial | null>(null)
+  const [view, setView] = useState<View>(viewFromHash)
+
+  useEffect(() => {
+    const onHash = () => setView(viewFromHash())
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  const showView = (next: View) => {
+    // Keeps the view in the URL so it survives reloads and can be shared,
+    // without adding a history entry per tab click.
+    history.replaceState(null, '', next === 'all' ? '#all' : window.location.pathname + window.location.search)
+    setView(next)
+  }
 
   const nctIds = useMemo(() => trials.map((t) => t.nctId).filter((id): id is string => Boolean(id)), [])
+  const featuredIds = useMemo(() => new Set(nctIds), [nctIds])
   const { statuses: liveStatuses, state: syncState, lastSyncedAt, refresh } = useLiveTrialStatuses(nctIds)
 
   const filteredTrials = useMemo(() => {
@@ -58,9 +80,9 @@ function App() {
           ALS Clinical Trials Dashboard
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Tracking notable ongoing amyotrophic lateral sclerosis (ALS) trials: therapy background and mechanism,
-          preclinical evidence, phase and design, results reported so far, and estimated timeframes for future
-          readouts. Curated content is a hand-researched snapshot; status and enrollment sync live from{' '}
+          Tracking amyotrophic lateral sclerosis (ALS) trials. Featured trials have hand-researched summaries of the
+          therapy, preclinical evidence, design, results and expected timeframes; the full catalog lists every ALS
+          study registered on{' '}
           <a href="https://clinicaltrials.gov" target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
             ClinicalTrials.gov
           </a>
@@ -68,6 +90,37 @@ function App() {
         </p>
       </header>
 
+      <div role="tablist" aria-label="Dashboard views" className="mb-6 flex gap-1 border-b" style={{ borderColor: 'var(--gridline)' }}>
+        {(
+          [
+            ['featured', 'Featured trials'],
+            ['all', 'All registered studies'],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={view === key}
+            onClick={() => showView(key)}
+            className="-mb-px border-b-2 px-3 py-2 text-sm font-medium"
+            style={{
+              borderColor: view === key ? 'var(--text-primary)' : 'transparent',
+              color: view === key ? 'var(--text-primary)' : 'var(--text-muted)',
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === 'all' ? (
+        <RegistryCatalog
+          featuredIds={featuredIds}
+          onOpenFeatured={(id) => setSelectedTrial(trials.find((t) => t.nctId === id) ?? null)}
+        />
+      ) : (
+      <>
       <div className="mb-6">
         <LiveSyncBar state={syncState} lastSyncedAt={lastSyncedAt} onRefresh={refresh} dataAsOf={DATA_AS_OF} />
       </div>
@@ -124,6 +177,8 @@ function App() {
         </p>
         <ConcludedList readouts={concludedReadouts} />
       </section>
+      </>
+      )}
 
       <footer className="mt-12 border-t pt-4 text-xs" style={{ borderColor: 'var(--gridline)', color: 'var(--text-muted)' }}>
         This dashboard is for informational purposes only and is not medical advice. Trial details change frequently

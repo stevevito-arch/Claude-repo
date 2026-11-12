@@ -26,9 +26,10 @@ const STATUS_LABELS: Record<string, string> = {
   ACTIVE_NOT_RECRUITING: 'Active, not recruiting',
   NOT_YET_RECRUITING: 'Not yet recruiting',
   ENROLLING_BY_INVITATION: 'Enrolling by invitation',
+  UNKNOWN: 'Status unknown',
 }
 
-function statusLabel(raw: string | undefined): string {
+export function statusLabel(raw: string | undefined): string {
   if (!raw) return 'Unknown'
   if (STATUS_LABELS[raw]) return STATUS_LABELS[raw]
   const words = raw.toLowerCase().replace(/_/g, ' ')
