@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { RegistrySnapshot, RegistryStudy } from '../types/registry'
 import { statusLabel } from '../lib/clinicalTrialsApi'
+import { useFollowed } from '../lib/useFollowed'
 import { Badge } from './Badge'
 
 const PAGE_SIZE = 40
@@ -119,6 +120,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const [target, setTarget] = useState('')
   const [sort, setSort] = useState<SortKey>('newest')
   const [visible, setVisible] = useState(PAGE_SIZE)
+  const { followed, toggleFollow } = useFollowed()
+  const followedSet = useMemo(() => new Set(followed), [followed])
 
   useEffect(() => {
     let cancelled = false
@@ -200,6 +203,15 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     return rows.map((r) => r.study)
   }, [indexed, search, types, phases, groups, resultsOnly, modalities, target, sort])
 
+  // Followed studies are pinned above the filters whatever the filters say,
+  // so the list below leaves them out rather than showing them twice.
+  const pinned = useMemo(() => {
+    const byId = new Map(indexed.map(({ study }) => [study.id, study]))
+    return followed.map((id) => byId.get(id)).filter((s): s is RegistryStudy => s !== undefined)
+  }, [indexed, followed])
+  const unpinned = useMemo(() => filtered.filter((s) => !followedSet.has(s.id)), [filtered, followedSet])
+  const pinnedMatches = filtered.length - unpinned.length
+
   // Any change to what is shown starts the list from the top again.
   useEffect(() => setVisible(PAGE_SIZE), [search, types, phases, groups, resultsOnly, modalities, target, sort])
 
@@ -231,6 +243,36 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
         entries are the registry’s own records, not curated summaries. Coverage before about 2000 is thin, and trials registered
         only in other countries’ registries (EU, Australia, China, Japan and others) are not included.
       </p>
+
+      {pinned.length > 0 ? (
+        <section aria-labelledby="following-heading" className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+            <h2 id="following-heading" className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+              Following · {pinned.length}
+            </h2>
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              Saved in this browser only
+            </span>
+          </div>
+          <ul className="flex flex-col gap-2">
+            {pinned.map((s) => (
+              <StudyRow
+                key={s.id}
+                study={s}
+                featured={featuredIds.has(s.id)}
+                onOpenFeatured={() => onOpenFeatured(s.id)}
+                followed
+                onToggleFollow={() => toggleFollow(s.id)}
+              />
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <p className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+          <StarIcon filled={false} />
+          Tap Follow on any study to pin it to the top of this page.
+        </p>
+      )}
 
       <div className="flex flex-col gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card)' }}>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -307,7 +349,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
 
       <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
         <span>
-          Showing {Math.min(visible, filtered.length).toLocaleString()} of {filtered.length.toLocaleString()} studies
+          Showing {Math.min(visible, unpinned.length).toLocaleString()} of {unpinned.length.toLocaleString()} studies
+          {pinnedMatches > 0 && ` (plus ${pinnedMatches} you follow, pinned above)`}
         </span>
         {hasFilters && (
           <button
@@ -328,36 +371,64 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
         )}
       </div>
 
-      {filtered.length === 0 ? (
+      {unpinned.length === 0 ? (
         <div className="rounded-xl border p-8 text-center text-sm" style={{ borderColor: 'var(--border-hairline)', color: 'var(--text-muted)' }}>
-          No studies match the current filters.
+          {pinnedMatches > 0 ? 'The only matching studies are ones you follow, pinned above.' : 'No studies match the current filters.'}
         </div>
       ) : (
         <ul className="flex flex-col gap-2">
-          {filtered.slice(0, visible).map((s) => (
-            <StudyRow key={s.id} study={s} featured={featuredIds.has(s.id)} onOpenFeatured={() => onOpenFeatured(s.id)} />
+          {unpinned.slice(0, visible).map((s) => (
+            <StudyRow
+              key={s.id}
+              study={s}
+              featured={featuredIds.has(s.id)}
+              onOpenFeatured={() => onOpenFeatured(s.id)}
+              followed={false}
+              onToggleFollow={() => toggleFollow(s.id)}
+            />
           ))}
         </ul>
       )}
 
-      {visible < filtered.length && (
+      {visible < unpinned.length && (
         <button
           type="button"
           onClick={() => setVisible((v) => v + PAGE_SIZE)}
           className="self-center rounded-full border px-4 py-2 text-sm font-medium"
           style={{ borderColor: 'var(--border-hairline)', color: 'var(--text-primary)' }}
         >
-          Show {Math.min(PAGE_SIZE, filtered.length - visible)} more
+          Show {Math.min(PAGE_SIZE, unpinned.length - visible)} more
         </button>
       )}
     </div>
   )
 }
 
-function StudyRow({ study, featured, onOpenFeatured }: { study: RegistryStudy; featured: boolean; onOpenFeatured: () => void }) {
+function StarIcon({ filled }: { filled: boolean }) {
+  return (
+    <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" className="shrink-0">
+      <path
+        d="M10 1.8l2.47 5.2 5.7.68-4.2 3.9 1.1 5.63L10 14.4l-5.07 2.8 1.1-5.63-4.2-3.9 5.7-.68z"
+        fill={filled ? 'var(--cat-yellow)' : 'none'}
+        stroke={filled ? 'var(--cat-yellow)' : 'currentColor'}
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+interface StudyRowProps {
+  study: RegistryStudy
+  featured: boolean
+  onOpenFeatured: () => void
+  followed: boolean
+  onToggleFollow: () => void
+}
+
+function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }: StudyRowProps) {
   const group = statusGroup(study.status)
   const end = study.completion ?? study.primaryCompletion
-  // Registry "other names" not already shown in a curated note above.
   // Registry "other names" not already shown on a drug line below.
   const shownNames = new Set(study.drugs.flatMap((d) => d.names.map((x) => x.toLowerCase())))
   const otherNames = study.aliases.filter((a) => !shownNames.has(a.toLowerCase()))
@@ -391,14 +462,30 @@ function StudyRow({ study, featured, onOpenFeatured }: { study: RegistryStudy; f
             </button>
           )}
         </div>
-        <div className="shrink-0 text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>
-          {!study.start
-            ? 'Dates not reported'
-            : end
-              ? `${year(study.start)} – ${year(end)}`
-              : group === 'Ongoing'
-                ? `${year(study.start)} – ongoing`
-                : `Started ${year(study.start)}`}
+        <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
+          <span className="text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>
+            {!study.start
+              ? 'Dates not reported'
+              : end
+                ? `${year(study.start)} – ${year(end)}`
+                : group === 'Ongoing'
+                  ? `${year(study.start)} – ongoing`
+                  : `Started ${year(study.start)}`}
+          </span>
+          <button
+            type="button"
+            onClick={onToggleFollow}
+            aria-pressed={followed}
+            aria-label={followed ? `Unfollow ${study.id}` : `Follow ${study.id}`}
+            className="inline-flex min-h-8 items-center gap-1 rounded-full border px-2.5 text-xs font-medium"
+            style={{
+              borderColor: followed ? 'var(--cat-yellow)' : 'var(--border-hairline)',
+              color: followed ? 'var(--text-primary)' : 'var(--text-secondary)',
+            }}
+          >
+            <StarIcon filled={followed} />
+            {followed ? 'Following' : 'Follow'}
+          </button>
         </div>
       </div>
 

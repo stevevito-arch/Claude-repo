@@ -2,8 +2,8 @@
 
 A dashboard for tracking amyotrophic lateral sclerosis (ALS) clinical trials. It has two views:
 
-- **Featured trials** — notable ongoing trials with hand-researched summaries: therapy/modality background, preclinical evidence, phase and design, results reported so far, and estimated timeframes for future readouts.
-- **All registered studies** (`#all`) — a searchable, filterable catalog of every ALS study registered on ClinicalTrials.gov (about 1,000 studies: interventional trials, observational studies and expanded-access programs).
+- **All registered studies** (the landing page) — a searchable, filterable catalog of every ALS study registered on ClinicalTrials.gov (about 1,000 studies: interventional trials, observational studies and expanded-access programs). Tap **Follow** on a study to pin it to the top; followed studies are saved in that browser only (`localStorage`), since the site has no accounts.
+- **Featured trials** (`#featured`) — notable late-stage trials with hand-researched summaries: therapy/modality background, preclinical evidence, phase and design, results reported so far, and estimated timeframes for future readouts.
 
 ## Data model
 

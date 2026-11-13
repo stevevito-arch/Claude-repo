@@ -12,8 +12,10 @@ import { RegistryCatalog } from './components/RegistryCatalog'
 
 type View = 'featured' | 'all'
 
+// The catalog is the landing page; "#featured" opens the curated view. Old
+// "#all" links still land on the catalog.
 function viewFromHash(): View {
-  return window.location.hash === '#all' ? 'all' : 'featured'
+  return window.location.hash === '#featured' ? 'featured' : 'all'
 }
 
 function toggleInSet<T>(set: Set<T>, value: T): Set<T> {
@@ -40,7 +42,7 @@ function App() {
   const showView = (next: View) => {
     // Keeps the view in the URL so it survives reloads and can be shared,
     // without adding a history entry per tab click.
-    history.replaceState(null, '', next === 'all' ? '#all' : window.location.pathname + window.location.search)
+    history.replaceState(null, '', next === 'featured' ? '#featured' : window.location.pathname + window.location.search)
     setView(next)
   }
 
@@ -80,21 +82,22 @@ function App() {
           ALS Clinical Trials Dashboard
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Tracking amyotrophic lateral sclerosis (ALS) trials. Featured trials have hand-researched summaries of the
-          therapy, preclinical evidence, design, results and expected timeframes; the full catalog lists every ALS
-          study registered on{' '}
+          Every amyotrophic lateral sclerosis (ALS) study registered on{' '}
           <a href="https://clinicaltrials.gov" target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
             ClinicalTrials.gov
           </a>
-          .
+          , with its therapy target and modality. Follow the studies you care about to pin them to the top. Featured
+          trials are late-stage
+          programs with hand-researched summaries of the therapy, preclinical evidence, design, results and expected
+          timeframes.
         </p>
       </header>
 
       <div role="tablist" aria-label="Dashboard views" className="mb-6 flex gap-1 border-b" style={{ borderColor: 'var(--gridline)' }}>
         {(
           [
-            ['featured', 'Featured trials'],
             ['all', 'All registered studies'],
+            ['featured', 'Featured trials'],
           ] as const
         ).map(([key, label]) => (
           <button
