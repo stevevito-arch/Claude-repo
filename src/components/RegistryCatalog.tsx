@@ -59,6 +59,18 @@ const MODALITY_BADGE_COLOR: Record<string, string> = {
   Peptide: 'var(--cat-green)',
 }
 
+// What a study is mainly for, set by scripts/fetch-registry.mjs. The catalog
+// opens on trials aimed at slowing the disease itself.
+const FOCUS_OPTIONS = [
+  'Slowing ALS progression',
+  'Symptom management',
+  'Supportive care',
+  'Diagnostics & biomarkers',
+  'Natural history & other research',
+  'Other-disease studies',
+]
+const DEFAULT_FOCUS = 'Slowing ALS progression'
+
 // Outcome verdicts (scripts/fetch-registry.mjs, scripts/outcomes.json) grouped
 // for the filter, in the order the chips appear.
 const OUTCOME_GROUPS: [string, string[]][] = [
@@ -137,6 +149,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
 
   const [search, setSearch] = useState('')
   const [types, setTypes] = useState<Set<string>>(new Set(['INTERVENTIONAL']))
+  const [focuses, setFocuses] = useState<Set<string>>(new Set([DEFAULT_FOCUS]))
   const [phases, setPhases] = useState<Set<string>>(new Set())
   const [groups, setGroups] = useState<Set<StatusGroup>>(new Set())
   const [resultsOnly, setResultsOnly] = useState(false)
@@ -175,7 +188,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
           s.id, s.title, s.acronym, s.sponsor, ...s.interventions, ...s.aliases, ...s.targets, ...s.modalities,
           ...s.targets.flatMap(targetSynonyms),
           ...s.drugs.flatMap((d) => [...d.names, d.what]),
-          s.outcome?.verdict, s.outcome?.summary,
+          s.outcome?.verdict, s.outcome?.summary, s.focus,
         ]),
       })),
     [snapshot],
@@ -183,18 +196,23 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
 
   const typeCounts = useMemo(() => {
     const counts: Record<string, number> = {}
-    for (const { study } of indexed) counts[study.type] = (counts[study.type] ?? 0) + 1
+    for (const { study } of indexed) {
+      if (focuses.size === 0 || focuses.has(study.focus)) counts[study.type] = (counts[study.type] ?? 0) + 1
+    }
     return counts
-  }, [indexed])
+  }, [indexed, focuses])
 
   // Counts for the modality chips and the target picker, most common first.
   const facetCounts = useMemo(() => {
+    const byFocus = new Map<string, number>()
     const byOutcome = new Map<string, number>()
     const byModality = new Map<string, number>()
     const byTarget = new Map<string, number>()
-    // Count only studies of the selected types, so the numbers match the list.
+    // Count only studies of the selected types and focus, so the numbers match the list.
     for (const { study } of indexed) {
       if (types.size > 0 && !types.has(study.type)) continue
+      byFocus.set(study.focus, (byFocus.get(study.focus) ?? 0) + 1)
+      if (focuses.size > 0 && !focuses.has(study.focus)) continue
       for (const m of study.modalities) byModality.set(m, (byModality.get(m) ?? 0) + 1)
       for (const t of study.targets) byTarget.set(t, (byTarget.get(t) ?? 0) + 1)
       const group = study.outcome && OUTCOME_GROUP_OF.get(study.outcome.verdict)
@@ -205,13 +223,15 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     const mods = sorted(byModality).filter(([k]) => k !== UNCLASSIFIED)
     if (byModality.has(UNCLASSIFIED)) mods.push([UNCLASSIFIED, byModality.get(UNCLASSIFIED)!])
     const outcomeCounts = OUTCOME_GROUPS.map(([g]) => [g, byOutcome.get(g) ?? 0] as const).filter(([, n]) => n > 0)
-    return { modalities: mods, targets: sorted(byTarget), outcomes: outcomeCounts }
-  }, [indexed, types])
+    const focusCounts = FOCUS_OPTIONS.map((f) => [f, byFocus.get(f) ?? 0] as const).filter(([, n]) => n > 0)
+    return { focuses: focusCounts, modalities: mods, targets: sorted(byTarget), outcomes: outcomeCounts }
+  }, [indexed, types, focuses])
 
   const filtered = useMemo(() => {
     const terms = parseQuery(search)
     const rows = indexed.filter(({ study, group, index }) => {
       if (types.size > 0 && !types.has(study.type)) return false
+      if (focuses.size > 0 && !focuses.has(study.focus)) return false
       if (phases.size > 0 && !phases.has(study.phase ?? 'No phase')) return false
       if (groups.size > 0 && !groups.has(group)) return false
       if (resultsOnly && !study.hasResults) return false
@@ -231,7 +251,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       return byStart(b.study, a.study)
     })
     return rows.map((r) => r.study)
-  }, [indexed, search, types, phases, groups, resultsOnly, modalities, target, outcomes, sort])
+  }, [indexed, search, types, focuses, phases, groups, resultsOnly, modalities, target, outcomes, sort])
 
   // Followed studies are pinned above the filters whatever the filters say,
   // so the list below leaves them out rather than showing them twice.
@@ -243,11 +263,12 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const pinnedMatches = filtered.length - unpinned.length
 
   // Any change to what is shown starts the list from the top again.
-  useEffect(() => setVisible(PAGE_SIZE), [search, types, phases, groups, resultsOnly, modalities, target, outcomes, sort])
+  useEffect(() => setVisible(PAGE_SIZE), [search, types, focuses, phases, groups, resultsOnly, modalities, target, outcomes, sort])
 
   const hasFilters =
     search.length > 0 || phases.size > 0 || groups.size > 0 || resultsOnly || modalities.size > 0 || target !== '' || outcomes.size > 0 ||
-    !(types.size === 1 && types.has('INTERVENTIONAL'))
+    !(types.size === 1 && types.has('INTERVENTIONAL')) ||
+    !(focuses.size === 1 && focuses.has(DEFAULT_FOCUS))
 
   if (loadError) {
     return (
@@ -269,7 +290,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     <div className="flex flex-col gap-4">
       <p className="max-w-3xl text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
         Every ALS study registered on ClinicalTrials.gov — {snapshot.studies.length.toLocaleString()} in total, as of{' '}
-        {new Date(snapshot.generatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}. These
+        {new Date(snapshot.generatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}. It opens on
+        trials aimed at slowing ALS itself; use Focus to see symptom, supportive-care, diagnostic and other studies. These
         entries are the registry’s own records, not curated summaries. Coverage before about 2000 is thin, and trials registered
         only in other countries’ registries (EU, Australia, China, Japan and others) are not included.
       </p>
@@ -328,6 +350,13 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
           </select>
         </div>
 
+        <ChipRow label="Focus">
+          {facetCounts.focuses.map(([f, n]) => (
+            <Chip key={f} active={focuses.has(f)} onClick={() => setFocuses((prev) => toggle(prev, f))}>
+              {f} · {n}
+            </Chip>
+          ))}
+        </ChipRow>
         <ChipRow label="Type">
           {TYPE_OPTIONS.map((t) => (
             <Chip key={t.key} active={types.has(t.key)} onClick={() => setTypes((prev) => toggle(prev, t.key))}>
@@ -396,6 +425,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
             onClick={() => {
               setSearch('')
               setTypes(new Set(['INTERVENTIONAL']))
+              setFocuses(new Set([DEFAULT_FOCUS]))
               setPhases(new Set())
               setGroups(new Set())
               setResultsOnly(false)
@@ -489,6 +519,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
             />
           )}
           <Badge label={statusLabel(study.status)} color={STATUS_GROUP_COLOR[group]} />
+          {study.focus !== DEFAULT_FOCUS && <Badge label={study.focus} color="var(--text-muted)" />}
           {study.type !== 'INTERVENTIONAL' && <Badge label={study.type === 'OBSERVATIONAL' ? 'Observational' : 'Expanded access'} color="var(--text-muted)" />}
           {study.modalities.map((m) => (
             <Badge key={m} label={m} color={m === UNCLASSIFIED ? 'var(--text-muted)' : (MODALITY_BADGE_COLOR[m] ?? 'var(--text-secondary)')} />

@@ -50,6 +50,8 @@ export interface RegistryStudy {
   /** Publications the registry lists as reporting this study's results. */
   publications: { pmid: string; citation: string }[]
   outcome: RegistryOutcome | null
+  /** What the study is mainly for (see focusOf in scripts/fetch-registry.mjs). */
+  focus: string
 }
 
 export interface RegistrySnapshot {

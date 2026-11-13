@@ -13,12 +13,13 @@ const API = 'https://clinicaltrials.gov/api/v2/studies'
 const OUT = new URL('../public/data/als-registry.json', import.meta.url)
 const DRUGS = new URL('./drugs.json', import.meta.url)
 const OUTCOMES = new URL('./outcomes.json', import.meta.url)
+const FOCUS = new URL('./focus.json', import.meta.url)
 
 const FIELDS = [
   'NCTId', 'BriefTitle', 'OfficialTitle', 'Acronym', 'OverallStatus', 'WhyStopped', 'Phase', 'StudyType',
   'Condition', 'Keyword', 'InterventionName', 'InterventionType', 'InterventionOtherName', 'LeadSponsorName', 'LeadSponsorClass',
   'StartDate', 'PrimaryCompletionDate', 'CompletionDate', 'EnrollmentCount', 'EnrollmentType',
-  'HasResults', 'LocationCountry', 'ReferencesModule',
+  'HasResults', 'LocationCountry', 'ReferencesModule', 'PrimaryOutcomeMeasure', 'DesignPrimaryPurpose',
 ].join(',')
 
 function describedAs(s) {
@@ -143,6 +144,48 @@ function outcomeOf(id, type, status, whyStopped, hasResults, publications) {
   return null
 }
 
+// What a study is mainly for. Decided from the registry record by the rules
+// below, with hand corrections in scripts/focus.json where the rules get it wrong.
+const focusOverrides = JSON.parse(await readFile(FOCUS, 'utf8')).focus
+const SYMPTOM = /pseudobulbar|emotional labil|\bPBA\b|pathological (laughing|crying)|sialorrh|drool|saliva|secretion|cramp|spastic|fasciculation|depress|anxiety|\bpain\b|insomnia|\bsleep|fatigue|appetite|constipation|dyspn|breathless|cough|itch|pruritus|cognitive (impair|symptom)|apathy|muscle stiffness/i
+const SUPPORT = /ventilat|\bNIV\b|bipap|tracheost|diaphragm(atic)? pac|insufflat|airway clearance|respiratory (muscle )?training|gastrostom|\bPEG\b|\bRIG\b|feeding|nutrition|\bdiet|caloric|calorie|exercise|rehabilit|physiotherap|physical therap|occupational therap|speech therap|communication|brain[- ]computer|\bBCI\b|eye[- ]track|augmentative|voice bank|palliative|end[- ]of[- ]life|caregiver|carer|telehealth|telemedicine|multidisciplinary|quality of life|psycholog|mindfulness|music|exoskeleton|wheelchair|orthos|robot|advance care|decision aid|dysphagia|swallow|home care|assistive|neural interface|neuroprosthe|intracortical|tetrapleg|paralysis|brain[- ]machine|cortical communication|neurotechnology|manipulation device|\\bbrace\\b|dysarthria|advance care/i
+const DIAGNOSTIC = /\bPET\b|positron|SPECT|\bMRI\b|magnetic resonance imaging|imaging|tracer|radioligand|biomarker|diagnos|electromyograph|\bEMG\b|nerve conduction|electrical impedance|ultrasound|spectroscopy/i
+const ALS_IN_TITLE = /amyotrophic|\bALS\b|motor neurone? disease|\bMND\b|lou gehrig/i
+const ALS_LIKE_CONDITION = /amyotrophic|\bALS\b|motor neuron|\bMND\b|lou gehrig|frontotemporal|\bFTD\b|neurodegenerat|primary lateral|progressive muscular atrophy|bulbar palsy|healthy/i
+
+const THERAPEUTIC_TYPES = new Set(['DRUG', 'BIOLOGICAL', 'GENETIC', 'COMBINATION_PRODUCT'])
+const TRACER = /\bPET\b|positron|SPECT|tracer|radioligand|dosimetry|imaging/i
+
+function focusOf(id, p, type, modalities) {
+  if (focusOverrides[id]) return focusOverrides[id]
+  const ident = p.identificationModule
+  const titles = `${ident.briefTitle} ${ident.officialTitle ?? ''}`
+  const conditions = p.conditionsModule?.conditions ?? []
+  const text = [titles, ...conditions, ...(p.conditionsModule?.keywords ?? []),
+    ...(p.outcomesModule?.primaryOutcomes ?? []).map((o) => o.measure)].join(' ')
+  const purpose = p.designModule?.designInfo?.primaryPurpose
+  const interventions = p.armsInterventionsModule?.interventions ?? []
+  // A drug, biologic or gene therapy that isn't a diagnostic agent.
+  const treats = interventions.some((i) => THERAPEUTIC_TYPES.has(i.type) && !/placebo/i.test(i.name)) &&
+    modalities.some((m) => m !== 'Diagnostic')
+
+  if (modalities.includes('Diagnostic') || (treats ? TRACER.test(titles) && !modalities.some((m) => m !== 'Diagnostic' && m !== 'Not yet classified')
+    : purpose === 'DIAGNOSTIC' || purpose === 'SCREENING')) return 'Diagnostics & biomarkers'
+  const symptomTitle = SYMPTOM.test(titles)
+  const supportTitle = SUPPORT.test(titles)
+  // Drugs for a symptom are symptom management; devices, therapy and care
+  // aimed at a symptom (e.g. ventilation for breathlessness) are supportive care.
+  if (symptomTitle && (!supportTitle || treats)) return 'Symptom management'
+  if (supportTitle) return 'Supportive care'
+  if (conditions.some((c) => SYMPTOM.test(c))) return treats ? 'Symptom management' : 'Supportive care'
+  if (purpose === 'SUPPORTIVE_CARE') return treats && SYMPTOM.test(text) ? 'Symptom management' : 'Supportive care'
+  // ALS is one of several conditions, and not what the title is about.
+  if (!ALS_IN_TITLE.test(titles) && conditions.some((c) => !ALS_LIKE_CONDITION.test(c))) return 'Other-disease studies'
+  if (type === 'OBSERVATIONAL') return DIAGNOSTIC.test(text) ? 'Diagnostics & biomarkers' : 'Natural history & other research'
+  if (!treats && DIAGNOSTIC.test(titles)) return 'Diagnostics & biomarkers'
+  return 'Slowing ALS progression'
+}
+
 const PHASE_LABEL = { EARLY_PHASE1: 'Early Phase 1', PHASE1: 'Phase 1', PHASE2: 'Phase 2', PHASE3: 'Phase 3', PHASE4: 'Phase 4' }
 
 function slim(s) {
@@ -193,6 +236,7 @@ function slim(s) {
     hasResults: Boolean(s.hasResults),
     countries: [...new Set((p.contactsLocationsModule?.locations ?? []).map((l) => l.country).filter(Boolean))],
     publications,
+    focus: focusOf(id.nctId, p, type, modalities),
     outcome: outcomeOf(id.nctId, type, status, st.whyStopped ?? null, Boolean(s.hasResults), publications),
   }
 }
@@ -205,6 +249,8 @@ for (const { cond, keep } of SEARCHES) {
   }
 }
 
+const missingFocus = Object.keys(focusOverrides).filter((id) => !byId.has(id))
+if (missingFocus.length) console.warn(`Focus corrections for studies not in the catalog: ${missingFocus.join(', ')}`)
 const missing = Object.keys(curatedOutcomes).filter((id) => !byId.has(id))
 if (missing.length) console.warn(`Curated outcomes for studies not in the catalog: ${missing.join(', ')}`)
 
