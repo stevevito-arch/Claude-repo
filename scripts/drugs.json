@@ -111,7 +111,7 @@
    "names": [],
    "what": "Retinal imaging tracer that binds TDP-43 deposits (a diagnostic, not a treatment)",
    "targets": [
-    "TDP-43 (imaging)"
+    "TDP-43 (TARDBP)"
    ],
    "modality": "Diagnostic",
    "source": "https://www.biospace.com/amydis-announces-enrollment-of-first-participants-in-probe-a-phase-1-2a-trial-evaluating-a-novel-retinal-tracer-in-people-with-amyotrophic-lateral-sclerosis-or-parkinson-s-disease"
@@ -150,7 +150,7 @@
    "names": [],
    "what": "Antibody that binds misfolded SOD1",
    "targets": [
-    "Misfolded SOD1"
+    "SOD1"
    ],
    "modality": "Antibody",
    "source": "https://www.neurologylive.com/view/ap-101-meets-primary-end-point-phase-2-study-sod1-als"
@@ -196,7 +196,7 @@
    "what": "Dextromethorphan/quinidine combination, tested for pseudobulbar affect",
    "targets": [
     "NMDA receptor",
-    "Sigma-1 receptor"
+    "SIGMAR1 (sigma-1 receptor)"
    ],
    "modality": "Small molecule",
    "source": "https://scholars.houstonmethodist.org/en/publications/treatment-of-pseudobulbar-affect-in-als-with-dextromethorphanquin/"
@@ -277,7 +277,7 @@
    "names": [],
    "what": "Regulatory T cells derived from umbilical cord blood",
    "targets": [
-    "Neuroinflammation (regulatory T cells)"
+    "Regulatory T cells"
    ],
    "modality": "Cell therapy",
    "source": "https://alsnewstoday.com/news/fda-clears-als-clinical-study-cellenkos-treg-cell-therapy-ck0803/"
@@ -304,8 +304,8 @@
    ],
    "what": "Low-dose interleukin-2 combined with abatacept (CTLA4-Ig)",
    "targets": [
-    "Regulatory T cells (IL-2)",
-    "CD80/CD86 (abatacept)"
+    "Regulatory T cells",
+    "CD80/CD86"
    ],
    "modality": "Protein",
    "source": "https://trials.coyatherapeutics.com/trial/alstars-als"
@@ -629,7 +629,7 @@
    ],
    "what": "Oral monepantel, thought to inhibit mTOR and boost autophagy",
    "targets": [
-    "mTOR pathway"
+    "mTOR"
    ],
    "modality": "Small molecule",
    "source": "https://alsnewstoday.com/news/repurposed-vet-drug-helps-als-patients-live-longer-study/"
@@ -2036,7 +2036,7 @@
    ],
    "names": [],
    "targets": [
-    "TARDBP (TDP-43)"
+    "TDP-43 (TARDBP)"
    ],
    "modality": "Antisense oligonucleotide",
    "source": null,
@@ -2184,7 +2184,7 @@
    ],
    "names": [],
    "targets": [
-    "Regulatory T cells (IL-2 receptor)"
+    "Regulatory T cells"
    ],
    "modality": "Protein",
    "source": null
@@ -2280,7 +2280,7 @@
    ],
    "names": [],
    "targets": [
-    "Immune modulation (pooled IgG)"
+    "Immune modulation"
    ],
    "modality": "Protein",
    "source": null
@@ -2382,7 +2382,7 @@
    ],
    "names": [],
    "targets": [
-    "Neuroinflammation (regulatory T cells)"
+    "Regulatory T cells"
    ],
    "modality": "Cell therapy",
    "source": null
@@ -2597,7 +2597,7 @@
    ],
    "names": [],
    "targets": [
-    "Misfolded SOD1"
+    "SOD1"
    ],
    "modality": "Diagnostic",
    "source": null
@@ -2608,7 +2608,7 @@
    ],
    "names": [],
    "targets": [
-    "CSF1R (microglia)"
+    "CSF1R"
    ],
    "modality": "Diagnostic",
    "source": null

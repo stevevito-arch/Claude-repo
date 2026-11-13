@@ -9,6 +9,8 @@ import { TrialDetail } from './components/TrialDetail'
 import { LiveSyncBar } from './components/LiveSyncBar'
 import { ConcludedList } from './components/ConcludedList'
 import { RegistryCatalog } from './components/RegistryCatalog'
+import { buildIndex, matchesQuery, parseQuery } from './lib/search'
+import { targetSynonyms } from './data/targets'
 
 type View = 'featured' | 'all'
 
@@ -50,20 +52,21 @@ function App() {
   const featuredIds = useMemo(() => new Set(nctIds), [nctIds])
   const { statuses: liveStatuses, state: syncState, lastSyncedAt, refresh } = useLiveTrialStatuses(nctIds)
 
+  const trialIndex = useMemo(
+    () => new Map(trials.map((t) => [t.id, buildIndex([t.name, t.sponsor, t.target, t.modality, t.nctId, ...targetSynonyms(t.target)])])),
+    [],
+  )
+
   const filteredTrials = useMemo(() => {
-    const query = search.trim().toLowerCase()
+    const terms = parseQuery(search)
     return trials.filter((trial) => {
       if (activeModalities.size > 0 && !activeModalities.has(trial.modality)) return false
       if (activePhases.size > 0 && !activePhases.has(trial.phase)) return false
       const effectiveStatus = liveStatuses[trial.nctId ?? '']?.overallStatus ?? trial.status
       if (activeStatuses.size > 0 && !activeStatuses.has(effectiveStatus as TrialStatus)) return false
-      if (query.length > 0) {
-        const haystack = `${trial.name} ${trial.sponsor} ${trial.target} ${trial.modality}`.toLowerCase()
-        if (!haystack.includes(query)) return false
-      }
-      return true
+      return matchesQuery(trialIndex.get(trial.id)!, terms)
     })
-  }, [search, activeModalities, activePhases, activeStatuses, liveStatuses])
+  }, [search, activeModalities, activePhases, activeStatuses, liveStatuses, trialIndex])
 
   const stats = useMemo(() => {
     const recruiting = trials.filter((t) => {

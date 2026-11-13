@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 import type { RegistrySnapshot, RegistryStudy } from '../types/registry'
 import { statusLabel } from '../lib/clinicalTrialsApi'
 import { useFollowed } from '../lib/useFollowed'
+import { buildIndex, matchesQuery, parseQuery } from '../lib/search'
+import { targetSynonyms } from '../data/targets'
 import { Badge } from './Badge'
 
 const PAGE_SIZE = 40
@@ -146,12 +148,11 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       (snapshot?.studies ?? []).map((s) => ({
         study: s,
         group: statusGroup(s.status),
-        haystack: [
+        index: buildIndex([
           s.id, s.title, s.acronym, s.sponsor, ...s.interventions, ...s.aliases, ...s.targets, ...s.modalities,
-          ...s.drugs.flatMap((d) => [...d.names, d.what ?? '']),
-        ]
-          .join(' ')
-          .toLowerCase(),
+          ...s.targets.flatMap(targetSynonyms),
+          ...s.drugs.flatMap((d) => [...d.names, d.what]),
+        ]),
       })),
     [snapshot],
   )
@@ -180,15 +181,15 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   }, [indexed, types])
 
   const filtered = useMemo(() => {
-    const terms = search.trim().toLowerCase().split(/\s+/).filter(Boolean)
-    const rows = indexed.filter(({ study, group, haystack }) => {
+    const terms = parseQuery(search)
+    const rows = indexed.filter(({ study, group, index }) => {
       if (types.size > 0 && !types.has(study.type)) return false
       if (phases.size > 0 && !phases.has(study.phase ?? 'No phase')) return false
       if (groups.size > 0 && !groups.has(group)) return false
       if (resultsOnly && !study.hasResults) return false
       if (modalities.size > 0 && !study.modalities.some((m) => modalities.has(m))) return false
       if (target && !study.targets.includes(target)) return false
-      return terms.every((t) => haystack.includes(t))
+      return matchesQuery(index, terms)
     })
     const byStart = (a: RegistryStudy, b: RegistryStudy) => (a.start ?? '').localeCompare(b.start ?? '')
     rows.sort((a, b) => {
