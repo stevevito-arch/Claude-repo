@@ -109,6 +109,34 @@ function classify(interventions) {
   return { entries: [...drugs.entries()], modalities: [...modalities] }
 }
 
+// The drugs a study tests, as keys that stay the same across studies: the drug
+// table entry when there is one (so a code and its later name match), otherwise
+// the intervention name without its dose. Riluzole is left out when it is only
+// the background treatment alongside the drug under test.
+const BACKGROUND = /^riluzole\b/i
+// Medicines given alongside the one under test, e.g. steroids before a gene therapy.
+const HELPER = /prevent|prophyla|premedicat|pre-medicat/i
+const DOSE = /\s+\d+(\.\d+)?\s*(mg|g|mcg|ug|µg|ml|iu|units?|cells|x)\b.*$/i
+const DOSE_PREFIX = /^((single|multiple) ascending doses? of|\d+(\.\d+)?\s*(mg|g|mcg|ug|µg|ml))\s+/i
+function testedDrugs(interventions) {
+  const found = new Map()
+  for (const i of interventions) {
+    if (!DRUG_TYPES.has(i.type) || IS_COMPARATOR.test(i.name.trim()) || HELPER.test(i.name)) continue
+    const label = i.name.replace(DOSE_PREFIX, '').replace(DOSE, '').trim()
+    const entry = entryFor(i)
+    // Group entries (various stem-cell products, say) are tracked by the study's own name.
+    const known = Boolean(entry)
+    const key = entry && !entry.group ? `t:${entry.match[0].toLowerCase()}` : `n:${spaced(label)}`
+    if (key !== 'n:' && !found.has(key)) found.set(key, { key, label, known })
+  }
+  let tested = [...found.values()].filter((d) => !BACKGROUND.test(d.label))
+  if (!tested.length) tested = [...found.values()]
+  // When the table recognises a drug, other names in the study are usually
+  // helpers (e.g. a drug-interaction cocktail), so keep only the recognised ones.
+  if (tested.some((d) => d.known)) tested = tested.filter((d) => d.known)
+  return tested.map(({ key, label }) => ({ key, label }))
+}
+
 // Hand-researched outcomes (scripts/outcomes.json), keyed by NCT ID.
 const curatedOutcomes = JSON.parse(await readFile(OUTCOMES, 'utf8')).outcomes
 
@@ -214,6 +242,7 @@ function slim(s) {
   const status = st.overallStatus ?? 'UNKNOWN'
   const type = p.designModule?.studyType ?? 'UNKNOWN'
   return {
+    _drugs: type === 'INTERVENTIONAL' ? testedDrugs(interventions) : [],
     id: id.nctId,
     title: id.briefTitle,
     acronym: id.acronym ?? null,
@@ -259,6 +288,39 @@ const missing = Object.keys(curatedOutcomes).filter((id) => !byId.has(id))
 if (missing.length) console.warn(`Curated outcomes for studies not in the catalog: ${missing.join(', ')}`)
 
 const studies = [...byId.values()].sort((a, b) => (b.start ?? '').localeCompare(a.start ?? ''))
+
+// Whether each drug tested before Phase 3 reached a later phase in ALS: the
+// furthest phase of any trial of the same drug, with that trial's ID, start
+// and status. Phase 1 studies sometimes run alongside a drug's Phase 3 (e.g.
+// drug-interaction studies), so the other trial may have started first.
+// Withdrawn trials never ran, so they don't count; at the furthest phase, the
+// drug's first main trial is shown rather than an extension or a platform
+// trial's master protocol.
+const EXTENSION = /extension|continuation|rollover|roll-over|long[- ]term (safety|follow)/i
+// Phase 4 (post-approval) studies are left out: they say nothing about
+// whether a new drug advanced. So is riluzole, approved since 1995, when a
+// study tests a new form of it.
+const PHASE_RANK = { 'Early Phase 1': 0, 'Phase 1': 1, 'Phase 1/2': 1.5, 'Phase 2': 2, 'Phase 2/3': 2.5, 'Phase 3': 3 }
+const byDrug = new Map()
+for (const st of studies) for (const { key } of st._drugs) {
+  if (!byDrug.has(key)) byDrug.set(key, [])
+  byDrug.get(key).push(st)
+}
+for (const st of studies) {
+  const rank = PHASE_RANK[st.phase]
+  st.laterDevelopment = rank === undefined || rank >= 3 ? [] : st._drugs.filter((x) => !/riluzole/i.test(x.label)).slice(0, 3).map(({ key, label }) => {
+    const later = byDrug.get(key)
+      .filter((o) => o !== st && o.status !== 'WITHDRAWN' && o.focus === st.focus && (PHASE_RANK[o.phase] ?? -1) > rank)
+      .sort((a, b) => PHASE_RANK[b.phase] - PHASE_RANK[a.phase] ||
+        Number(EXTENSION.test(a.title)) - Number(EXTENSION.test(b.title)) ||
+        // A drug's own trial rather than a platform master protocol listing many drugs.
+        a._drugs.length - b._drugs.length || (a.start ?? '9999').localeCompare(b.start ?? '9999'))[0]
+    return later
+      ? { drug: label, phase: later.phase, id: later.id, start: later.start, status: later.status }
+      : { drug: label, phase: null, id: null, start: null, status: null }
+  })
+}
+for (const st of studies) delete st._drugs
 if (studies.length < 500) throw new Error(`Only ${studies.length} studies returned; refusing to overwrite the snapshot`)
 
 await mkdir(new URL('.', OUT), { recursive: true })

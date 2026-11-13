@@ -1,5 +1,5 @@
 {
- "about": "Drug table used by scripts/fetch-registry.mjs. For each drug: the names and codes it is matched by (an intervention matches the first entry with a name it starts with, so specific products come before the generic ingredients they contain), other names, its target(s) and modality, and a source. Entries for company codes cite the public source that identifies the code. Entries for well-characterised drugs give a source where one was checked (e.g. ChEMBL); entries with source null state standard, widely documented pharmacology. Drugs whose target could not be established are left out and show as 'Not yet classified'.",
+ "about": "Drug table used by scripts/fetch-registry.mjs. For each drug: the names and codes it is matched by (an intervention matches the first entry with a name it starts with, so specific products come before the generic ingredients they contain), other names, its target(s) and modality, and a source. Entries for company codes cite the public source that identifies the code. Entries for well-characterised drugs give a source where one was checked (e.g. ChEMBL); entries with source null state standard, widely documented pharmacology. Entries marked group: true cover a class of different products (e.g. various mesenchymal stem-cell preparations), so they are not treated as one drug when tracking whether a drug went on to a later phase. Drugs whose target could not be established are left out and show as 'Not yet classified'.",
  "drugs": [
   {
    "match": [
@@ -1341,7 +1341,17 @@
     "triumeq",
     "dolutegravir",
     "abacavir",
-    "lamivudine",
+    "lamivudine"
+   ],
+   "names": [],
+   "targets": [
+    "Endogenous retroviruses (HERV-K)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
     "darunavir",
     "ritonavir",
     "tenofovir alafenamide"
@@ -1626,7 +1636,8 @@
     "Glucocorticoid receptor"
    ],
    "modality": "Small molecule",
-   "source": null
+   "source": null,
+   "group": true
   },
   {
    "match": [
@@ -1734,7 +1745,17 @@
   {
    "match": [
     "usnoflast",
-    "ZYIL1",
+    "ZYIL1"
+   ],
+   "names": [],
+   "targets": [
+    "NLRP3 inflammasome"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
     "kamlanoflast"
    ],
    "names": [],
@@ -1779,7 +1800,17 @@
   },
   {
    "match": [
-    "triheptanoin",
+    "triheptanoin"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial energy metabolism"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
     "oxaloacetic acid"
    ],
    "names": [],
@@ -2385,7 +2416,8 @@
     "Regulatory T cells"
    ],
    "modality": "Cell therapy",
-   "source": null
+   "source": null,
+   "group": true
   },
   {
    "match": [
@@ -2399,7 +2431,8 @@
     "Cell replacement and neurotrophic support"
    ],
    "modality": "Cell therapy",
-   "source": null
+   "source": null,
+   "group": true
   },
   {
    "match": [
@@ -2437,7 +2470,8 @@
     "Neurotrophic and immune support"
    ],
    "modality": "Cell therapy",
-   "source": null
+   "source": null,
+   "group": true
   },
   {
    "match": [
@@ -2451,7 +2485,8 @@
     "Paracrine factors (stem-cell secretome)"
    ],
    "modality": "Protein",
-   "source": null
+   "source": null,
+   "group": true
   },
   {
    "match": [

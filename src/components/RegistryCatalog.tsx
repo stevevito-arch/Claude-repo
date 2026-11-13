@@ -603,6 +603,33 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
           </span>
         </div>
       ))}
+      {study.laterDevelopment.map((dev) => (
+        <p key={dev.drug} className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <span style={{ color: 'var(--text-muted)' }}>
+            Furthest phase in ALS{study.laterDevelopment.length > 1 && ` (${dev.drug.length > 40 ? `${dev.drug.slice(0, 37)}…` : dev.drug})`}:{' '}
+          </span>
+          {dev.phase && dev.id ? (
+            <>
+              <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                {dev.phase}
+              </span>
+              {' · '}
+              <a
+                href={`https://clinicaltrials.gov/study/${dev.id}`}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono underline"
+                style={{ color: 'var(--cat-blue)' }}
+              >
+                {dev.id}
+              </a>{' '}
+              ({[dev.start ? `started ${year(dev.start)}` : null, dev.status ? statusLabel(dev.status).toLowerCase() : null].filter(Boolean).join(', ')})
+            </>
+          ) : (
+            'this trial; no later-phase ALS trial registered'
+          )}
+        </p>
+      ))}
       {otherNames.length > 0 && (
         <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           <span style={{ color: 'var(--text-muted)' }}>Also listed as: </span>

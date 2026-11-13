@@ -50,6 +50,11 @@ export interface RegistryStudy {
   /** Publications the registry lists as reporting this study's results. */
   publications: { pmid: string; citation: string }[]
   outcome: RegistryOutcome | null
+  /**
+   * For trials before Phase 3: for each drug tested, the furthest phase any
+   * ALS trial of that drug reached (null phase: none beyond this trial).
+   */
+  laterDevelopment: { drug: string; phase: string | null; id: string | null; start: string | null; status: string | null }[]
   /** What the study is mainly for (see focusOf in scripts/fetch-registry.mjs). */
   focus: string
 }
