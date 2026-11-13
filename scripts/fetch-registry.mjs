@@ -127,7 +127,10 @@ const STOP_REASONS = [
 // outcome where there is one, otherwise what the registry itself shows.
 function outcomeOf(id, type, status, whyStopped, hasResults, publications) {
   const curated = curatedOutcomes[id]
-  if (curated) return { ...curated, curated: true }
+  if (curated) {
+    const { ignorePublications: _, ...outcome } = curated
+    return { ...outcome, curated: true }
+  }
   if (type !== 'INTERVENTIONAL') return null
   const auto = (verdict) => ({ verdict, summary: null, source: null, curated: false })
   if (status === 'WITHDRAWN') return auto('Withdrawn before enrolling')
@@ -235,7 +238,8 @@ function slim(s) {
     enrollmentActual: de.enrollmentInfo?.type === 'ACTUAL',
     hasResults: Boolean(s.hasResults),
     countries: [...new Set((p.contactsLocationsModule?.locations ?? []).map((l) => l.country).filter(Boolean))],
-    publications,
+    // Curated outcomes can mark the registry's "result" papers as background or another study.
+    publications: curatedOutcomes[id.nctId]?.ignorePublications ? [] : publications,
     focus: focusOf(id.nctId, p, type, modalities),
     outcome: outcomeOf(id.nctId, type, status, st.whyStopped ?? null, Boolean(s.hasResults), publications),
   }

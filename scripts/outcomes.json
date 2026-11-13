@@ -1,5 +1,5 @@
 {
- "about": "Hand-researched outcomes for finished ALS studies, used by scripts/fetch-registry.mjs. Keyed by NCT ID. verdict is one of: Met primary endpoint, Missed primary endpoint, No benefit shown (exploratory study with no formal primary endpoint), Mixed results, Inconclusive, Stopped: no benefit, Stopped: safety, Stopped: slow enrollment, Stopped: business or funding, Extension or access study, Safety study, Not a treatment study, No results found. summary says what happened in plain words; source is the checked publication or report it rests on (null only for facts that are part of the registry record itself or widely documented, e.g. a drug's market withdrawal). Studies not listed here get an automatic outcome from the registry (its stop reason, posted results and linked publications).",
+ "about": "Hand-researched outcomes for finished ALS studies, used by scripts/fetch-registry.mjs. Keyed by NCT ID. verdict is one of: Met primary endpoint, Missed primary endpoint, No benefit shown (exploratory study with no formal primary endpoint), Mixed results, Inconclusive, Stopped: no benefit, Stopped: safety, Stopped: slow enrollment, Stopped: business or funding, Extension or access study, Safety study, Descriptive results (no comparison or formal test, e.g. a feasibility or physiology study), Not a treatment study, No results found. summary says what happened in plain words; source is the checked publication or report it rests on (null only for facts that are part of the registry record itself or widely documented, e.g. a drug's market withdrawal). ignorePublications: true hides publications the registry links as results when they are really background or a different study. Studies not listed here get an automatic outcome from the registry (its stop reason, posted results and linked publications).",
  "outcomes": {
   "NCT00021697": {
    "verdict": "Met primary endpoint",
@@ -285,6 +285,517 @@
    "verdict": "Stopped: no benefit",
    "summary": "Continuation study of latozinemab, stopped after its parent phase 3 in frontotemporal dementia due to GRN mutations (INFRONT-3) missed its clinical endpoint.",
    "source": "https://www.biopharmadive.com/news/gsk-alector-frontotemporal-dementia-latozinemab-study-results/803463/"
+  },
+  "NCT03766321": {
+   "verdict": "No results found",
+   "summary": "Placebo-controlled trial of faecal microbiota transplantation (42 patients). No results posted; the papers the registry links are background reading, not this trial's results.",
+   "source": null,
+   "ignorePublications": true
+  },
+  "NCT05189106": {
+   "verdict": "Safety study",
+   "summary": "Open-label basket study of baricitinib in 9 people with ALS and 7 with Alzheimer's: the drug reached the spinal fluid; one serious adverse event in the ALS group. No efficacy comparison.",
+   "source": "https://clinicaltrials.gov/study/NCT05189106?tab=results"
+  },
+  "NCT05163886": {
+   "verdict": "Safety study",
+   "summary": "Small safety study (15 patients with C9orf72 ALS), placebo-controlled for 12 weeks: 9 of 10 completed treatment on LAM-002A. Not designed to test efficacy.",
+   "source": "https://clinicaltrials.gov/study/NCT05163886?tab=results"
+  },
+  "NCT05039099": {
+   "verdict": "Safety study",
+   "summary": "Phase 2a safety study in 73 patients with sporadic or SOD1 ALS: no anti-drug antibodies; serious adverse events in 19 of 66 people given AP-101 (including open-label treatment) vs 7 of 25 on placebo. Not designed to test efficacy.",
+   "source": "https://clinicaltrials.gov/study/NCT05039099?tab=results"
+  },
+  "NCT04490148": {
+   "verdict": "Descriptive results",
+   "summary": "Home breathing tests flagged the need for ventilation a median of 176 days after enrolment, vs 259 days with clinic tests (34 patients; no formal comparison).",
+   "source": "https://clinicaltrials.gov/study/NCT04490148?tab=results"
+  },
+  "NCT04866771": {
+   "verdict": "Descriptive results",
+   "summary": "Pilot (14 patients): less functional decline was reported during transcranial direct current stimulation than in the delayed-start group, without a statistical test.",
+   "source": "https://clinicaltrials.gov/study/NCT04866771?tab=results"
+  },
+  "NCT04499963": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label (50 treated): the rate of functional decline on Theracurmin was no different from the comparison group (p=0.98).",
+   "source": "https://clinicaltrials.gov/study/NCT04499963?tab=results"
+  },
+  "NCT06429059": {
+   "verdict": "No benefit shown",
+   "summary": "Pilot (50 patients) assigning supplements by genomic subtype: no difference in functional decline between approaches (p=0.56).",
+   "source": "https://clinicaltrials.gov/study/NCT06429059?tab=results"
+  },
+  "NCT05542576": {
+   "verdict": "Safety study",
+   "summary": "Retinal tracer AMDX-2011P in 13 people: a few mild side effects at the higher doses; no serious adverse events.",
+   "source": "https://clinicaltrials.gov/study/NCT05542576?tab=results"
+  },
+  "NCT05979688": {
+   "verdict": "No results found",
+   "summary": "Small trial of yogic breathing exercise. No results posted; the paper the registry links is a different study.",
+   "source": null,
+   "ignorePublications": true
+  },
+  "NCT04998305": {
+   "verdict": "No benefit shown",
+   "summary": "Small crossover trial (11 patients): muscle-cramp scores were similar on TJ-68 and placebo.",
+   "source": "https://clinicaltrials.gov/study/NCT04998305?tab=results"
+  },
+  "NCT04245709": {
+   "verdict": "Safety study",
+   "summary": "Open-label (25 patients): two serious adverse events on clenbuterol; no control group to judge efficacy.",
+   "source": "https://clinicaltrials.gov/study/NCT04245709?tab=results"
+  },
+  "NCT06889857": {
+   "verdict": "No results found",
+   "summary": "Open-label study of a stem-cell-derived secretome (8 patients). No results posted; the paper the registry links is a different trial (JETALS).",
+   "source": null,
+   "ignorePublications": true
+  },
+  "NCT04632225": {
+   "verdict": "Safety study",
+   "summary": "18 patients: Engensis injections into muscle were generally tolerated (bruising, fever); one serious adverse event on Engensis.",
+   "source": "https://clinicaltrials.gov/study/NCT04632225?tab=results"
+  },
+  "NCT04953286": {
+   "verdict": "Descriptive results",
+   "summary": "Study of tear fluid chemistry in ALS; published in 2024.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39349171/"
+  },
+  "NCT05039268": {
+   "verdict": "Safety study",
+   "summary": "16 patients: no serious or severe adverse events; a PET measure of motor-cortex inflammation did not change after 7 days (only 8 scanned).",
+   "source": "https://clinicaltrials.gov/study/NCT05039268?tab=results"
+  },
+  "NCT05508074": {
+   "verdict": "Safety study",
+   "summary": "51 patients with bulbar-onset ALS on riluzole: more side effects on IFB-088 (25 of 34 vs 10 of 17); serious adverse events 8 of 34 vs 4 of 17. A safety-focused phase 2.",
+   "source": "https://clinicaltrials.gov/study/NCT05508074?tab=results"
+  },
+  "NCT04322149": {
+   "verdict": "Safety study",
+   "summary": "Open-label dose study (54 patients) of AT-1501 (tegoprubart): generally tolerated, with one serious adverse event across four doses.",
+   "source": "https://clinicaltrials.gov/study/NCT04322149?tab=results"
+  },
+  "NCT05003167": {
+   "verdict": "Met primary endpoint",
+   "summary": "Single-group study (13 patients): expiratory muscle training raised maximum expiratory pressure from 66 to 84 cmH2O (p=0.001).",
+   "source": "https://clinicaltrials.gov/study/NCT05003167?tab=results"
+  },
+  "NCT05176093": {
+   "verdict": "Extension or access study",
+   "summary": "Six-month extension of the Engensis safety study (8 patients).",
+   "source": "https://clinicaltrials.gov/study/NCT05176093?tab=results"
+  },
+  "NCT03427086": {
+   "verdict": "No results found",
+   "summary": "Small placebo-controlled safety study of high-dose biotin (12 patients). No results posted; the papers the registry links are general reviews.",
+   "source": null,
+   "ignorePublications": true
+  },
+  "NCT04176224": {
+   "verdict": "Descriptive results",
+   "summary": "Pharmacology study: measured blood levels of oral edaravone in 9 patients.",
+   "source": "https://clinicaltrials.gov/study/NCT04176224?tab=results"
+  },
+  "NCT04254913": {
+   "verdict": "Descriptive results",
+   "summary": "Pharmacology study: measured blood levels of oral edaravone given through a feeding tube in 6 patients.",
+   "source": "https://clinicaltrials.gov/study/NCT04254913?tab=results"
+  },
+  "NCT02118727": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Memantine 20 mg twice daily did not slow functional decline over 36 weeks (−0.29 vs −0.28 points a week, 89 patients).",
+   "source": "https://clinicaltrials.gov/study/NCT02118727?tab=results"
+  },
+  "NCT03487263": {
+   "verdict": "Safety study",
+   "summary": "Phase 1b dose-escalation and safety study of the anti-CD14 antibody IC14 in 10 patients; published in 2021.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/34678870/"
+  },
+  "NCT03411863": {
+   "verdict": "Descriptive results",
+   "summary": "Physiology study of cervical spinal stimulation in 11 people with ALS and 8 controls; not a test of treatment benefit.",
+   "source": "https://clinicaltrials.gov/study/NCT03411863?tab=results"
+  },
+  "NCT03851302": {
+   "verdict": "Descriptive results",
+   "summary": "Physiology study of remote ischaemic conditioning with hand exercise, mostly in spinal cord injury (2 people with ALS).",
+   "source": "https://clinicaltrials.gov/study/NCT03851302?tab=results"
+  },
+  "NCT03883581": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Open-label (28 patients): no significant change in swallowing safety, speech intelligibility or patient-rated bulbar function after 30 days of Nuedexta (p=0.08 to 0.65).",
+   "source": "https://clinicaltrials.gov/study/NCT03883581?tab=results"
+  },
+  "NCT03506425": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label pilot (15 patients): decline slowed from 0.57 to 0.39 points a month on triheptanoin, not statistically significant (p=0.32).",
+   "source": "https://clinicaltrials.gov/study/NCT03506425?tab=results"
+  },
+  "NCT03986671": {
+   "verdict": "Descriptive results",
+   "summary": "Test of a throat EMG probe: readings agreed in 78% of people with ALS vs 96% of healthy volunteers.",
+   "source": "https://clinicaltrials.gov/study/NCT03986671?tab=results"
+  },
+  "NCT03488524": {
+   "verdict": "Extension or access study",
+   "summary": "Open-label extension of CENTAUR (90 patients). Published analyses linked longer survival to earlier AMX0035, but the PHOENIX phase 3 later failed and the drug was withdrawn in 2024.",
+   "source": "https://clinicaltrials.gov/study/NCT03488524?tab=results"
+  },
+  "NCT04055623": {
+   "verdict": "Descriptive results",
+   "summary": "Small randomised trial (11 patients; enrolment cut short by COVID-19) of regulatory T-cell infusions with IL-2; Treg function was measured, with no efficacy conclusion. The paper the registry links is the earlier phase 1.",
+   "source": "https://clinicaltrials.gov/study/NCT04055623?tab=results",
+   "ignorePublications": true
+  },
+  "NCT03214224": {
+   "verdict": "Descriptive results",
+   "summary": "Home breathing tests gave values close to clinic tests (FVC 80% vs 73% predicted) in 40 patients.",
+   "source": "https://clinicaltrials.gov/study/NCT03214224?tab=results"
+  },
+  "NCT03694132": {
+   "verdict": "Descriptive results",
+   "summary": "Brain-imaging and EEG/MEG study of sensory-motor pathways in ALS; published in 2025.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/40488178/"
+  },
+  "NCT04098406": {
+   "verdict": "Missed primary endpoint",
+   "summary": "RESCUE-ALS: CNM-Au8 missed its primary nerve-conduction (EMG) endpoint (p=0.43) in 45 patients; exploratory clinical measures were reported in the publication.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37396808/"
+  },
+  "NCT03645031": {
+   "verdict": "Descriptive results",
+   "summary": "Single-session physiology study (14 people with ALS, 11 controls) of brief low-oxygen breathing; no consistent improvement in breathing strength in ALS.",
+   "source": "https://clinicaltrials.gov/study/NCT03645031?tab=results"
+  },
+  "NCT02437110": {
+   "verdict": "Descriptive results",
+   "summary": "Phase 1: a four-drug antiretroviral regimen lowered HERV-K levels by about 31% over 24 weeks; no serious adverse events. Clinical benefit was not tested here (that was Lighthouse II).",
+   "source": "https://clinicaltrials.gov/study/NCT02437110?tab=results"
+  },
+  "NCT03293394": {
+   "verdict": "Met primary endpoint",
+   "summary": "Real transcranial direct current stimulation with rehabilitation improved muscle strength at 2 weeks compared with sham (p=0.001, 30 patients).",
+   "source": "https://clinicaltrials.gov/study/NCT03293394?tab=results"
+  },
+  "NCT03168711": {
+   "verdict": "Safety study",
+   "summary": "Raising urate with inosine (23 patients): 12 of 14 on inosine and 7 of 9 on placebo completed; serious adverse events 4 vs 1.",
+   "source": "https://clinicaltrials.gov/study/NCT03168711?tab=results"
+  },
+  "NCT03472950": {
+   "verdict": "Safety study",
+   "summary": "Open-label (14 patients): dose-limiting side effects in 1 of 6 at 500 mg and 2 of 8 at 1000 mg of ranolazine; no serious adverse events.",
+   "source": "https://clinicaltrials.gov/study/NCT03472950?tab=results"
+  },
+  "NCT02447952": {
+   "verdict": "Descriptive results",
+   "summary": "Feasibility of a wearable sensor (25 patients): it was worn about 12 hours a day.",
+   "source": "https://clinicaltrials.gov/study/NCT02447952?tab=results"
+  },
+  "NCT02469896": {
+   "verdict": "Safety study",
+   "summary": "Pilot (22 patients): tolerability of tocilizumab similar to placebo; no deaths. Not designed to test efficacy.",
+   "source": "https://clinicaltrials.gov/study/NCT02469896?tab=results"
+  },
+  "NCT03127514": {
+   "verdict": "Met primary endpoint",
+   "summary": "CENTAUR: AMX0035 slowed functional decline (−1.24 vs −1.66 points a month, p=0.03) in 137 fast-progressing patients. It was approved in 2022, but the confirmatory PHOENIX trial failed and it was withdrawn in 2024.",
+   "source": "https://clinicaltrials.gov/study/NCT03127514?tab=results"
+  },
+  "NCT02891629": {
+   "verdict": "Descriptive results",
+   "summary": "Feasibility of the EyeControl eye-tracking communication device in 5 people with ALS and 10 volunteers.",
+   "source": "https://clinicaltrials.gov/study/NCT02891629?tab=results"
+  },
+  "NCT02682030": {
+   "verdict": "Inconclusive",
+   "summary": "Only 5 patients enrolled and 2 completed, too few to compare the airway-clearance devices.",
+   "source": "https://clinicaltrials.gov/study/NCT02682030?tab=results"
+  },
+  "NCT03160898": {
+   "verdict": "Missed primary endpoint",
+   "summary": "FORTITUDE-ALS: reldesemtiv did not significantly slow the decline in breathing capacity at 12 weeks (p=0.11), though trends favoured it; the phase 3 COURAGE-ALS that followed was stopped for futility.",
+   "source": "https://clinicaltrials.gov/study/NCT03160898?tab=results"
+  },
+  "NCT02872142": {
+   "verdict": "Descriptive results",
+   "summary": "Open-label (12 patients) plasma exchange with albumin; no control group.",
+   "source": "https://clinicaltrials.gov/study/NCT02872142?tab=results"
+  },
+  "NCT02059759": {
+   "verdict": "Met primary endpoint",
+   "summary": "IMODALS (36 patients): low-dose IL-2 raised regulatory T-cell numbers, its primary (biomarker) endpoint, and was well tolerated; this led to the MIROCALS trial.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/32651161/"
+  },
+  "NCT03241784": {
+   "verdict": "Safety study",
+   "summary": "Phase 1 (3 patients): no treatment-related adverse events from regulatory T-cell infusions.",
+   "source": "https://clinicaltrials.gov/study/NCT03241784?tab=results"
+  },
+  "NCT02781454": {
+   "verdict": "Met primary endpoint",
+   "summary": "In 20 patients, mexiletine changed a measure of motor-nerve excitability (resting motor threshold) compared with placebo (p=0.04). A drug-effect study, not a test of disease progression.",
+   "source": "https://clinicaltrials.gov/study/NCT02781454?tab=results"
+  },
+  "NCT03456882": {
+   "verdict": "Missed primary endpoint",
+   "summary": "RNS60 had no effect on the primary blood biomarkers of inflammation over 24 weeks (147 patients).",
+   "source": "https://clinicaltrials.gov/study/NCT03456882?tab=results"
+  },
+  "NCT02709330": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label (50 patients) compared with historical controls: lunasin did not change the rate of decline (p=0.99).",
+   "source": "https://clinicaltrials.gov/study/NCT02709330?tab=results"
+  },
+  "NCT02525471": {
+   "verdict": "Safety study",
+   "summary": "Open-label (16 patients): 13 completed 24 weeks of RNS60; one serious adverse event.",
+   "source": "https://clinicaltrials.gov/study/NCT02525471?tab=results"
+  },
+  "NCT02789059": {
+   "verdict": "Descriptive results",
+   "summary": "Study of muscle oxygen use during effort in neuromuscular diseases.",
+   "source": "https://clinicaltrials.gov/study/NCT02789059?tab=results"
+  },
+  "NCT02418546": {
+   "verdict": "Descriptive results",
+   "summary": "Weight held steady with in-person (−0.1 kg) or app-based (−0.2 kg) nutrition counselling, vs −1.2 kg with standard care over 6 months (78 patients; no formal test).",
+   "source": "https://clinicaltrials.gov/study/NCT02418546?tab=results"
+  },
+  "NCT02714036": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label (35 patients): ibudilast did not change a PET measure of brain inflammation after 12 to 24 weeks.",
+   "source": "https://clinicaltrials.gov/study/NCT02714036?tab=results"
+  },
+  "NCT03039673": {
+   "verdict": "Missed primary endpoint",
+   "summary": "MIROCALS (304 patients): low-dose IL-2 did not improve survival overall, the primary endpoint; a prespecified analysis suggested benefit in patients with lower spinal-fluid neurofilament levels.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/40354799/"
+  },
+  "NCT02450552": {
+   "verdict": "Descriptive results",
+   "summary": "Drug-effect study (65 patients) of ezogabine on motor-neuron excitability measured by magnetic stimulation; results are posted on the registry.",
+   "source": "https://clinicaltrials.gov/study/NCT02450552?tab=results"
+  },
+  "NCT02670226": {
+   "verdict": "Descriptive results",
+   "summary": "Study of muscle metabolism in early ALS; published in 2022.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/35740329/"
+  },
+  "NCT02460679": {
+   "verdict": "Safety study",
+   "summary": "Open-label (19 patients): no drug-related serious adverse events on EPI-589.",
+   "source": "https://clinicaltrials.gov/study/NCT02460679?tab=results"
+  },
+  "NCT02017912": {
+   "verdict": "Safety study",
+   "summary": "Phase 2 of NurOwn (48 patients): serious adverse events in 8 of 36 treated vs 1 of 12 on placebo. The phase 3 that followed missed its primary endpoint.",
+   "source": "https://clinicaltrials.gov/study/NCT02017912?tab=results"
+  },
+  "NCT01709149": {
+   "verdict": "Missed primary endpoint",
+   "summary": "BENEFIT-ALS: tirasemtiv did not improve function at 12 weeks (p=0.11; numerically worse) in 711 patients, though breathing capacity declined less, which led to the VITALITY-ALS phase 3.",
+   "source": "https://clinicaltrials.gov/study/NCT01709149?tab=results"
+  },
+  "NCT01786174": {
+   "verdict": "Safety study",
+   "summary": "Short phase 2a (30 patients, 8 weeks): fingolimod was tolerated, with no difference from placebo in function or breathing.",
+   "source": "https://clinicaltrials.gov/study/NCT01786174?tab=results"
+  },
+  "NCT01806857": {
+   "verdict": "Met primary endpoint",
+   "summary": "Crossover trial: Nuedexta improved patient-rated bulbar function (speech, swallowing, saliva) compared with placebo (p=0.0003). A symptom treatment.",
+   "source": "https://clinicaltrials.gov/study/NCT01806857?tab=results"
+  },
+  "NCT02039401": {
+   "verdict": "Safety study",
+   "summary": "Open-label (18 patients): VM202 injections into muscle were generally tolerated; three serious adverse events.",
+   "source": "https://clinicaltrials.gov/study/NCT02039401?tab=results"
+  },
+  "NCT01906658": {
+   "verdict": "Safety study",
+   "summary": "Dose-finding safety study of Acthar Gel (43 patients): 4 had side effects that required stopping or could not be controlled.",
+   "source": "https://clinicaltrials.gov/study/NCT01906658?tab=results"
+  },
+  "NCT01232738": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label (36 patients) compared with historical placebo data: decline on rasagiline was slightly faster (−1.20 vs −0.94 points a month, p=0.07).",
+   "source": "https://clinicaltrials.gov/study/NCT01232738?tab=results"
+  },
+  "NCT04947436": {
+   "verdict": "Inconclusive",
+   "summary": "Small comparison (28 patients) of airway-clearance devices; respiratory-complication scores were similar and no formal analysis was possible.",
+   "source": "https://clinicaltrials.gov/study/NCT04947436?tab=results"
+  },
+  "NCT01884571": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label combination immunosuppression (31 patients): no one met the target improvement in function.",
+   "source": "https://clinicaltrials.gov/study/NCT01884571?tab=results"
+  },
+  "NCT02288091": {
+   "verdict": "Safety study",
+   "summary": "Open-label (25 patients): 24 completed 12 weeks of inosine; three serious adverse events.",
+   "source": "https://clinicaltrials.gov/study/NCT02288091?tab=results"
+  },
+  "NCT03828123": {
+   "verdict": "No results found",
+   "summary": "Open-label study of the patient's own mesenchymal stem cells (26 patients). No results posted; the paper the registry links is an earlier trial.",
+   "source": null,
+   "ignorePublications": true
+  },
+  "NCT01640067": {
+   "verdict": "Safety study",
+   "summary": "Phase 1 (18 patients) of neural stem-cell transplantation into the spinal cord; published in 2015.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/25889343/"
+  },
+  "NCT01823380": {
+   "verdict": "Descriptive results",
+   "summary": "Low vitamin D levels were associated with more severe ALS in 127 patients (published 2020).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/32547467/"
+  },
+  "NCT01786603": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Rasagiline did not significantly slow functional decline over 12 months (80 patients).",
+   "source": "https://clinicaltrials.gov/study/NCT01786603?tab=results"
+  },
+  "NCT01753076": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Ozanezumab did not improve function or survival (p=0.12; numerically worse) in 304 patients.",
+   "source": "https://clinicaltrials.gov/study/NCT01753076?tab=results"
+  },
+  "NCT01849770": {
+   "verdict": "Safety study",
+   "summary": "Phase 2 (60 patients): mexiletine 900 mg a day was poorly tolerated (32% stopped) vs 5% at 300 mg. Not powered for efficacy.",
+   "source": "https://clinicaltrials.gov/study/NCT01849770?tab=results"
+  },
+  "NCT02238626": {
+   "verdict": "Safety study",
+   "summary": "Phase 2 (70 patients): ibudilast with riluzole was generally tolerated. It led to the COMBAT-ALS phase 2b/3.",
+   "source": "https://clinicaltrials.gov/study/NCT02238626?tab=results"
+  },
+  "NCT02479802": {
+   "verdict": "Descriptive results",
+   "summary": "Open-label (13 patients) plasma exchange with albumin: function and breathing declined over 48 weeks; no control group.",
+   "source": "https://clinicaltrials.gov/study/NCT02479802?tab=results"
+  },
+  "NCT01811355": {
+   "verdict": "Met primary endpoint",
+   "summary": "Crossover trial (23 patients): mexiletine reduced how often and how badly muscle cramps occurred, compared with placebo. A symptom treatment.",
+   "source": "https://clinicaltrials.gov/study/NCT01811355?tab=results"
+  },
+  "NCT02164253": {
+   "verdict": "Safety study",
+   "summary": "FAIR-ALS pilot (23 patients): deferiprone was safe, and decline was smaller in the first 3 months of treatment. It led to FAIR-ALS II.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29287521/"
+  },
+  "NCT00877604": {
+   "verdict": "Met primary endpoint",
+   "summary": "TUDCA (34 patients): more responders by rate of decline over a year (13 of 15 vs 6 of 14 on placebo). A larger phase 3 followed.",
+   "source": "https://clinicaltrials.gov/study/NCT00877604?tab=results"
+  },
+  "NCT00326625": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Glatiramer acetate did not slow functional decline over 52 weeks (366 patients, p=0.48).",
+   "source": "https://clinicaltrials.gov/study/NCT00326625?tab=results"
+  },
+  "NCT00243932": {
+   "verdict": "Missed primary endpoint",
+   "summary": "High-dose coenzyme Q10 was judged not promising enough for a phase 3 (futility design, 185 patients).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/19743457/"
+  },
+  "NCT02880033": {
+   "verdict": "Descriptive results",
+   "summary": "Study of ferroptosis-related blood markers alongside deferiprone; published in 2019.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30814647/"
+  },
+  "NCT01089010": {
+   "verdict": "Safety study",
+   "summary": "Phase 2a of tirasemtiv (67 patients): safety and early drug effects; published in 2012.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/22591195/"
+  },
+  "NCT00600873": {
+   "verdict": "Safety study",
+   "summary": "Early-phase study of high-dose R(+)pramipexole (dexpramipexole) in 10 patients; published in 2008.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/18270879/"
+  },
+  "NCT00647296": {
+   "verdict": "Safety study",
+   "summary": "Phase 2 of dexpramipexole: well tolerated, with a dose-related trend toward slower decline that led to the EMPOWER phase 3, which failed.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/22101764/"
+  },
+  "NCT01154283": {
+   "verdict": "Descriptive results",
+   "summary": "Crossover trial (28 patients): ventilator use was similar with standard bi-level and inspiratory-only settings.",
+   "source": "https://clinicaltrials.gov/study/NCT01154283?tab=results"
+  },
+  "NCT00790582": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label lithium (109 patients) compared with historical controls: decline was not slower (1.20 vs 1.01 points a month).",
+   "source": "https://clinicaltrials.gov/study/NCT00790582?tab=results"
+  },
+  "NCT01083667": {
+   "verdict": "Descriptive results",
+   "summary": "Open-label (32 patients with SOD1-ALS): tested whether pyrimethamine lowers SOD1 in spinal fluid; results are posted on the registry.",
+   "source": "https://clinicaltrials.gov/study/NCT01083667?tab=results"
+  },
+  "NCT01363401": {
+   "verdict": "Met primary endpoint",
+   "summary": "Repeated injections of the patient's own stem cells (lenzumestrocel): function declined less at 16 weeks than without treatment (−1.4 vs −4.7 points; 72 patients, open-label control). The ALSUMMIT phase 3 later missed its primary endpoint.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30048006/"
+  },
+  "NCT01123148": {
+   "verdict": "Descriptive results",
+   "summary": "Brain-computer interface for wheelchair tilt: typing accuracy stayed about 91% while tilting; tested in able-bodied volunteers only.",
+   "source": "https://clinicaltrials.gov/study/NCT01123148?tab=results"
+  },
+  "NCT01123200": {
+   "verdict": "Descriptive results",
+   "summary": "In-home brain-computer interface (1 participant), used for 5 months.",
+   "source": "https://clinicaltrials.gov/study/NCT01123200?tab=results"
+  },
+  "NCT00931944": {
+   "verdict": "Extension or access study",
+   "summary": "Long-term open-label extension of dexpramipexole (74 patients).",
+   "source": "https://clinicaltrials.gov/study/NCT00931944?tab=results"
+  },
+  "NCT01257581": {
+   "verdict": "Inconclusive",
+   "summary": "Selection design comparing creatine and two doses of tamoxifen (60 patients): rates of decline were similar (−0.74 to −0.98 points a month); no placebo group.",
+   "source": "https://clinicaltrials.gov/study/NCT01257581?tab=results"
+  },
+  "NCT00983983": {
+   "verdict": "Safety study",
+   "summary": "Pilot in 24 patients with feeding tubes: the high-carbohydrate, high-calorie diet was the best tolerated, with fewer serious adverse events than the control diet.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24582471/"
+  },
+  "NCT00860951": {
+   "verdict": "Descriptive results",
+   "summary": "Brain-computer interface keyboard: about 85% typing accuracy across settings (29 participants).",
+   "source": "https://clinicaltrials.gov/study/NCT00860951?tab=results"
+  },
+  "NCT01378676": {
+   "verdict": "Safety study",
+   "summary": "Repeated-dose safety study of tirasemtiv (49 patients); published in 2013.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/23952636/"
+  },
+  "NCT00613899": {
+   "verdict": "Descriptive results",
+   "summary": "Home, on-demand mechanical cough assistance with telesurveillance (40 patients); published in 2010.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/20407305/"
+  },
+  "NCT01119001": {
+   "verdict": "Descriptive results",
+   "summary": "Brain-computer interface keyboard used by 13 people with ALS: about 81% typing accuracy.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/23590556/"
+  },
+  "NCT00116558": {
+   "verdict": "Descriptive results",
+   "summary": "Early ventilation and nutrition study (153 patients): 35 accepted early non-invasive ventilation; design and early results published in 2011.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/21271789/"
   }
  }
 }

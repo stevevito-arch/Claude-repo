@@ -81,7 +81,7 @@ const OUTCOME_GROUPS: [string, string[]][] = [
   ['Stopped for other reasons', ['Stopped: slow enrollment', 'Stopped: business or funding', 'Stopped: other reason', 'Stopped: reason not given', 'Withdrawn before enrolling', 'Suspended']],
   ['Results available, not summarised', ['Results posted, not yet summarised', 'Publication linked, not yet summarised']],
   ['No results available', ['No results posted', 'No results found']],
-  ['Extension, safety or other', ['Extension or access study', 'Safety study', 'Not a treatment study']],
+  ['Safety, extension or descriptive', ['Safety study', 'Extension or access study', 'Descriptive results', 'Not a treatment study']],
 ]
 const OUTCOME_GROUP_OF = new Map(OUTCOME_GROUPS.flatMap(([group, verdicts]) => verdicts.map((v) => [v, group] as const)))
 
