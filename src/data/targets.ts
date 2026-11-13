@@ -32,6 +32,7 @@ export const TARGET_SYNONYMS: Record<string, string[]> = {
   'IL-10': ['interleukin-10'],
   'TNF-α': ['TNF', 'tumor necrosis factor'],
   CD40L: ['CD40 ligand', 'CD154'],
+  'CD20 (B cells)': ['CD20', 'MS4A1', 'B cells', 'B-cell depletion'],
   'CD80/CD86': ['CD80', 'CD86', 'CTLA4-Ig', 'co-stimulation'],
   KIT: ['c-Kit', 'CD117'],
   BTK: ["Bruton's tyrosine kinase"],

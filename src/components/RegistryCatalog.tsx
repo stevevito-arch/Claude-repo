@@ -36,7 +36,7 @@ type StatusGroup ='Ongoing' | 'Completed' | 'Stopped early' | 'Status unknown'
 const STATUS_GROUPS: StatusGroup[] = ['Ongoing', 'Completed', 'Stopped early', 'Status unknown']
 
 function statusGroup(status: string): StatusGroup {
-  if (['COMPLETED', 'APPROVED_FOR_MARKETING', 'NO_LONGER_AVAILABLE'].includes(status)) return 'Completed'
+  if (['COMPLETED', 'ENDED', 'APPROVED_FOR_MARKETING', 'NO_LONGER_AVAILABLE'].includes(status)) return 'Completed'
   if (['TERMINATED', 'WITHDRAWN', 'SUSPENDED'].includes(status)) return 'Stopped early'
   if (status === 'UNKNOWN') return 'Status unknown'
   return 'Ongoing'
@@ -270,6 +270,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     !(types.size === 1 && types.has('INTERVENTIONAL')) ||
     !(focuses.size === 1 && focuses.has(DEFAULT_FOCUS))
 
+  const otherRegistries = snapshot ? snapshot.studies.filter((st) => st.registry !== 'ClinicalTrials.gov').length : 0
+
   if (loadError) {
     return (
       <div className="rounded-xl border p-8 text-center text-sm" style={{ borderColor: 'var(--border-hairline)', color: 'var(--text-secondary)' }}>
@@ -289,11 +291,13 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   return (
     <div className="flex flex-col gap-4">
       <p className="max-w-3xl text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-        Every ALS study registered on ClinicalTrials.gov — {snapshot.studies.length.toLocaleString()} in total, as of{' '}
+        Every ALS study registered on ClinicalTrials.gov, plus ALS trials found only in the UK’s ISRCTN registry or the EU’s
+        trial registers (CTIS and the older EU Clinical Trials Register) — {snapshot.studies.length.toLocaleString()} in total
+        {otherRegistries > 0 && <>, {otherRegistries.toLocaleString()} of them from outside ClinicalTrials.gov</>}, as of{' '}
         {new Date(snapshot.generatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}. It opens on
         trials aimed at slowing ALS itself; use Focus to see symptom, supportive-care, diagnostic and other studies. These
-        entries are the registry’s own records, not curated summaries. Coverage before about 2000 is thin, and trials registered
-        only in other countries’ registries (EU, Australia, China, Japan and others) are not included.
+        entries are the registries’ own records, not curated summaries. Coverage before about 2000 is thin, and trials registered
+        only in other countries’ registries (Australia, China, Japan and others) are not included yet.
       </p>
 
       {pinned.length > 0 ? (
@@ -520,6 +524,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
           )}
           <Badge label={statusLabel(study.status)} color={STATUS_GROUP_COLOR[group]} />
           {study.focus !== DEFAULT_FOCUS && <Badge label={study.focus} color="var(--text-muted)" />}
+          {study.registry !== 'ClinicalTrials.gov' && <Badge label={study.registry} color="var(--cat-violet)" />}
           {study.type !== 'INTERVENTIONAL' && <Badge label={study.type === 'OBSERVATIONAL' ? 'Observational' : 'Expanded access'} color="var(--text-muted)" />}
           {study.modalities.map((m) => (
             <Badge key={m} label={m} color={m === UNCLASSIFIED ? 'var(--text-muted)' : (MODALITY_BADGE_COLOR[m] ?? 'var(--text-secondary)')} />
@@ -559,14 +564,14 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
       </div>
 
       <a
-        href={`https://clinicaltrials.gov/study/${study.id}`}
+        href={study.url}
         target="_blank"
         rel="noreferrer"
         className="mt-1.5 block text-sm font-medium leading-snug hover:underline"
         style={{ color: 'var(--text-primary)' }}
       >
         {study.title}
-        {study.acronym && <span style={{ color: 'var(--text-secondary)' }}> ({study.acronym})</span>}
+        {study.acronym && !study.title.includes(study.acronym) && <span style={{ color: 'var(--text-secondary)' }}> ({study.acronym})</span>}
       </a>
 
       <p className="mt-1 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -615,7 +620,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
               </span>
               {' · '}
               <a
-                href={`https://clinicaltrials.gov/study/${dev.id}`}
+                href={dev.url ?? `https://clinicaltrials.gov/study/${dev.id}`}
                 target="_blank"
                 rel="noreferrer"
                 className="font-mono underline"
@@ -644,7 +649,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
             <span key={pub.pmid}>
               {i > 0 && '; '}
               <a
-                href={`https://pubmed.ncbi.nlm.nih.gov/${pub.pmid}/`}
+                href={pub.url ?? `https://pubmed.ncbi.nlm.nih.gov/${pub.pmid}/`}
                 target="_blank"
                 rel="noreferrer"
                 title={pub.citation}
@@ -669,7 +674,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
 
 function OutcomeLine({ study, outcome }: { study: RegistryStudy; outcome: RegistryOutcome }) {
   const group = OUTCOME_GROUP_OF.get(outcome.verdict) ?? ''
-  const showResultsLink = !outcome.curated && study.hasResults
+  const showResultsLink = !outcome.curated && Boolean(study.resultsUrl)
   return (
     <div className="mt-1.5 flex flex-col gap-1 text-xs leading-relaxed sm:flex-row sm:items-baseline sm:gap-2">
       <span className="flex shrink-0 items-center gap-1.5">
@@ -689,7 +694,7 @@ function OutcomeLine({ study, outcome }: { study: RegistryStudy; outcome: Regist
           )}
           {showResultsLink && (
             <a
-              href={`https://clinicaltrials.gov/study/${study.id}?tab=results`}
+              href={study.resultsUrl ?? study.url}
               target="_blank"
               rel="noreferrer"
               className="underline"

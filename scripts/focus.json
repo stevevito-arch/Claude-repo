@@ -1,6 +1,11 @@
 {
  "about": "Hand corrections to what scripts/fetch-registry.mjs decides a study is mainly for, keyed by NCT ID. One of: Slowing ALS progression, Symptom management, Supportive care, Diagnostics & biomarkers, Other-disease studies, Natural history & other research.",
  "focus": {
+  "2024-516954-24-00": "Diagnostics & biomarkers",
+  "2025-522546-52-00": "Symptom management",
+  "ISRCTN12655391": "Supportive care",
+  "ISRCTN64652583": "Diagnostics & biomarkers",
+  "ISRCTN71271888": "Supportive care",
   "NCT00420719": "Supportive care",
   "NCT00613899": "Supportive care",
   "NCT00847847": "Natural history & other research",

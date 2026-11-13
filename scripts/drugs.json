@@ -1303,11 +1303,25 @@
   },
   {
    "match": [
-    "ALZT-OP1a",
-    "cromolyn",
-    "sodium cromoglycate"
+    "ALZT-OP1a"
    ],
    "names": [],
+   "targets": [
+    "Mast cells"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "cromolyn",
+    "sodium cromoglycate",
+    "sodium cromoglicate",
+    "cromoglicate",
+    "PHENOGENE-1a"
+   ],
+   "names": [],
+   "what": "Mast-cell stabiliser",
    "targets": [
     "Mast cells"
    ],
@@ -2657,6 +2671,19 @@
     "Dopamine transporter"
    ],
    "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "rituximab",
+    "Rixathon"
+   ],
+   "names": [],
+   "what": "Antibody that depletes B cells",
+   "targets": [
+    "CD20 (B cells)"
+   ],
+   "modality": "Antibody",
    "source": null
   }
  ]

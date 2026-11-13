@@ -89,7 +89,7 @@ function App() {
           <a href="https://clinicaltrials.gov" target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
             ClinicalTrials.gov
           </a>
-          , with its therapy target and modality. Follow the studies you care about to pin them to the top. Featured
+          , plus trials found only in the UK and EU registries, with its therapy target and modality. Follow the studies you care about to pin them to the top. Featured
           trials are late-stage
           programs with hand-researched summaries of the therapy, preclinical evidence, design, results and expected
           timeframes.

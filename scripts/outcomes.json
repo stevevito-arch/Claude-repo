@@ -1021,6 +1021,11 @@
    "verdict": "Safety study",
    "summary": "First-in-human study (76 patients): ozanezumab was well tolerated and bound its target in muscle; no effect on function. The phase 2 that followed found no benefit.",
    "source": "https://pubmed.ncbi.nlm.nih.gov/24841795/"
+  },
+  "ISRCTN83178718": {
+   "verdict": "Missed primary endpoint",
+   "summary": "LiCALS (UK, 220 patients): lithium did not improve survival at 18 months, and raised no safety concerns.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/23453347/"
   }
  }
 }

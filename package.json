@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "fetch-registry": "node scripts/fetch-registry.mjs"
+    "fetch-registry": "node scripts/fetch-registry.mjs",
+    "fetch-euctr": "node scripts/fetch-euctr.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",

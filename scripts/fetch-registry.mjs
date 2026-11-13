@@ -1,5 +1,7 @@
 // Builds public/data/als-registry.json: every ALS study registered on
-// ClinicalTrials.gov, trimmed to the fields the catalog view uses.
+// ClinicalTrials.gov, plus ALS trials found only in ISRCTN, the EU's CTIS or
+// the EU Clinical Trials Register (see other-registries.mjs), trimmed to the
+// fields the catalog view uses.
 //
 //   node scripts/fetch-registry.mjs
 //
@@ -8,6 +10,7 @@
 // can fall back to the committed snapshot.
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { fetchIsrctn, fetchCtis, fetchEuctr } from './other-registries.mjs'
 
 const API = 'https://clinicaltrials.gov/api/v2/studies'
 const OUT = new URL('../public/data/als-registry.json', import.meta.url)
@@ -19,7 +22,7 @@ const FIELDS = [
   'NCTId', 'BriefTitle', 'OfficialTitle', 'Acronym', 'OverallStatus', 'WhyStopped', 'Phase', 'StudyType',
   'Condition', 'Keyword', 'InterventionName', 'InterventionType', 'InterventionOtherName', 'LeadSponsorName', 'LeadSponsorClass',
   'StartDate', 'PrimaryCompletionDate', 'CompletionDate', 'EnrollmentCount', 'EnrollmentType',
-  'HasResults', 'LocationCountry', 'ReferencesModule', 'PrimaryOutcomeMeasure', 'DesignPrimaryPurpose',
+  'HasResults', 'LocationCountry', 'ReferencesModule', 'SecondaryIdInfo', 'PrimaryOutcomeMeasure', 'DesignPrimaryPurpose',
 ].join(',')
 
 function describedAs(s) {
@@ -114,6 +117,8 @@ function classify(interventions) {
 // the intervention name without its dose. Riluzole is left out when it is only
 // the background treatment alongside the drug under test.
 const BACKGROUND = /^riluzole\b/i
+// Placeholder names (other registries' interventions without a drug name) aren't drugs to track.
+const GENERIC_NAME = /^(drug|biological product|genetic therapy|other intervention|behavioural intervention|device|procedure|supplement or diet)$/i
 // Medicines given alongside the one under test, e.g. steroids before a gene therapy.
 const HELPER = /prevent|prophyla|premedicat|pre-medicat/i
 const DOSE = /\s+\d+(\.\d+)?\s*(mg|g|mcg|ug|µg|ml|iu|units?|cells|x)\b.*$/i
@@ -127,7 +132,7 @@ function testedDrugs(interventions) {
     // Group entries (various stem-cell products, say) are tracked by the study's own name.
     const known = Boolean(entry)
     const key = entry && !entry.group ? `t:${entry.match[0].toLowerCase()}` : `n:${spaced(label)}`
-    if (key !== 'n:' && !found.has(key)) found.set(key, { key, label, known })
+    if (key !== 'n:' && !GENERIC_NAME.test(label) && !found.has(key)) found.set(key, { key, label, known })
   }
   let tested = [...found.values()].filter((d) => !BACKGROUND.test(d.label))
   if (!tested.length) tested = [...found.values()]
@@ -167,7 +172,7 @@ function outcomeOf(id, type, status, whyStopped, hasResults, publications) {
     if (!whyStopped) return auto('Stopped: reason not given')
     return auto(STOP_REASONS.find(([, re]) => re.test(whyStopped))?.[0] ?? 'Stopped: other reason')
   }
-  if (status === 'COMPLETED') {
+  if (status === 'COMPLETED' || status === 'ENDED') {
     if (hasResults) return auto('Results posted, not yet summarised')
     if (publications.length) return auto('Publication linked, not yet summarised')
     return auto('No results posted')
@@ -179,7 +184,7 @@ function outcomeOf(id, type, status, whyStopped, hasResults, publications) {
 // below, with hand corrections in scripts/focus.json where the rules get it wrong.
 const focusOverrides = JSON.parse(await readFile(FOCUS, 'utf8')).focus
 const SYMPTOM = /pseudobulbar|emotional labil|\bPBA\b|pathological (laughing|crying)|sialorrh|drool|saliva|secretion|cramp|spastic|fasciculation|depress|anxiety|\bpain\b|insomnia|\bsleep|fatigue|appetite|constipation|dyspn|breathless|cough|itch|pruritus|cognitive (impair|symptom)|apathy|muscle stiffness/i
-const SUPPORT = /ventilat|\bNIV\b|bipap|tracheost|diaphragm(atic)? pac|insufflat|airway clearance|respiratory (muscle )?training|gastrostom|\bPEG\b|\bRIG\b|feeding|nutrition|\bdiet|caloric|calorie|exercise|rehabilit|physiotherap|physical therap|occupational therap|speech therap|communication|brain[- ]computer|\bBCI\b|eye[- ]track|augmentative|voice bank|palliative|end[- ]of[- ]life|caregiver|carer|telehealth|telemedicine|multidisciplinary|quality of life|psycholog|mindfulness|music|exoskeleton|wheelchair|orthos|robot|advance care|decision aid|dysphagia|swallow|home care|assistive|neural interface|neuroprosthe|intracortical|tetrapleg|paralysis|brain[- ]machine|cortical communication|neurotechnology|manipulation device|\\bbrace\\b|dysarthria|advance care/i
+const SUPPORT = /muscle (strength )?training|expiratory muscle|inspiratory muscle|ventilat|\bNIV\b|bipap|tracheost|diaphragm(atic)? pac|insufflat|airway clearance|respiratory (muscle )?training|gastrostom|\bPEG\b|\bRIG\b|feeding|nutrition|\bdiet|caloric|calorie|exercise|rehabilit|physiotherap|physical therap|occupational therap|speech therap|communication|brain[- ]computer|\bBCI\b|eye[- ]track|augmentative|voice bank|palliative|end[- ]of[- ]life|caregiver|carer|telehealth|telemedicine|multidisciplinary|quality of life|psycholog|mindfulness|music|exoskeleton|wheelchair|orthos|robot|advance care|decision aid|dysphagia|swallow|home care|assistive|neural interface|neuroprosthe|intracortical|tetrapleg|paralysis|brain[- ]machine|cortical communication|neurotechnology|manipulation device|\\bbrace\\b|dysarthria|advance care/i
 const DIAGNOSTIC = /\bPET\b|positron|SPECT|\bMRI\b|magnetic resonance imaging|imaging|tracer|radioligand|biomarker|diagnos|electromyograph|\bEMG\b|nerve conduction|electrical impedance|ultrasound|spectroscopy/i
 const ALS_IN_TITLE = /amyotrophic|\bALS\b|motor neurone? disease|\bMND\b|lou gehrig/i
 const ALS_LIKE_CONDITION = /amyotrophic|\bALS\b|motor neuron|\bMND\b|lou gehrig|frontotemporal|\bFTD\b|neurodegenerat|primary lateral|progressive muscular atrophy|bulbar palsy|healthy/i
@@ -236,14 +241,18 @@ function slim(s) {
   ])].filter((a) => !NOT_A_NAME.test(a) && !lowerNames.has(norm(a))).slice(0, 8)
   // Publications the registry lists as reporting this study's results.
   const publications = (p.referencesModule?.references ?? [])
-    .filter((r) => r.type === 'RESULT' && r.pmid)
-    .map((r) => ({ pmid: r.pmid, citation: r.citation ?? '' }))
+    .filter((r) => r.type === 'RESULT' && (r.pmid || r.url))
+    .map((r) => ({ pmid: r.pmid ?? null, url: r.url ?? null, citation: r.citation ?? '' }))
     .slice(0, 3)
   const status = st.overallStatus ?? 'UNKNOWN'
   const type = p.designModule?.studyType ?? 'UNKNOWN'
+  const registry = s.registry ?? 'ClinicalTrials.gov'
   return {
     _drugs: type === 'INTERVENTIONAL' ? testedDrugs(interventions) : [],
     id: id.nctId,
+    registry,
+    url: s.url ?? `https://clinicaltrials.gov/study/${id.nctId}`,
+    resultsUrl: s.resultsUrl ?? (s.hasResults ? `https://clinicaltrials.gov/study/${id.nctId}?tab=results` : null),
     title: id.briefTitle,
     acronym: id.acronym ?? null,
     status,
@@ -275,10 +284,72 @@ function slim(s) {
 }
 
 const byId = new Map()
+// Every identifier the catalog already covers: its NCT numbers and the
+// EudraCT, CTIS, ISRCTN and other numbers those records list.
+const knownIds = new Set()
+// Registry numbers in one form: no "EudraCT"/"CTIS" prefix, and a trial moved
+// from the old EU register to CTIS (old number + "-00") matches its old number.
+const normId = (x) => String(x).toUpperCase().replace(/\s+/g, '').replace(/^(EUDRACT|EUCT|CTIS)[:#-]*/, '').replace(/^(\d{4}-\d{6}-\d{2})-00$/, '$1')
+const words = (t) => new Set(t.toLowerCase().match(/[a-z0-9]{4,}/g) ?? [])
+const similarTitles = (a, b) => {
+  const x = words(a), y = words(b)
+  return [...x].filter((w) => y.has(w)).length / Math.max(1, new Set([...x, ...y]).size) >= 0.35
+}
 for (const { cond, keep } of SEARCHES) {
   for (const s of await fetchAll(cond)) {
     const id = s.protocolSection.identificationModule.nctId
-    if (!byId.has(id) && keep(s)) byId.set(id, slim(s))
+    if (!byId.has(id) && keep(s)) {
+      byId.set(id, slim(s))
+      knownIds.add(id)
+      for (const sec of s.protocolSection.identificationModule.secondaryIdInfos ?? []) knownIds.add(normId(sec.id))
+    }
+  }
+}
+
+// Trials from other registries, unless the catalog already has them under any
+// of their numbers. Sources are tried in this order, so a trial in both CTIS
+// and the older EU register is kept once, from CTIS. If a registry can't be
+// reached, its trials from the previous snapshot are kept.
+let previous = []
+try {
+  previous = JSON.parse(await readFile(OUT, 'utf8')).studies
+} catch {
+  // No earlier snapshot.
+}
+for (const [registry, fetchFrom] of [['EU CTIS', fetchCtis], ['ISRCTN', fetchIsrctn], ['EudraCT', fetchEuctr]]) {
+  let added = 0
+  try {
+    for (const s of await fetchFrom()) {
+      const ids = s.otherIds.map(normId)
+      const duplicate = ids.some((x) => knownIds.has(x))
+      // A duplicate's other numbers still count: a third registry may list only those.
+      ids.forEach((x) => knownIds.add(x))
+      if (duplicate) continue
+      const study = slim(s)
+      // Some records don't cross-reference ClinicalTrials.gov at all. Treat one as
+      // the same trial when a ClinicalTrials.gov trial tests the same recognised
+      // drug at the same phase and started within a year of it. A drug often has
+      // several Phase 1 studies, so those must also have similar titles; platform
+      // trials, which test many drugs, are never matched this way.
+      const earlyPhase = /^(Early )?Phase 1$/.test(study.phase ?? '')
+      const tests = (x) => x.interventions.filter((n) => !IS_COMPARATOR.test(n.trim())).length
+      const twin = study.phase && tests(study) <= 2 && study._drugs.some((d) => d.key.startsWith('t:')) && [...byId.values()].find((o) =>
+        o.registry === 'ClinicalTrials.gov' && o.phase === study.phase && o.start && study.start && tests(o) <= 2 &&
+        Math.abs(Number(o.start.slice(0, 4)) - Number(study.start.slice(0, 4))) <= 1 &&
+        o._drugs.some((d) => d.key.startsWith('t:') && study._drugs.some((e) => e.key === d.key)) &&
+        (!earlyPhase || similarTitles(o.title, study.title)))
+      if (twin) {
+        console.log(`  ${study.id} looks like ${twin.id} (same drug, phase and start); skipped`)
+        continue
+      }
+      byId.set(study.id, study)
+      added++
+    }
+    console.log(`${registry}: added ${added} trials not on ClinicalTrials.gov`)
+  } catch (err) {
+    const kept = previous.filter((s) => s.registry === registry && !byId.has(s.id))
+    for (const s of kept) byId.set(s.id, { ...s, _drugs: [] })
+    console.warn(`::warning::${registry} unavailable (${err.message}); kept ${kept.length} trials from the previous snapshot`)
   }
 }
 
@@ -316,8 +387,8 @@ for (const st of studies) {
         // A drug's own trial rather than a platform master protocol listing many drugs.
         a._drugs.length - b._drugs.length || (a.start ?? '9999').localeCompare(b.start ?? '9999'))[0]
     return later
-      ? { drug: label, phase: later.phase, id: later.id, start: later.start, status: later.status }
-      : { drug: label, phase: null, id: null, start: null, status: null }
+      ? { drug: label, phase: later.phase, id: later.id, url: later.url, start: later.start, status: later.status }
+      : { drug: label, phase: null, id: null, url: null, start: null, status: null }
   })
 }
 for (const st of studies) delete st._drugs
