@@ -287,9 +287,9 @@
    "source": "https://www.biopharmadive.com/news/gsk-alector-frontotemporal-dementia-latozinemab-study-results/803463/"
   },
   "NCT03766321": {
-   "verdict": "No results found",
-   "summary": "Placebo-controlled trial of faecal microbiota transplantation (42 patients). No results posted; the papers the registry links are background reading, not this trial's results.",
-   "source": null,
+   "verdict": "Missed primary endpoint",
+   "summary": "Faecal microbiota transplantation (42 patients) did not meet its primary endpoint; it modestly raised regulatory T cells. Function declined 0.31 points a month more slowly (exploratory), but muscle strength was lower at 6 months. No major safety concerns.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/42849176/",
    "ignorePublications": true
   },
   "NCT05189106": {
@@ -926,6 +926,101 @@
    "verdict": "No benefit shown",
    "summary": "Anakinra (17 patients) was safe and lowered inflammatory markers at first, but did not slow progression vs historical controls; most patients developed antibodies against it.",
    "source": "https://pubmed.ncbi.nlm.nih.gov/26444282/"
+  },
+  "NCT07105371": {
+   "verdict": "Safety study",
+   "summary": "Open-label nasal exosome treatment in ALS and other motor disorders: the investigators report no adverse events and strength improvements. Uncontrolled, and run by the product's developer.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41278139/"
+  },
+  "NCT06286475": {
+   "verdict": "Descriptive results",
+   "summary": "Healthy-volunteer study: VRG50635 raised a marker of PIKfyve inhibition (GPNMB) in blood and spinal fluid, showing it reaches its target.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41708347/"
+  },
+  "NCT05903690": {
+   "verdict": "Safety study",
+   "summary": "Phase 1 in SOD1-ALS: RAG-17 (an siRNA) had a favourable safety profile, and lowered SOD1 in spinal fluid by 56–69% and neurofilament light by 52–62%.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/42458007/"
+  },
+  "NCT04820478": {
+   "verdict": "Mixed results",
+   "summary": "KETO-ALS (81 patients): a ketone ester did not significantly slow the rise in neurofilament light, the primary endpoint, in the unadjusted analysis (p=0.094); the adjusted analysis favoured it. No difference in function or weight; well tolerated.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/42990966/"
+  },
+  "NCT06307301": {
+   "verdict": "Safety study",
+   "summary": "Open-label (4 analysed): abatacept plus low-dose IL-2 was safe and well tolerated, with encouraging changes in function and inflammation markers. This combination became COYA 302.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/38915796/"
+  },
+  "NCT05006352": {
+   "verdict": "Safety study",
+   "summary": "Phase 1b: DNL343 was generally well tolerated and reduced markers of the integrated stress response in blood and spinal fluid. The HEALEY Regimen G trial later found no clinical benefit.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/40825784/"
+  },
+  "NCT04840823": {
+   "verdict": "Descriptive results",
+   "summary": "Small randomised study (8 patients): enoxacin reached the spinal fluid and raised microRNA levels, as intended; no serious adverse events. Reported in a preprint.",
+   "source": "https://doi.org/10.1101/2024.07.31.24311258"
+  },
+  "NCT05795907": {
+   "verdict": "Safety study",
+   "summary": "Healthy-volunteer study: SAR443820 was safe, entered the brain well and strongly blocked its target, RIPK1. This supported the HIMALAYA phase 2, which was later stopped.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/38010108/"
+  },
+  "NCT04744532": {
+   "verdict": "Safety study",
+   "summary": "iDReAM phase 1 part: bosutinib was tolerated up to 300 mg but not 400 mg; some patients' motor function responded (open-label, small).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36467452/"
+  },
+  "NCT03626012": {
+   "verdict": "No benefit shown",
+   "summary": "Phase 1 (106 patients with C9orf72 ALS): BIIB078 did not lower neurofilament or help clinically compared with placebo, and Biogen discontinued it.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39059407/"
+  },
+  "NCT03482050": {
+   "verdict": "Safety study",
+   "summary": "Phase 1/2a (16 patients): a single spinal injection of AstroRx astrocytes was safe; decline appeared slower for the first 3 months only.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36788520/"
+  },
+  "NCT02943850": {
+   "verdict": "Safety study",
+   "summary": "Phase 1/2a (18 patients): GDNF-secreting neural progenitor cells transplanted into one side of the lumbar spinal cord met the safety endpoint, with no harm to the treated leg; grafts survived and made GDNF for up to 42 months.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36064599/"
+  },
+  "NCT02655614": {
+   "verdict": "Safety study",
+   "summary": "Phase 1: no adequately tolerated dose of GDC-0134 was found, and its safety profile was judged unacceptable; Genentech stopped developing it for ALS.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/35014217/"
+  },
+  "NCT02166944": {
+   "verdict": "Inconclusive",
+   "summary": "Tamoxifen (20 patients): fewer reached the primary endpoint and decline was slower for 6 months, but neither difference was significant, and there was none at 12 months.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/32481440/"
+  },
+  "NCT01771640": {
+   "verdict": "Safety study",
+   "summary": "Phase 1 (spinal injection, Iran): the patient's own bone-marrow stromal cells were safe and feasible; function and breathing kept declining.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30124008/"
+  },
+  "NCT01759797": {
+   "verdict": "Safety study",
+   "summary": "Phase 1 (intravenous, Iran): the patient's own bone-marrow stromal cells were safe and feasible; function and breathing kept declining.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30124008/"
+  },
+  "NCT01051882": {
+   "verdict": "Safety study",
+   "summary": "Phase 1/2 of NurOwn: safe, with slower decline after treatment than before (uncontrolled). The phase 3 later missed its primary endpoint.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/26751635/"
+  },
+  "NCT01091142": {
+   "verdict": "Safety study",
+   "summary": "Single-dose phase 1: NP001 was generally safe and well tolerated, and lowered a marker of inflammatory monocyte activation.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/25192333/"
+  },
+  "NCT00875446": {
+   "verdict": "Safety study",
+   "summary": "First-in-human study (76 patients): ozanezumab was well tolerated and bound its target in muscle; no effect on function. The phase 2 that followed found no benefit.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24841795/"
   }
  }
 }
