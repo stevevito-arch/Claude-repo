@@ -28,6 +28,13 @@ export function ConcludedList({ readouts }: { readouts: ConcludedReadout[] }) {
                 {r.name}
               </span>
             </div>
+            <p className="mt-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+              <span style={{ color: 'var(--text-muted)' }}>Target: </span>
+              <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                {r.target}
+              </span>
+              <span style={{ color: 'var(--text-muted)' }}> · {r.modality}</span>
+            </p>
             <p className="mt-1 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
               {r.summary}
             </p>

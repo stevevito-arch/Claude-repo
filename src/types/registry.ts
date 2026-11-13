@@ -1,9 +1,14 @@
-// See scripts/drug-aliases.json.
-export interface DrugNote {
-  codes: string[]
+// A drug recognised from scripts/drugs.json.
+export interface RegistryDrug {
+  /** The name this study uses for the drug. */
+  label: string
+  /** Other names for it (e.g. the nonproprietary name of a company code). */
   names: string[]
-  what: string
-  source: string
+  what: string | null
+  targets: string[]
+  modality: string
+  /** A checked source, or null for standard, widely documented pharmacology. */
+  source: string | null
 }
 
 // One study from public/data/als-registry.json (see scripts/fetch-registry.mjs).
@@ -18,8 +23,11 @@ export interface RegistryStudy {
   interventions: string[]
   /** Other names for the interventions: the registry's own plus curated ones. */
   aliases: string[]
-  /** Curated, sourced descriptions of drugs the registry names only by code. */
-  drugNotes: DrugNote[]
+  drugs: RegistryDrug[]
+  /** All targets of this study's recognised drugs. */
+  targets: string[]
+  /** Modalities of this study's interventions; "Not yet classified" marks drugs the table doesn't cover. */
+  modalities: string[]
   interventionTypes: string[]
   sponsor: string | null
   sponsorClass: string | null

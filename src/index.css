@@ -16,6 +16,7 @@
   --cat-aqua: #1baf7a;
   --cat-yellow: #eda100;
   --cat-magenta: #e87ba4;
+  --cat-green: #008300;
   --cat-violet: #4a3aa7;
 
   --seq-250: #86b6ef;
@@ -47,6 +48,7 @@
     --cat-aqua: #199e70;
     --cat-yellow: #c98500;
     --cat-magenta: #d55181;
+    --cat-green: #008300;
     --cat-violet: #9085e9;
 
     --seq-250: #86b6ef;
@@ -73,6 +75,7 @@
   --cat-aqua: #199e70;
   --cat-yellow: #c98500;
   --cat-magenta: #d55181;
+  --cat-green: #008300;
   --cat-violet: #9085e9;
 }
 

@@ -65,6 +65,13 @@ export function TrialDetail({ trial, liveStatus, onClose }: TrialDetailProps) {
         </div>
 
         <div className="mt-6 flex flex-col gap-5">
+          <Section title="Target and modality">
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              {trial.target}
+            </span>{' '}
+            · {trial.modality}
+          </Section>
+
           <Section title="Population">{trial.population}</Section>
 
           <Section title="Background & modality">{trial.background}</Section>

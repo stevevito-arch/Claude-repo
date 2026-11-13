@@ -11,7 +11,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises'
 
 const API = 'https://clinicaltrials.gov/api/v2/studies'
 const OUT = new URL('../public/data/als-registry.json', import.meta.url)
-const ALIASES = new URL('./drug-aliases.json', import.meta.url)
+const DRUGS = new URL('./drugs.json', import.meta.url)
 
 const FIELDS = [
   'NCTId', 'BriefTitle', 'OfficialTitle', 'Acronym', 'OverallStatus', 'WhyStopped', 'Phase', 'StudyType',
@@ -54,25 +54,58 @@ async function fetchAll(cond) {
   return studies
 }
 
-// Hand-curated, sourced names for drugs the registry knows only by a company
-// code (see scripts/drug-aliases.json). A study gets an entry's names when one
-// of its interventions starts with one of the entry's codes.
-const curated = JSON.parse(await readFile(ALIASES, 'utf8')).aliases
+// Hand-curated, sourced drug table (scripts/drugs.json): for each drug, the
+// names it goes by, its target(s), its modality and a source. An intervention
+// gets the first entry with a name it starts with, so put specific products
+// (codes, brand names) before the generic ingredients they contain.
+const drugTable = JSON.parse(await readFile(DRUGS, 'utf8')).drugs
 const norm = (x) => x.toLowerCase().replace(/[^a-z0-9]/g, '')
 // Lowercase with every run of punctuation/space turned into one space, so
 // "NPT520-34 (125 mg)" reads "npt520 34 125 mg" and still starts with "npt520 34".
 const spaced = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
-function startsWithCode(name, code) {
-  const n = spaced(name), c = spaced(code)
+function startsWithName(name, term) {
+  const n = spaced(name), c = spaced(term)
   // "NB-4746 High dose" matches NB-4746; "NP0012" does not match NP001.
-  if (n.startsWith(c) && !/[0-9]/.test(n.charAt(c.length))) return true
+  if (n.startsWith(c) && !/[0-9a-z]/.test(n.charAt(c.length))) return true
   // Same code written with different separators, e.g. "ISIS-333611".
-  return norm(name) === norm(code)
+  return norm(name) === norm(term)
 }
-function curatedFor(interventionNames) {
-  return curated.filter((entry) => entry.codes.some((code) => interventionNames.some((name) => startsWithCode(name, code))))
+function entryFor(intervention) {
+  for (const name of [intervention.name, ...(intervention.otherNames ?? [])]) {
+    const entry = drugTable.find((e) => e.match.some((term) => startsWithName(name, term)))
+    if (entry) return entry
+  }
+  return null
 }
 const NOT_A_NAME = /placebo|vehicle|sham|saline|matching|control/i
+// An intervention that is itself a comparator ("Placebo", "Matching placebo"),
+// as opposed to a drug named alongside one ("TBN tablet / Placebo").
+const IS_COMPARATOR = /^(matching\s+|matched\s+)?(placebo|sham|vehicle|saline|control|standard of care|usual care|best supportive care)/i
+
+// Interventions that aren't drugs take their modality from the registry's type.
+const TYPE_MODALITY = { DEVICE: 'Device', BEHAVIORAL: 'Behavioral', PROCEDURE: 'Procedure', DIAGNOSTIC_TEST: 'Diagnostic', RADIATION: 'Radiation', DIETARY_SUPPLEMENT: 'Supplement or diet' }
+const DRUG_TYPES = new Set(['DRUG', 'BIOLOGICAL', 'GENETIC', 'COMBINATION_PRODUCT'])
+
+function classify(interventions) {
+  const drugs = new Map()
+  const modalities = new Set()
+  for (const i of interventions) {
+    if (IS_COMPARATOR.test(i.name.trim())) continue
+    const entry = entryFor(i)
+    if (entry) {
+      // Label each drug with the name this study uses for it.
+      if (!drugs.has(entry)) drugs.set(entry, i.name)
+      modalities.add(entry.modality)
+    } else if (DRUG_TYPES.has(i.type)) {
+      modalities.add('Not yet classified')
+    } else if (TYPE_MODALITY[i.type]) {
+      modalities.add(TYPE_MODALITY[i.type])
+    }
+  }
+  // "Not yet classified" stays alongside known modalities when a study has
+  // any drug the table doesn't cover, so gaps stay visible.
+  return { entries: [...drugs.entries()], modalities: [...modalities] }
+}
 
 const PHASE_LABEL = { EARLY_PHASE1: 'Early Phase 1', PHASE1: 'Phase 1', PHASE2: 'Phase 2', PHASE3: 'Phase 3', PHASE4: 'Phase 4' }
 
@@ -84,12 +117,12 @@ function slim(s) {
   const interventions = p.armsInterventionsModule?.interventions ?? []
   const phases = (de.phases ?? []).filter((x) => PHASE_LABEL[x])
   const names = [...new Set(interventions.map((i) => i.name))]
-  const entries = curatedFor(names)
+  const { entries, modalities } = classify(interventions)
   const lowerNames = new Set(names.map(norm))
   // Search terms: the registry's own "other names" plus curated names.
   const aliases = [...new Set([
     ...interventions.filter((i) => !NOT_A_NAME.test(i.name)).flatMap((i) => i.otherNames ?? []),
-    ...entries.flatMap((e) => e.names),
+    ...entries.flatMap(([e]) => e.names ?? []),
   ])].filter((a) => !NOT_A_NAME.test(a) && !lowerNames.has(norm(a))).slice(0, 8)
   return {
     id: id.nctId,
@@ -102,8 +135,10 @@ function slim(s) {
     phase: phases.length ? phases.map((x) => PHASE_LABEL[x]).join('/').replace(/\/Phase /g, '/') : null,
     interventions: names.slice(0, 6),
     aliases,
-    // Short, sourced description of what each code-named drug is.
-    drugNotes: entries.map((e) => ({ codes: e.codes, names: e.names, what: e.what, source: e.source })),
+    // What each recognised drug is: label, other names, target(s), modality, source.
+    drugs: entries.map(([e, label]) => ({ label, names: e.names ?? [], what: e.what ?? null, targets: e.targets, modality: e.modality, source: e.source })),
+    targets: [...new Set(entries.flatMap(([e]) => e.targets))],
+    modalities,
     interventionTypes: [...new Set(interventions.map((i) => i.type))],
     sponsor: p.sponsorCollaboratorsModule?.leadSponsor?.name ?? null,
     sponsorClass: p.sponsorCollaboratorsModule?.leadSponsor?.class ?? null,

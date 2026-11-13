@@ -7,6 +7,7 @@ export const MODALITY_COLOR: Record<Modality, string> = {
   'Cell therapy': 'var(--cat-aqua)',
   'Monoclonal antibody': 'var(--cat-yellow)',
   'Gene therapy': 'var(--cat-magenta)',
+  Peptide: 'var(--cat-green)',
   'Platform trial': 'var(--cat-violet)',
 }
 

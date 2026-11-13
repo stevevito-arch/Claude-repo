@@ -1,0 +1,2628 @@
+{
+ "about": "Drug table used by scripts/fetch-registry.mjs. For each drug: the names and codes it is matched by (an intervention matches the first entry with a name it starts with, so specific products come before the generic ingredients they contain), other names, its target(s) and modality, and a source. Entries for company codes cite the public source that identifies the code. Entries for well-characterised drugs give a source where one was checked (e.g. ChEMBL); entries with source null state standard, widely documented pharmacology. Drugs whose target could not be established are left out and show as 'Not yet classified'.",
+ "drugs": [
+  {
+   "match": [
+    "ION363",
+    "jacifusen",
+    "ulefnersen"
+   ],
+   "names": [
+    "ulefnersen",
+    "jacifusen"
+   ],
+   "what": "Antisense oligonucleotide that lowers FUS, for FUS-ALS",
+   "targets": [
+    "FUS"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://www.neurologylive.com/view/ulefnersen-meets-primary-end-point-phase-3-fusion-trial-fus-als"
+  },
+  {
+   "match": [
+    "VHB937",
+    "lifonebart"
+   ],
+   "names": [
+    "lifonebart"
+   ],
+   "what": "Antibody that activates TREM2 on microglia",
+   "targets": [
+    "TREM2"
+   ],
+   "modality": "Antibody",
+   "source": "https://pharmacally.com/novartis-discontinues-lifonebart-vhb937-als-astrals-phase-2/"
+  },
+  {
+   "match": [
+    "ABBV-CLS-7262",
+    "fosigotifator"
+   ],
+   "names": [
+    "fosigotifator"
+   ],
+   "what": "eIF2B activator targeting the integrated stress response",
+   "targets": [
+    "eIF2B"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.medthority.com/news/2025/1/als-platform-trial-with-fosigotifator-did-not-meet-its-primary-endpoint---calico-life-sciences/"
+  },
+  {
+   "match": [
+    "AMX0035"
+   ],
+   "names": [
+    "sodium phenylbutyrate",
+    "taurursodiol"
+   ],
+   "what": "Combination of sodium phenylbutyrate and taurursodiol",
+   "targets": [
+    "ER stress",
+    "Mitochondrial dysfunction"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT03127514"
+  },
+  {
+   "match": [
+    "AMX0114"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide that lowers calpain-2 (CAPN2)",
+   "targets": [
+    "CAPN2"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://www.businesswire.com/news/home/20250603158624/en"
+  },
+  {
+   "match": [
+    "AL001",
+    "latozinemab"
+   ],
+   "names": [
+    "latozinemab"
+   ],
+   "what": "Antibody against sortilin that raises progranulin levels",
+   "targets": [
+    "SORT1"
+   ],
+   "modality": "Antibody",
+   "source": "https://investors.alector.com/news-releases/news-release-details/alector-announces-first-participant-dosed-phase-2-study-0"
+  },
+  {
+   "match": [
+    "ALT001"
+   ],
+   "names": [],
+   "what": "Cell-free protein complex derived from umbilical cord mesenchymal stem cells",
+   "targets": [
+    "Undefined (stem-cell-derived protein mix)"
+   ],
+   "modality": "Protein",
+   "source": "https://www.citybiz.co/?p=927207"
+  },
+  {
+   "match": [
+    "AMDX-2011P",
+    "AMDXP-2011P"
+   ],
+   "names": [],
+   "what": "Retinal imaging tracer that binds TDP-43 deposits (a diagnostic, not a treatment)",
+   "targets": [
+    "TDP-43 (imaging)"
+   ],
+   "modality": "Diagnostic",
+   "source": "https://www.biospace.com/amydis-announces-enrollment-of-first-participants-in-probe-a-phase-1-2a-trial-evaluating-a-novel-retinal-tracer-in-people-with-amyotrophic-lateral-sclerosis-or-parkinson-s-disease"
+  },
+  {
+   "match": [
+    "AMT-162"
+   ],
+   "names": [],
+   "what": "AAVrh10 gene therapy delivering a microRNA that silences SOD1",
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "Gene therapy",
+   "source": "https://alsnewstoday.com/news/first-sod1-als-patient-dosed-trial-amt-162-gene-therapy/"
+  },
+  {
+   "match": [
+    "ANX005",
+    "tanruprubart"
+   ],
+   "names": [
+    "tanruprubart"
+   ],
+   "what": "Antibody that blocks complement protein C1q",
+   "targets": [
+    "C1q"
+   ],
+   "modality": "Antibody",
+   "source": "https://annexonbio.com/wp-content/uploads/2026/07/EAN-2026-Clinical-Endpoints-ePoster_v5.00_18Jun2026.pdf"
+  },
+  {
+   "match": [
+    "AP-101"
+   ],
+   "names": [],
+   "what": "Antibody that binds misfolded SOD1",
+   "targets": [
+    "Misfolded SOD1"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.neurologylive.com/view/ap-101-meets-primary-end-point-phase-2-study-sod1-als"
+  },
+  {
+   "match": [
+    "ARGX-119",
+    "adimanebart"
+   ],
+   "names": [
+    "adimanebart"
+   ],
+   "what": "Antibody that activates MuSK to stabilise the neuromuscular junction",
+   "targets": [
+    "MuSK"
+   ],
+   "modality": "Antibody",
+   "source": "https://reports.argenx.com/2025/argenx-group/our-products-and-product-candidates/adimanebart-development.html"
+  },
+  {
+   "match": [
+    "AT-1501",
+    "tegoprubart"
+   ],
+   "names": [
+    "tegoprubart"
+   ],
+   "what": "Antibody that blocks CD40 ligand, to dampen neuroinflammation",
+   "targets": [
+    "CD40L"
+   ],
+   "modality": "Antibody",
+   "source": "https://alsnewstoday.com/news/als-antibody-therapy-at-1501-renamed-tegoprubart/"
+  },
+  {
+   "match": [
+    "AVP-923"
+   ],
+   "names": [
+    "dextromethorphan",
+    "quinidine"
+   ],
+   "what": "Dextromethorphan/quinidine combination, tested for pseudobulbar affect",
+   "targets": [
+    "NMDA receptor",
+    "Sigma-1 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://scholars.houstonmethodist.org/en/publications/treatment-of-pseudobulbar-affect-in-als-with-dextromethorphanquin/"
+  },
+  {
+   "match": [
+    "BHV-0223"
+   ],
+   "names": [
+    "riluzole"
+   ],
+   "what": "Sublingual, orally dissolving formulation of riluzole",
+   "targets": [
+    "Voltage-gated sodium channels",
+    "Glutamate release"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/biohaven-sublingual-als-therapy-bhv-0223-moves-closer-to-fda-approval/"
+  },
+  {
+   "match": [
+    "BIIB078"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide targeting repeat-containing C9orf72 RNA",
+   "targets": [
+    "C9orf72"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://alsnewstoday.com/news/discontinued-therapy-biib078-not-effective-als-trial-data/"
+  },
+  {
+   "match": [
+    "BIIB100",
+    "KPT-350"
+   ],
+   "names": [
+    "KPT-350"
+   ],
+   "what": "Brain-penetrant inhibitor of exportin 1 (XPO1)",
+   "targets": [
+    "XPO1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/biogen-acquiring-therapy-that-karyopharm-developed-for-als-and-other-disorders/"
+  },
+  {
+   "match": [
+    "BIIB105"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide that lowers ataxin-2 (ATXN2)",
+   "targets": [
+    "ATXN2"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://clinicaltrials.gov/study/NCT04494256"
+  },
+  {
+   "match": [
+    "BLZ945",
+    "sotuletinib"
+   ],
+   "names": [
+    "sotuletinib"
+   ],
+   "what": "CSF-1R inhibitor that reduces microglial activity",
+   "targets": [
+    "CSF1R"
+   ],
+   "modality": "Small molecule",
+   "source": "https://en.wikipedia.org/wiki/Sotuletinib"
+  },
+  {
+   "match": [
+    "CK0803"
+   ],
+   "names": [],
+   "what": "Regulatory T cells derived from umbilical cord blood",
+   "targets": [
+    "Neuroinflammation (regulatory T cells)"
+   ],
+   "modality": "Cell therapy",
+   "source": "https://alsnewstoday.com/news/fda-clears-als-clinical-study-cellenkos-treg-cell-therapy-ck0803/"
+  },
+  {
+   "match": [
+    "CNS10"
+   ],
+   "names": [],
+   "what": "Neural progenitor cells engineered to secrete GDNF",
+   "targets": [
+    "GDNF"
+   ],
+   "modality": "Cell therapy",
+   "source": "https://clinicaltrials.gov/study/NCT02943850"
+  },
+  {
+   "match": [
+    "COYA 302"
+   ],
+   "names": [
+    "interleukin-2",
+    "abatacept"
+   ],
+   "what": "Low-dose interleukin-2 combined with abatacept (CTLA4-Ig)",
+   "targets": [
+    "Regulatory T cells (IL-2)",
+    "CD80/CD86 (abatacept)"
+   ],
+   "modality": "Protein",
+   "source": "https://trials.coyatherapeutics.com/trial/alstars-als"
+  },
+  {
+   "match": [
+    "DNL343"
+   ],
+   "names": [],
+   "what": "eIF2B activator targeting the integrated stress response",
+   "targets": [
+    "eIF2B"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/als-investigational-therapies-dnl343-fosigotifator-fail-healey-trial-goals/"
+  },
+  {
+   "match": [
+    "DNL747"
+   ],
+   "names": [],
+   "what": "RIPK1 inhibitor, later replaced by DNL788",
+   "targets": [
+    "RIPK1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.clinicaltrialsarena.com/news/sanofi-and-denalis-als-therapy-misses-primary-endpoint-in-phase-ii/"
+  },
+  {
+   "match": [
+    "SAR443820",
+    "DNL788"
+   ],
+   "names": [
+    "DNL788"
+   ],
+   "what": "RIPK1 inhibitor",
+   "targets": [
+    "RIPK1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/denali-therapy-candidate-fails-slowing-als-progression-trial/"
+  },
+  {
+   "match": [
+    "FAB122"
+   ],
+   "names": [
+    "edaravone"
+   ],
+   "what": "Daily oral formulation of edaravone",
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT05178810"
+  },
+  {
+   "match": [
+    "FHND1002"
+   ],
+   "names": [],
+   "what": "Oral 3-n-butylphthalide derivative",
+   "targets": [
+    "Undisclosed"
+   ],
+   "modality": "Small molecule",
+   "source": "https://synapse.patsnap.com/drug/baf439b718084db1a43274b7fbd99b6e"
+  },
+  {
+   "match": [
+    "FLX-787"
+   ],
+   "names": [],
+   "what": "Activator of TRPA1/TRPV1 ion channels, tested for muscle cramps",
+   "targets": [
+    "TRPA1",
+    "TRPV1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/flx-787-investigated-treatment-cramps-als-patients/"
+  },
+  {
+   "match": [
+    "G04CB02"
+   ],
+   "names": [
+    "dutasteride"
+   ],
+   "what": "WHO ATC code for dutasteride, a 5-alpha-reductase inhibitor",
+   "targets": [
+    "SRD5A (5-alpha-reductase)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://atcddd.fhi.no/atc_ddd_index/?code=G04CB02"
+  },
+  {
+   "match": [
+    "GDC-0134"
+   ],
+   "names": [],
+   "what": "Inhibitor of dual leucine zipper kinase (DLK)",
+   "targets": [
+    "MAP3K12 (DLK)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/35014217/"
+  },
+  {
+   "match": [
+    "GM604",
+    "GM6"
+   ],
+   "names": [],
+   "what": "Peptide derived from motoneuronotrophic factor",
+   "targets": [
+    "Undefined (neurotrophic peptide)"
+   ],
+   "modality": "Peptide",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6051227"
+  },
+  {
+   "match": [
+    "GSK1223249",
+    "ozanezumab"
+   ],
+   "names": [
+    "ozanezumab"
+   ],
+   "what": "Antibody against Nogo-A",
+   "targets": [
+    "RTN4 (Nogo-A)"
+   ],
+   "modality": "Antibody",
+   "source": "https://en.wikipedia.org/wiki/Ozanezumab"
+  },
+  {
+   "match": [
+    "IC14",
+    "atibuclimab"
+   ],
+   "names": [
+    "atibuclimab"
+   ],
+   "what": "Antibody against CD14",
+   "targets": [
+    "CD14"
+   ],
+   "modality": "Antibody",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36533976/"
+  },
+  {
+   "match": [
+    "INS1202"
+   ],
+   "names": [],
+   "what": "AAV9 gene therapy delivering a short-hairpin RNA that silences SOD1",
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "Gene therapy",
+   "source": "https://alsnewstoday.com/news/mda-2026-insmed-launches-phase-1-trial-als-gene-therapy/"
+  },
+  {
+   "match": [
+    "IPL344"
+   ],
+   "names": [],
+   "what": "Peptide that activates the Akt cell-survival pathway",
+   "targets": [
+    "Akt pathway"
+   ],
+   "modality": "Peptide",
+   "source": "https://alsnewstoday.com/ipl344-for-als/"
+  },
+  {
+   "match": [
+    "ISIS 333611"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide against SOD1, the first given intrathecally",
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3712285"
+  },
+  {
+   "match": [
+    "LAM-002A"
+   ],
+   "names": [
+    "apilimod"
+   ],
+   "what": "Apilimod dimesylate capsules",
+   "targets": [
+    "PIKFYVE"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT05163886"
+  },
+  {
+   "match": [
+    "LTX-002"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide that lowers SPTLC1 (serine palmitoyltransferase)",
+   "targets": [
+    "SPTLC1"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://longevity.technology/news/leal-therapeutics-doses-first-patient-in-neurals-trial/"
+  },
+  {
+   "match": [
+    "LY3873862"
+   ],
+   "names": [],
+   "what": "SARM1 inhibitor intended to prevent axon degeneration",
+   "targets": [
+    "SARM1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.massgeneral.org/neurology/als/news/new-regimen-for-healey-als-platform-trial-with-lilly"
+  },
+  {
+   "match": [
+    "MaaT033"
+   ],
+   "names": [],
+   "what": "Oral microbiome ecosystem therapy",
+   "targets": [
+    "Gut microbiome"
+   ],
+   "modality": "Microbiome",
+   "source": "https://www.businesswire.com/news/home/20241125058999/en/MaaT-Pharma-Announces-Positive-Phase-1b-Results-Meeting-Primary-Endpoint-in-the-Evaluation-of-MaaT033-in-Amyotrophic-Lateral-Sclerosis-ALS"
+  },
+  {
+   "match": [
+    "MD1003"
+   ],
+   "names": [
+    "biotin"
+   ],
+   "what": "High-dose pharmaceutical-grade biotin",
+   "targets": [
+    "Cellular energy metabolism"
+   ],
+   "modality": "Supplement or diet",
+   "source": "https://doaj.org/article/808df3a8ac1b42b99b763bfd9e5f5b3c"
+  },
+  {
+   "match": [
+    "MRG-001"
+   ],
+   "names": [],
+   "what": "Combination drug meant to mobilise bone-marrow stem cells and regulatory T cells",
+   "targets": [
+    "Stem-cell and regulatory T-cell mobilisation"
+   ],
+   "modality": "Small molecule",
+   "source": "https://navigator.reaganudall.org/medregen-llc"
+  },
+  {
+   "match": [
+    "MTP-101C"
+   ],
+   "names": [],
+   "what": "Intestinal microbiome transplant product",
+   "targets": [
+    "Gut microbiome"
+   ],
+   "modality": "Microbiome",
+   "source": "https://clinicaltrials.gov/study/NCT07017946"
+  },
+  {
+   "match": [
+    "NB-4746"
+   ],
+   "names": [],
+   "what": "SARM1 inhibitor intended to prevent axon degeneration",
+   "targets": [
+    "SARM1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alzforum.org/therapeutics/nb-4746"
+  },
+  {
+   "match": [
+    "NP001"
+   ],
+   "names": [
+    "sodium chlorite"
+   ],
+   "what": "Intravenous sodium chlorite formulation that regulates macrophage activation",
+   "targets": [
+    "Macrophage activation"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/np001/"
+  },
+  {
+   "match": [
+    "NPT520-34"
+   ],
+   "names": [],
+   "what": "Small molecule intended to reduce neuroinflammation",
+   "targets": [
+    "Neuroinflammation"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/npt520-34-granted-fda-orphan-drug-designation-als/"
+  },
+  {
+   "match": [
+    "NUZ-001",
+    "monepantel"
+   ],
+   "names": [
+    "monepantel"
+   ],
+   "what": "Oral monepantel, thought to inhibit mTOR and boost autophagy",
+   "targets": [
+    "mTOR pathway"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/repurposed-vet-drug-helps-als-patients-live-longer-study/"
+  },
+  {
+   "match": [
+    "NX210c"
+   ],
+   "names": [],
+   "what": "Cyclic peptide derived from SCO-spondin, intended to restore blood-brain barrier integrity",
+   "targets": [
+    "Blood-brain barrier"
+   ],
+   "modality": "Peptide",
+   "source": "https://fiercebiotech.com/biotech/axoltis-misses-mark-phase-2-als-study-still-strives-move-towards-clinic"
+  },
+  {
+   "match": [
+    "ONO-2506",
+    "arundic acid"
+   ],
+   "names": [
+    "arundic acid"
+   ],
+   "what": "Astrocyte modulator that inhibits S100B synthesis",
+   "targets": [
+    "S100B (astrocytes)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://drugs.ncats.io/drug/F2628ZD0FO"
+  },
+  {
+   "match": [
+    "PTC857",
+    "utreloxastat"
+   ],
+   "names": [
+    "utreloxastat"
+   ],
+   "what": "15-lipoxygenase inhibitor",
+   "targets": [
+    "ALOX15 (15-lipoxygenase)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/utreloxastat-fails-slow-als-disease-progression-phase-2-trial/"
+  },
+  {
+   "match": [
+    "QRL-101",
+    "QRA-244"
+   ],
+   "names": [
+    "QRA-244"
+   ],
+   "what": "Kv7.2/7.3 potassium channel opener",
+   "targets": [
+    "KCNQ2/KCNQ3 (Kv7.2/7.3)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://neurologylive.com/view/dosing-begins-phase-1-study-kv7-2-7-3-ion-channel-opener-qrl-101-als"
+  },
+  {
+   "match": [
+    "QRL-201"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide that restores stathmin-2 (STMN2)",
+   "targets": [
+    "STMN2"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://www.neurologylive.com/view/quralis-reports-anqur-interim-data-stathmin-2-targeting-agent-qrl-201-als"
+  },
+  {
+   "match": [
+    "RAG-17"
+   ],
+   "names": [],
+   "what": "RNA drug that silences SOD1",
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "RNA interference",
+   "source": "https://www.bioworld.com/articles/732805-rag-17-silences-sod1-extends-survival-in-als-preclinical-models"
+  },
+  {
+   "match": [
+    "RAG-21"
+   ],
+   "names": [],
+   "what": "siRNA that lowers FUS",
+   "targets": [
+    "FUS"
+   ],
+   "modality": "RNA interference",
+   "source": "https://alsnewstoday.com/news/fda-grants-orphan-drug-status-rag-21-treatment-fus-als/"
+  },
+  {
+   "match": [
+    "SB-509"
+   ],
+   "names": [],
+   "what": "Plasmid encoding a zinc-finger activator of VEGF-A",
+   "targets": [
+    "VEGFA"
+   ],
+   "modality": "Gene therapy",
+   "source": "https://clinicaltrials.gov/study/NCT00748501"
+  },
+  {
+   "match": [
+    "SLS-005"
+   ],
+   "names": [
+    "trehalose"
+   ],
+   "what": "Intravenous trehalose, an autophagy enhancer",
+   "targets": [
+    "Autophagy"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.neurologylive.com/view/sls-005-als-progression-better-without-amx0035-healey-als-platform-trial"
+  },
+  {
+   "match": [
+    "SNUG01"
+   ],
+   "names": [],
+   "what": "AAV9 gene therapy delivering TRIM72",
+   "targets": [
+    "TRIM72"
+   ],
+   "modality": "Gene therapy",
+   "source": "https://alsnewstoday.com/news/fda-approves-study-snug01-gene-therapy-adults-als/"
+  },
+  {
+   "match": [
+    "SPG302"
+   ],
+   "names": [],
+   "what": "Small molecule intended to regenerate synapses",
+   "targets": [
+    "Synapse regeneration"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/fda-oks-phase-1-2-clinical-trial-small-molecule-spg302-als/"
+  },
+  {
+   "match": [
+    "STR04",
+    "STRO4"
+   ],
+   "names": [],
+   "what": "Autologous bone-marrow mesenchymal stem cells",
+   "targets": [
+    "Undefined (stem cells)"
+   ],
+   "modality": "Cell therapy",
+   "source": "https://ctv.veeva.com/study/a-study-of-stro4-in-patients-amyotrophic-lateral-sclerosis-als"
+  },
+  {
+   "match": [
+    "TPN-101",
+    "censavudine"
+   ],
+   "names": [
+    "censavudine"
+   ],
+   "what": "Inhibitor of LINE-1 reverse transcriptase",
+   "targets": [
+    "LINE-1 reverse transcriptase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/als-ftd-caused-c9orf7s-gene-mutations-improves-with-tpn-101/"
+  },
+  {
+   "match": [
+    "TRCN-1023"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide intended to restore UNC13A",
+   "targets": [
+    "UNC13A"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://clinicaltrials.gov/study/NCT07674667"
+  },
+  {
+   "match": [
+    "TRO19622",
+    "olesoxime"
+   ],
+   "names": [
+    "olesoxime"
+   ],
+   "what": "Olesoxime, tested as an add-on to riluzole",
+   "targets": [
+    "Mitochondria"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.fiercebiotech.com/biotech/trophos-announces-results-of-phase-3-study-of-olesoxime-amyotrophic-lateral-sclerosis"
+  },
+  {
+   "match": [
+    "VM202",
+    "donaperminogene seltoplasmid",
+    "Engensis"
+   ],
+   "names": [
+    "donaperminogene seltoplasmid",
+    "Engensis"
+   ],
+   "what": "Plasmid DNA encoding hepatocyte growth factor (HGF)",
+   "targets": [
+    "HGF"
+   ],
+   "modality": "Gene therapy",
+   "source": "https://alsnewstoday.com/vm202"
+  },
+  {
+   "match": [
+    "VRG50635"
+   ],
+   "names": [],
+   "what": "PIKfyve inhibitor (prodrug of VRG50468)",
+   "targets": [
+    "PIKFYVE"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/verge-launches-phase-1-trial-pikfyve-inhibitor-therapy-als-patients/"
+  },
+  {
+   "match": [
+    "WVE-004"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide that degrades repeat-containing C9orf72 RNA",
+   "targets": [
+    "C9orf72"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://alsnewstoday.com/news/wave-life-als-therapy-demonstrates-proof-of-concept-preclinical-studies/"
+  },
+  {
+   "match": [
+    "XT-150"
+   ],
+   "names": [],
+   "what": "Plasmid DNA encoding a variant of the anti-inflammatory cytokine IL-10",
+   "targets": [
+    "IL-10"
+   ],
+   "modality": "Gene therapy",
+   "source": "https://clinicaltrials.gov/study/NCT06704347"
+  },
+  {
+   "match": [
+    "tofersen",
+    "qalsody",
+    "BIIB067",
+    "IONIS-SOD1Rx"
+   ],
+   "names": [],
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3833346",
+   "what": "Antisense oligonucleotide that lowers SOD1"
+  },
+  {
+   "match": [
+    "riluzole",
+    "rilutek",
+    "exservan",
+    "tiglutik",
+    "intrathecal riluzole"
+   ],
+   "names": [],
+   "targets": [
+    "Voltage-gated sodium channels",
+    "Glutamate release"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL744"
+  },
+  {
+   "match": [
+    "edaravone",
+    "radicut",
+    "radicava",
+    "MCI-186",
+    "MT-1186",
+    "oral edaravone"
+   ],
+   "names": [],
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL290916",
+   "what": "Free-radical scavenger"
+  },
+  {
+   "match": [
+    "sodium phenylbutyrate"
+   ],
+   "names": [],
+   "targets": [
+    "Histone deacetylases",
+    "ER stress"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "taurursodiol",
+    "tauroursodeoxycholic acid",
+    "TUDCA"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial dysfunction",
+    "ER stress"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "dexpramipexole",
+    "KNS-760704",
+    "BIIB050",
+    "R pramipexole",
+    "R(+) pramipexole",
+    "cimetidine plus dexpramipexole"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondria"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tirasemtiv",
+    "CK-2017357",
+    "CK-201735"
+   ],
+   "names": [],
+   "targets": [
+    "Fast skeletal muscle troponin"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "reldesemtiv",
+    "CK-2127107"
+   ],
+   "names": [],
+   "targets": [
+    "Fast skeletal muscle troponin"
+   ],
+   "modality": "Small molecule",
+   "source": "https://alsnewstoday.com/news/courage-als-trial-stopping-reldesemtiv-fails-show-benefits/"
+  },
+  {
+   "match": [
+    "arimoclomol"
+   ],
+   "names": [],
+   "targets": [
+    "Heat shock response (HSP70)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "pridopidine"
+   ],
+   "names": [],
+   "targets": [
+    "SIGMAR1 (sigma-1 receptor)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.neurologylive.com/view/fda-clears-pivotal-phase-3-prevails-study-pridopidine-early-rapidly-progressive-als"
+  },
+  {
+   "match": [
+    "masitinib",
+    "AB1010"
+   ],
+   "names": [],
+   "targets": [
+    "KIT",
+    "PDGFR",
+    "FGFR3"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1908391"
+  },
+  {
+   "match": [
+    "ibudilast",
+    "MN-166"
+   ],
+   "names": [],
+   "targets": [
+    "Phosphodiesterases (PDE3/4/5/10)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL19449"
+  },
+  {
+   "match": [
+    "CuATSM",
+    "Cu-ATSM",
+    "diacetylbis"
+   ],
+   "names": [],
+   "targets": [
+    "Copper delivery (SOD1, mitochondria)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "CNM-Au8",
+    "CNMAu8",
+    "gold nanocrystal",
+    "gold nanocrystals"
+   ],
+   "names": [],
+   "targets": [
+    "NAD+/NADH redox metabolism"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.biospace.com/press-releases/clene-announces-statistically-significant-als-biomarker-results-supporting-accelerated-approval-pathway-for-cnm-au8",
+   "what": "Catalytic gold nanocrystal suspension"
+  },
+  {
+   "match": [
+    "verdiperstat"
+   ],
+   "names": [],
+   "targets": [
+    "MPO (myeloperoxidase)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11833655/"
+  },
+  {
+   "match": [
+    "trehalose"
+   ],
+   "names": [],
+   "targets": [
+    "Autophagy"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.neurologylive.com/view/sls-005-als-progression-better-without-amx0035-healey-als-platform-trial"
+  },
+  {
+   "match": [
+    "dazucorilant"
+   ],
+   "names": [],
+   "targets": [
+    "Glucocorticoid receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "fasudil"
+   ],
+   "names": [],
+   "targets": [
+    "ROCK (Rho kinase)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "memantine"
+   ],
+   "names": [],
+   "targets": [
+    "NMDA receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "amantadine"
+   ],
+   "names": [],
+   "targets": [
+    "NMDA receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "acamprosate"
+   ],
+   "names": [],
+   "targets": [
+    "NMDA receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "perampanel",
+    "fycompa"
+   ],
+   "names": [],
+   "targets": [
+    "AMPA receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "talampanel"
+   ],
+   "names": [],
+   "targets": [
+    "AMPA receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "mexiletine",
+    "mexitil"
+   ],
+   "names": [],
+   "targets": [
+    "Voltage-gated sodium channels"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "lacosamide"
+   ],
+   "names": [],
+   "targets": [
+    "Voltage-gated sodium channels"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "ranolazine"
+   ],
+   "names": [],
+   "targets": [
+    "Voltage-gated sodium channels"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "ezogabine",
+    "retigabine"
+   ],
+   "names": [],
+   "targets": [
+    "KCNQ2/KCNQ3 (Kv7.2/7.3)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "levetiracetam"
+   ],
+   "names": [],
+   "targets": [
+    "SV2A"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "lithium"
+   ],
+   "names": [],
+   "targets": [
+    "GSK-3β"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tideglusib"
+   ],
+   "names": [],
+   "targets": [
+    "GSK-3β"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tamoxifen"
+   ],
+   "names": [],
+   "targets": [
+    "Estrogen receptor",
+    "Protein kinase C"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "rasagiline"
+   ],
+   "names": [],
+   "targets": [
+    "MAO-B"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "deferiprone",
+    "ferriprox"
+   ],
+   "names": [],
+   "targets": [
+    "Iron (chelator)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "colchicine"
+   ],
+   "names": [],
+   "targets": [
+    "Tubulin"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "ALZT-OP1a",
+    "cromolyn",
+    "sodium cromoglycate"
+   ],
+   "names": [],
+   "targets": [
+    "Mast cells"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "inosine"
+   ],
+   "names": [],
+   "targets": [
+    "Urate"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "L-serine"
+   ],
+   "names": [],
+   "targets": [
+    "Protein misfolding"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "triumeq",
+    "dolutegravir",
+    "abacavir",
+    "lamivudine",
+    "darunavir",
+    "ritonavir",
+    "tenofovir alafenamide"
+   ],
+   "names": [],
+   "targets": [
+    "Endogenous retroviruses (HERV-K)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "PrimeC",
+    "fixed dose combination ciprofloxacin"
+   ],
+   "names": [],
+   "targets": [
+    "miRNA biogenesis (Dicer)",
+    "COX-2"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "enoxacin"
+   ],
+   "names": [],
+   "targets": [
+    "miRNA biogenesis (Dicer)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "celecoxib"
+   ],
+   "names": [],
+   "targets": [
+    "COX-2"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "minocycline"
+   ],
+   "names": [],
+   "targets": [
+    "Microglial activation"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "thalidomide"
+   ],
+   "names": [],
+   "targets": [
+    "TNF-α"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "pimozide"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine D2 receptor",
+    "T-type calcium channels"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "clenbuterol",
+    "salbutamol"
+   ],
+   "names": [],
+   "targets": [
+    "β2-adrenergic receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "digoxin"
+   ],
+   "names": [],
+   "targets": [
+    "Na+/K+-ATPase"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "metformin"
+   ],
+   "names": [],
+   "targets": [
+    "AMPK"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "pioglitazone"
+   ],
+   "names": [],
+   "targets": [
+    "PPARγ"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tretinoin"
+   ],
+   "names": [],
+   "targets": [
+    "Retinoic acid receptors"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "sodium valproate",
+    "valproic acid"
+   ],
+   "names": [],
+   "targets": [
+    "Histone deacetylases"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "rapamycin",
+    "sirolimus"
+   ],
+   "names": [],
+   "targets": [
+    "mTOR"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tofacitinib"
+   ],
+   "names": [],
+   "targets": [
+    "JAK"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "baricitinib"
+   ],
+   "names": [],
+   "targets": [
+    "JAK1/JAK2"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "fingolimod",
+    "gilenya"
+   ],
+   "names": [],
+   "targets": [
+    "S1P receptors"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "orelabrutinib"
+   ],
+   "names": [],
+   "targets": [
+    "BTK"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "bosutinib"
+   ],
+   "names": [],
+   "targets": [
+    "SRC/ABL kinases"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "trametinib"
+   ],
+   "names": [],
+   "targets": [
+    "MEK1/2"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "galunisertib"
+   ],
+   "names": [],
+   "targets": [
+    "TGF-β receptor I (ALK5)",
+    "PDE4B"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tacrolimus"
+   ],
+   "names": [],
+   "targets": [
+    "Calcineurin"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "mycophenolate"
+   ],
+   "names": [],
+   "targets": [
+    "IMPDH"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "cyclophosphamide"
+   ],
+   "names": [],
+   "targets": [
+    "Immunosuppression"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "prednisone",
+    "methylprednisolone",
+    "betamethasone",
+    "preventative medication - corticosteroids"
+   ],
+   "names": [],
+   "targets": [
+    "Glucocorticoid receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "ceftriaxone"
+   ],
+   "names": [],
+   "targets": [
+    "EAAT2 (glutamate transporter)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tetramethylpyrazine nitrone",
+    "TBN"
+   ],
+   "names": [],
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "acetylcysteine"
+   ],
+   "names": [],
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "ambroxol"
+   ],
+   "names": [],
+   "targets": [
+    "GBA1 (glucocerebrosidase)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "pyrimethamine"
+   ],
+   "names": [],
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "Small molecule",
+   "source": null,
+   "what": "Small molecule reported to lower SOD1 levels"
+  },
+  {
+   "match": [
+    "terazosin",
+    "terazosine"
+   ],
+   "names": [],
+   "targets": [
+    "PGK1"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "IFB-088",
+    "icerguastat"
+   ],
+   "names": [],
+   "targets": [
+    "PPP1R15A (integrated stress response)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "RT001"
+   ],
+   "names": [],
+   "targets": [
+    "Lipid peroxidation"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "EPI-589"
+   ],
+   "names": [],
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "usnoflast",
+    "ZYIL1",
+    "kamlanoflast"
+   ],
+   "names": [],
+   "targets": [
+    "NLRP3 inflammasome"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "prosetin"
+   ],
+   "names": [],
+   "targets": [
+    "MAP4K4"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "PU-AD"
+   ],
+   "names": [],
+   "targets": [
+    "HSP90 (epichaperome)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "trimetazidine"
+   ],
+   "names": [],
+   "targets": [
+    "Fatty-acid oxidation"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "triheptanoin",
+    "oxaloacetic acid"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial energy metabolism"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "methylcobalamin",
+    "mecobalamin",
+    "E0302"
+   ],
+   "names": [],
+   "targets": [
+    "Vitamin B12 (methylation)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "capsaicin",
+    "hot pepper"
+   ],
+   "names": [],
+   "targets": [
+    "TRPV1"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "dextromethorphan"
+   ],
+   "names": [],
+   "targets": [
+    "NMDA receptor",
+    "SIGMAR1 (sigma-1 receptor)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "nuedexta"
+   ],
+   "names": [],
+   "targets": [
+    "NMDA receptor",
+    "SIGMAR1 (sigma-1 receptor)"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "scopolamine",
+    "atropine",
+    "darifenacin"
+   ],
+   "names": [],
+   "targets": [
+    "Muscarinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "carbidopa-levodopa",
+    "levodopa"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "escitalopram",
+    "selective serotonin uptake inhibitors"
+   ],
+   "names": [],
+   "targets": [
+    "Serotonin transporter"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "tricyclic antidepressants"
+   ],
+   "names": [],
+   "targets": [
+    "Monoamine reuptake"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "trazodone"
+   ],
+   "names": [],
+   "targets": [
+    "Serotonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "olanzapine"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine and serotonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "psilocybin"
+   ],
+   "names": [],
+   "targets": [
+    "5-HT2A receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "melatonin"
+   ],
+   "names": [],
+   "targets": [
+    "Melatonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "testosterone"
+   ],
+   "names": [],
+   "targets": [
+    "Androgen receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "leuprolide"
+   ],
+   "names": [],
+   "targets": [
+    "GnRH receptor"
+   ],
+   "modality": "Peptide",
+   "source": null
+  },
+  {
+   "match": [
+    "dronabinol",
+    "cannabis",
+    "medicabilis cbd",
+    "cbd oil"
+   ],
+   "names": [],
+   "targets": [
+    "Cannabinoid receptors"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "endocannabinoid palmitoylethanolamide",
+    "palmitoylethanolamide"
+   ],
+   "names": [],
+   "targets": [
+    "PPAR-α"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "protandim",
+    "sulforaphane"
+   ],
+   "names": [],
+   "targets": [
+    "Nrf2"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "mitoq"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial oxidative stress"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "astaxanthin",
+    "vitamin e",
+    "tocotrienols",
+    "antioxidants",
+    "lipoic acid"
+   ],
+   "names": [],
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "nL-CHCHD-001"
+   ],
+   "names": [],
+   "targets": [
+    "CHCHD10"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": null,
+   "what": "Personalized antisense oligonucleotide (n-Lorem)"
+  },
+  {
+   "match": [
+    "nL-TARD-001",
+    "nL-TARDB-002",
+    "nL-TARDB-006"
+   ],
+   "names": [],
+   "targets": [
+    "TARDBP (TDP-43)"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": null,
+   "what": "Personalized antisense oligonucleotide (n-Lorem)"
+  },
+  {
+   "match": [
+    "nusinersen"
+   ],
+   "names": [],
+   "targets": [
+    "SMN2 splicing"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": null
+  },
+  {
+   "match": [
+    "ALN-SOD"
+   ],
+   "names": [],
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "RNA interference",
+   "source": null
+  },
+  {
+   "match": [
+    "ARO-SOD1"
+   ],
+   "names": [],
+   "targets": [
+    "SOD1"
+   ],
+   "modality": "RNA interference",
+   "source": null
+  },
+  {
+   "match": [
+    "zilucoplan"
+   ],
+   "names": [],
+   "targets": [
+    "C5 (complement)"
+   ],
+   "modality": "Peptide",
+   "source": "https://www.massgeneral.org/news/press-release/healey-als-platform-trial-update-ilucoplan-arm-stopped-early-for-futility"
+  },
+  {
+   "match": [
+    "pegcetacoplan"
+   ],
+   "names": [],
+   "targets": [
+    "C3 (complement)"
+   ],
+   "modality": "Peptide",
+   "source": null
+  },
+  {
+   "match": [
+    "ravulizumab"
+   ],
+   "names": [],
+   "targets": [
+    "C5 (complement)"
+   ],
+   "modality": "Antibody",
+   "source": null
+  },
+  {
+   "match": [
+    "tocilizumab"
+   ],
+   "names": [],
+   "targets": [
+    "IL-6 receptor"
+   ],
+   "modality": "Antibody",
+   "source": null
+  },
+  {
+   "match": [
+    "basiliximab"
+   ],
+   "names": [],
+   "targets": [
+    "IL-2 receptor α (CD25)"
+   ],
+   "modality": "Antibody",
+   "source": null
+  },
+  {
+   "match": [
+    "foralumab"
+   ],
+   "names": [],
+   "targets": [
+    "CD3"
+   ],
+   "modality": "Antibody",
+   "source": null
+  },
+  {
+   "match": [
+    "TCD601",
+    "siplizumab"
+   ],
+   "names": [],
+   "targets": [
+    "CD2"
+   ],
+   "modality": "Antibody",
+   "source": null
+  },
+  {
+   "match": [
+    "anakinra"
+   ],
+   "names": [],
+   "targets": [
+    "IL-1 receptor"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "abatacept"
+   ],
+   "names": [],
+   "targets": [
+    "CD80/CD86"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "IL-2",
+    "interleukin-2",
+    "proleukin",
+    "aldesleukin"
+   ],
+   "names": [],
+   "targets": [
+    "Regulatory T cells (IL-2 receptor)"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "G-CSF",
+    "granulocyte colony stimulating factor",
+    "granulocyte - colony stimulating factor",
+    "filgrastim"
+   ],
+   "names": [],
+   "targets": [
+    "G-CSF receptor"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "erythropoietin",
+    "erythropoetin",
+    "recombinant human erythropoietin"
+   ],
+   "names": [],
+   "targets": [
+    "EPO receptor"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "insulin like growth factor",
+    "IGF-1"
+   ],
+   "names": [],
+   "targets": [
+    "IGF-1 receptor"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "nerve growth factor"
+   ],
+   "names": [],
+   "targets": [
+    "TrkA (NGF receptor)"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "growth hormone"
+   ],
+   "names": [],
+   "targets": [
+    "GH receptor"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "SNN0029"
+   ],
+   "names": [],
+   "targets": [
+    "VEGF receptors"
+   ],
+   "modality": "Protein",
+   "source": null,
+   "what": "VEGF-A protein delivered into the brain ventricles"
+  },
+  {
+   "match": [
+    "3K3A-APC"
+   ],
+   "names": [],
+   "targets": [
+    "PAR1 (activated protein C analogue)"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "intravenous immunoglobulin",
+    "IVIG"
+   ],
+   "names": [],
+   "targets": [
+    "Immune modulation (pooled IgG)"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "albumin",
+    "albutein"
+   ],
+   "names": [],
+   "targets": [
+    "Albumin replacement (plasma exchange)"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "acthar",
+    "repository corticotropin"
+   ],
+   "names": [],
+   "targets": [
+    "Melanocortin receptors (ACTH)"
+   ],
+   "modality": "Peptide",
+   "source": null
+  },
+  {
+   "match": [
+    "glatiramer"
+   ],
+   "names": [],
+   "targets": [
+    "Immune modulation"
+   ],
+   "modality": "Peptide",
+   "source": null
+  },
+  {
+   "match": [
+    "botox",
+    "myobloc",
+    "incobotulinum",
+    "botulinum"
+   ],
+   "names": [],
+   "targets": [
+    "Acetylcholine release (SNARE proteins)"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "lunasin"
+   ],
+   "names": [],
+   "targets": [
+    "Histone acetylation"
+   ],
+   "modality": "Peptide",
+   "source": null
+  },
+  {
+   "match": [
+    "NurOwn",
+    "debamestrocel",
+    "MSC-NTF",
+    "MSC_NTF"
+   ],
+   "names": [],
+   "targets": [
+    "Neurotrophic factors (BDNF, GDNF, VEGF, HGF)"
+   ],
+   "modality": "Cell therapy",
+   "source": "https://ir.brainstorm-cell.com/2025-05-19-BrainStorm-Receives-FDA-Clearance-to-Initiate-Phase-3b-Trial-of-NurOwn-R-for-ALS"
+  },
+  {
+   "match": [
+    "lenzumestrocel",
+    "neuronata",
+    "HYNR-CS",
+    "HYNRCS"
+   ],
+   "names": [],
+   "targets": [
+    "Neurotrophic and immune support"
+   ],
+   "modality": "Cell therapy",
+   "source": null
+  },
+  {
+   "match": [
+    "autologous t-regulatory",
+    "autologous human polyclonal regulatory t",
+    "monthly autologous treg",
+    "RAPA-501"
+   ],
+   "names": [],
+   "targets": [
+    "Neuroinflammation (regulatory T cells)"
+   ],
+   "modality": "Cell therapy",
+   "source": null
+  },
+  {
+   "match": [
+    "iPSC-MNP",
+    "human allogeneic induced pluripotent",
+    "human neural stem cells",
+    "Q-Cells"
+   ],
+   "names": [],
+   "targets": [
+    "Cell replacement and neurotrophic support"
+   ],
+   "modality": "Cell therapy",
+   "source": null
+  },
+  {
+   "match": [
+    "AstroRx"
+   ],
+   "names": [],
+   "targets": [
+    "Astrocyte support"
+   ],
+   "modality": "Cell therapy",
+   "source": null
+  },
+  {
+   "match": [
+    "mesenchymal stem",
+    "autologous mesenchymal",
+    "MSC",
+    "autologous bone marrow",
+    "autologous adipose",
+    "HB-adMSCs",
+    "cultured allogeneic adult umbilical",
+    "umbilical cord blood therapy",
+    "stem cell",
+    "stem cells",
+    "intrathecal autologous stem cell",
+    "intra venous injection of stem cell",
+    "intravenous administration of",
+    "cell-based therapy",
+    "suspension of human autologous msc",
+    "PBMC autotransplantation",
+    "B cell infusion"
+   ],
+   "names": [],
+   "targets": [
+    "Neurotrophic and immune support"
+   ],
+   "modality": "Cell therapy",
+   "source": null
+  },
+  {
+   "match": [
+    "exosome",
+    "exosomes",
+    "HUC-MSC-sEV",
+    "the study drug is shed-cm"
+   ],
+   "names": [],
+   "targets": [
+    "Paracrine factors (stem-cell secretome)"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "probiotic",
+    "fecal microbiota"
+   ],
+   "names": [],
+   "targets": [
+    "Gut microbiome"
+   ],
+   "modality": "Microbiome",
+   "source": null
+  },
+  {
+   "match": [
+    "EH301"
+   ],
+   "names": [],
+   "targets": [
+    "NAD+ metabolism"
+   ],
+   "modality": "Supplement or diet",
+   "source": null,
+   "what": "Nicotinamide riboside plus pterostilbene"
+  },
+  {
+   "match": [
+    "creatine"
+   ],
+   "names": [],
+   "targets": [
+    "Cellular energy (phosphocreatine)"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "coenzyme q10"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial electron transport"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "acetyl-l-carnitine",
+    "l-carnitine"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial fatty-acid metabolism"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "biotin"
+   ],
+   "names": [],
+   "targets": [
+    "Cellular energy metabolism"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "zinc and copper"
+   ],
+   "names": [],
+   "targets": [
+    "Metal homeostasis"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "beta hydroxybutyrate",
+    "ketocal",
+    "high-caloric fatty diet",
+    "ultra-high-caloric",
+    "jevity",
+    "calogen",
+    "oral nutritional supplementation",
+    "oxepa",
+    "β-hydroxy-β-methylbutyrate",
+    "100% of individual calory",
+    "120% of individual calory"
+   ],
+   "names": [],
+   "targets": [
+    "Nutrition and energy metabolism"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "[18F]DPA-714",
+    "[18F]PBR06",
+    "[18F] GE-180",
+    "18F-DPA-714"
+   ],
+   "names": [],
+   "targets": [
+    "TSPO (microglial activation)"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "[11C]MPC6827"
+   ],
+   "names": [],
+   "targets": [
+    "Microtubules"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "drug: f 18 t807",
+    "flortaucipir"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "89Zr-DFO-AP-101"
+   ],
+   "names": [],
+   "targets": [
+    "Misfolded SOD1"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "[11C]CPPC"
+   ],
+   "names": [],
+   "targets": [
+    "CSF1R (microglia)"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "spect : 123 i-fp-cit"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine transporter"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  }
+ ]
+}

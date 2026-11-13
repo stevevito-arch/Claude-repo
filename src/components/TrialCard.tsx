@@ -33,6 +33,12 @@ export function TrialCard({ trial, liveStatus, onSelect }: TrialCardProps) {
         <p className="mt-0.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
           {trial.sponsor}
         </p>
+        <p className="mt-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+          <span style={{ color: 'var(--text-muted)' }}>Target: </span>
+          <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+            {trial.target}
+          </span>
+        </p>
       </div>
 
       <p className="line-clamp-3 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>

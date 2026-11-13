@@ -6,6 +6,7 @@ export type Modality =
   | 'Small molecule'
   | 'Monoclonal antibody'
   | 'Gene therapy'
+  | 'Peptide'
   | 'Platform trial'
 
 export type TrialStatus = 'Recruiting' | 'Active, not recruiting' | 'Not yet recruiting' | 'Enrolling by invitation'
@@ -49,6 +50,7 @@ export interface ConcludedReadout {
   name: string
   sponsor: string
   modality: Modality
+  target: string
   outcome: 'Negative / discontinued' | 'Mixed' | 'Positive'
   summary: string
   date: string

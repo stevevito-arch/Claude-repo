@@ -46,6 +46,19 @@ const STATUS_GROUP_COLOR: Record<StatusGroup, string> = {
   'Status unknown': 'var(--text-muted)',
 }
 
+// Same colours the featured cards use for each modality; others stay neutral.
+const MODALITY_BADGE_COLOR: Record<string, string> = {
+  'Small molecule': 'var(--cat-blue)',
+  'Antisense oligonucleotide': 'var(--cat-orange)',
+  'Cell therapy': 'var(--cat-aqua)',
+  Antibody: 'var(--cat-yellow)',
+  'Gene therapy': 'var(--cat-magenta)',
+  Peptide: 'var(--cat-green)',
+}
+
+// Set by scripts/fetch-registry.mjs for drugs the drug table doesn't cover yet.
+const UNCLASSIFIED = 'Not yet classified'
+
 type SortKey = 'newest' | 'oldest' | 'enrollment'
 
 function year(date: string | null): string {
@@ -102,6 +115,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const [phases, setPhases] = useState<Set<string>>(new Set())
   const [groups, setGroups] = useState<Set<StatusGroup>>(new Set())
   const [resultsOnly, setResultsOnly] = useState(false)
+  const [modalities, setModalities] = useState<Set<string>>(new Set())
+  const [target, setTarget] = useState('')
   const [sort, setSort] = useState<SortKey>('newest')
   const [visible, setVisible] = useState(PAGE_SIZE)
 
@@ -128,7 +143,10 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       (snapshot?.studies ?? []).map((s) => ({
         study: s,
         group: statusGroup(s.status),
-        haystack: [s.id, s.title, s.acronym, s.sponsor, ...s.interventions, ...(s.aliases ?? []), ...(s.drugNotes ?? []).map((n) => n.what)]
+        haystack: [
+          s.id, s.title, s.acronym, s.sponsor, ...s.interventions, ...s.aliases, ...s.targets, ...s.modalities,
+          ...s.drugs.flatMap((d) => [...d.names, d.what ?? '']),
+        ]
           .join(' ')
           .toLowerCase(),
       })),
@@ -141,6 +159,23 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     return counts
   }, [indexed])
 
+  // Counts for the modality chips and the target picker, most common first.
+  const facetCounts = useMemo(() => {
+    const byModality = new Map<string, number>()
+    const byTarget = new Map<string, number>()
+    // Count only studies of the selected types, so the numbers match the list.
+    for (const { study } of indexed) {
+      if (types.size > 0 && !types.has(study.type)) continue
+      for (const m of study.modalities) byModality.set(m, (byModality.get(m) ?? 0) + 1)
+      for (const t of study.targets) byTarget.set(t, (byTarget.get(t) ?? 0) + 1)
+    }
+    const sorted = (m: Map<string, number>) => [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    // "Not yet classified" goes last so it reads as a gap, not a category.
+    const mods = sorted(byModality).filter(([k]) => k !== UNCLASSIFIED)
+    if (byModality.has(UNCLASSIFIED)) mods.push([UNCLASSIFIED, byModality.get(UNCLASSIFIED)!])
+    return { modalities: mods, targets: sorted(byTarget) }
+  }, [indexed, types])
+
   const filtered = useMemo(() => {
     const terms = search.trim().toLowerCase().split(/\s+/).filter(Boolean)
     const rows = indexed.filter(({ study, group, haystack }) => {
@@ -148,6 +183,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       if (phases.size > 0 && !phases.has(study.phase ?? 'No phase')) return false
       if (groups.size > 0 && !groups.has(group)) return false
       if (resultsOnly && !study.hasResults) return false
+      if (modalities.size > 0 && !study.modalities.some((m) => modalities.has(m))) return false
+      if (target && !study.targets.includes(target)) return false
       return terms.every((t) => haystack.includes(t))
     })
     const byStart = (a: RegistryStudy, b: RegistryStudy) => (a.start ?? '').localeCompare(b.start ?? '')
@@ -161,12 +198,14 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       return byStart(b.study, a.study)
     })
     return rows.map((r) => r.study)
-  }, [indexed, search, types, phases, groups, resultsOnly, sort])
+  }, [indexed, search, types, phases, groups, resultsOnly, modalities, target, sort])
 
   // Any change to what is shown starts the list from the top again.
-  useEffect(() => setVisible(PAGE_SIZE), [search, types, phases, groups, resultsOnly, sort])
+  useEffect(() => setVisible(PAGE_SIZE), [search, types, phases, groups, resultsOnly, modalities, target, sort])
 
-  const hasFilters = search.length > 0 || phases.size > 0 || groups.size > 0 || resultsOnly || !(types.size === 1 && types.has('INTERVENTIONAL'))
+  const hasFilters =
+    search.length > 0 || phases.size > 0 || groups.size > 0 || resultsOnly || modalities.size > 0 || target !== '' ||
+    !(types.size === 1 && types.has('INTERVENTIONAL'))
 
   if (loadError) {
     return (
@@ -241,6 +280,29 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
             Results posted
           </Chip>
         </ChipRow>
+        <ChipRow label="Modality">
+          {facetCounts.modalities.map(([m, n]) => (
+            <Chip key={m} active={modalities.has(m)} onClick={() => setModalities((prev) => toggle(prev, m))}>
+              {m} · {n}
+            </Chip>
+          ))}
+        </ChipRow>
+        <ChipRow label="Target">
+          <select
+            value={target}
+            onChange={(e) => setTarget(e.target.value)}
+            aria-label="Filter by therapy target"
+            className="min-w-0 max-w-full rounded-lg border px-3 py-1.5 text-xs"
+            style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)', color: 'var(--text-primary)' }}
+          >
+            <option value="">Any target</option>
+            {facetCounts.targets.map(([t, n]) => (
+              <option key={t} value={t}>
+                {t} ({n})
+              </option>
+            ))}
+          </select>
+        </ChipRow>
       </div>
 
       <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
@@ -257,6 +319,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
               setPhases(new Set())
               setGroups(new Set())
               setResultsOnly(false)
+              setModalities(new Set())
+              setTarget('')
             }}
           >
             Reset filters
@@ -294,8 +358,9 @@ function StudyRow({ study, featured, onOpenFeatured }: { study: RegistryStudy; f
   const group = statusGroup(study.status)
   const end = study.completion ?? study.primaryCompletion
   // Registry "other names" not already shown in a curated note above.
-  const curatedNames = new Set((study.drugNotes ?? []).flatMap((n) => n.names.map((x) => x.toLowerCase())))
-  const otherNames = (study.aliases ?? []).filter((a) => !curatedNames.has(a.toLowerCase()))
+  // Registry "other names" not already shown on a drug line below.
+  const shownNames = new Set(study.drugs.flatMap((d) => d.names.map((x) => x.toLowerCase())))
+  const otherNames = study.aliases.filter((a) => !shownNames.has(a.toLowerCase()))
   const meta = [
     study.sponsor,
     study.enrollment != null ? `${study.enrollment.toLocaleString()} ${study.enrollmentActual ? 'enrolled' : 'planned'}` : null,
@@ -316,6 +381,9 @@ function StudyRow({ study, featured, onOpenFeatured }: { study: RegistryStudy; f
           )}
           <Badge label={statusLabel(study.status)} color={STATUS_GROUP_COLOR[group]} />
           {study.type !== 'INTERVENTIONAL' && <Badge label={study.type === 'OBSERVATIONAL' ? 'Observational' : 'Expanded access'} color="var(--text-muted)" />}
+          {study.modalities.map((m) => (
+            <Badge key={m} label={m} color={m === UNCLASSIFIED ? 'var(--text-muted)' : (MODALITY_BADGE_COLOR[m] ?? 'var(--text-secondary)')} />
+          ))}
           {study.hasResults && <Badge label="Results posted" color="var(--status-good)" />}
           {featured && (
             <button type="button" onClick={onOpenFeatured} className="rounded-full">
@@ -355,18 +423,29 @@ function StudyRow({ study, featured, onOpenFeatured }: { study: RegistryStudy; f
           {study.interventions.join(', ')}
         </p>
       )}
-      {(study.drugNotes ?? []).map((note) => (
-        <p key={note.codes[0]} className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+      {study.drugs.map((drug) => (
+        <div key={drug.label} className="mt-1.5 flex flex-col gap-0.5 text-xs leading-relaxed sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-2">
           <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-            {note.codes[0]}
-            {note.names.length > 0 && ` = ${note.names.join(', ')}`}
+            {drug.label.length > 60 ? `${drug.label.slice(0, 57)}…` : drug.label}
+            {drug.names.length > 0 && <span style={{ color: 'var(--text-secondary)' }}> = {drug.names.join(', ')}</span>}
           </span>
-          {': '}
-          {note.what}.{' '}
-          <a href={note.source} target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
-            Source
-          </a>
-        </p>
+          <span>
+            <span style={{ color: 'var(--text-muted)' }}>Target: </span>
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              {drug.targets.join(', ')}
+            </span>
+            <span style={{ color: 'var(--text-muted)' }}> · {drug.modality}</span>
+            {drug.what && <span style={{ color: 'var(--text-secondary)' }}> · {drug.what}</span>}
+            {drug.source && (
+              <>
+                {' · '}
+                <a href={drug.source} target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
+                  Source
+                </a>
+              </>
+            )}
+          </span>
+        </div>
       ))}
       {otherNames.length > 0 && (
         <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
