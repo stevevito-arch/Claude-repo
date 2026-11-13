@@ -1,0 +1,25 @@
+{
+ "about": "Trials registered in another registry that are the same trial as a ClinicalTrials.gov record, checked by hand (sponsor, drug, design, countries and dates) because the other record doesn't cross-reference the NCT number and differs too much in wording, dates or country lists for the automatic matching in scripts/fetch-registry.mjs. Keyed by the other registry's number; the value is the NCT number it duplicates.",
+ "duplicates": {
+  "2025-521295-60-00": "NCT07100119",
+  "2024-515021-29-00": "NCT06714396",
+  "2022-003050-32": "NCT05866926",
+  "2020-003376-40": "NCT05178810",
+  "2019-003797-10": "NCT04579666",
+  "2019-002108-41": "NCT04577404",
+  "2019-003549-14": "NCT04057898",
+  "2019-000099-41": "NCT04302870",
+  "2017-004459-21": "NCT03693781",
+  "2016-002399-28": "NCT03359538",
+  "2016-002382-62": "NCT03456882",
+  "2014-004567-21": "NCT02487407",
+  "2013-004842-40": "NCT02479802",
+  "2010-024423-24": "NCT02588677",
+  "2008-002062-62": "NCT00696332",
+  "2007-003775-39": "NCT00876772",
+  "2007-004723-37": "NCT00694941",
+  "2006-002660-26": "NCT00403104",
+  "2006-005410-13": "NCT00690118",
+  "2006-001688-49": "NCT00326625"
+ }
+}

@@ -17,6 +17,7 @@ const OUT = new URL('../public/data/als-registry.json', import.meta.url)
 const DRUGS = new URL('./drugs.json', import.meta.url)
 const OUTCOMES = new URL('./outcomes.json', import.meta.url)
 const FOCUS = new URL('./focus.json', import.meta.url)
+const DUPLICATES = new URL('./duplicates.json', import.meta.url)
 
 const FIELDS = [
   'NCTId', 'BriefTitle', 'OfficialTitle', 'Acronym', 'OverallStatus', 'WhyStopped', 'Phase', 'StudyType',
@@ -290,10 +291,18 @@ const knownIds = new Set()
 // Registry numbers in one form: no "EudraCT"/"CTIS" prefix, and a trial moved
 // from the old EU register to CTIS (old number + "-00") matches its old number.
 const normId = (x) => String(x).toUpperCase().replace(/\s+/g, '').replace(/^(EUDRACT|EUCT|CTIS)[:#-]*/, '').replace(/^(\d{4}-\d{6}-\d{2})-00$/, '$1')
-const words = (t) => new Set(t.toLowerCase().match(/[a-z0-9]{4,}/g) ?? [])
+// Words that say nothing about which trial a title describes.
+const COMMON = new Set(('amyotrophic lateral sclerosis motor neuron neurone disease diseases patients participants subjects people adults ' +
+  'study trial clinical phase randomized randomised double blind single placebo controlled multicenter multicentre multi centre center ' +
+  'international multinational parallel group open label pilot safety efficacy tolerability tolerability pharmacokinetics evaluate evaluation ' +
+  'evaluating assess assessment investigate investigating effect effects treatment therapy compared versus with from into their sporadic ' +
+  'familial over long term extension dose doses oral intravenous daily weeks months year years exploratory proof concept ' +
+  'healthy volunteers volunteer investigational drug test medicine agent product participant adult male female').split(' '))
+const words = (t) => new Set((t.toLowerCase().match(/[a-z0-9]{4,}/g) ?? []).filter((w) => !COMMON.has(w)))
 const similarTitles = (a, b) => {
   const x = words(a), y = words(b)
-  return [...x].filter((w) => y.has(w)).length / Math.max(1, new Set([...x, ...y]).size) >= 0.35
+  const shared = [...x].filter((w) => y.has(w)).length
+  return shared >= 3 && shared / Math.max(1, new Set([...x, ...y]).size) >= 0.35
 }
 for (const { cond, keep } of SEARCHES) {
   for (const s of await fetchAll(cond)) {
@@ -310,6 +319,8 @@ for (const { cond, keep } of SEARCHES) {
 // of their numbers. Sources are tried in this order, so a trial in both CTIS
 // and the older EU register is kept once, from CTIS. If a registry can't be
 // reached, its trials from the previous snapshot are kept.
+// Duplicates the automatic matching can't catch, checked by hand.
+const knownDuplicates = JSON.parse(await readFile(DUPLICATES, 'utf8')).duplicates
 let previous = []
 try {
   previous = JSON.parse(await readFile(OUT, 'utf8')).studies
@@ -321,7 +332,7 @@ for (const [registry, fetchFrom] of [['EU CTIS', fetchCtis], ['ISRCTN', fetchIsr
   try {
     for (const s of await fetchFrom()) {
       const ids = s.otherIds.map(normId)
-      const duplicate = ids.some((x) => knownIds.has(x))
+      const duplicate = ids.some((x) => knownIds.has(x)) || Boolean(knownDuplicates[s.protocolSection.identificationModule.nctId])
       // A duplicate's other numbers still count: a third registry may list only those.
       ids.forEach((x) => knownIds.add(x))
       if (duplicate) continue
@@ -331,15 +342,25 @@ for (const [registry, fetchFrom] of [['EU CTIS', fetchCtis], ['ISRCTN', fetchIsr
       // drug at the same phase and started within a year of it. A drug often has
       // several Phase 1 studies, so those must also have similar titles; platform
       // trials, which test many drugs, are never matched this way.
-      const earlyPhase = /^(Early )?Phase 1$/.test(study.phase ?? '')
+      const earlyPhase = /Phase 1/.test(study.phase ?? '')
       const tests = (x) => x.interventions.filter((n) => !IS_COMPARATOR.test(n.trim())).length
-      const twin = study.phase && tests(study) <= 2 && study._drugs.some((d) => d.key.startsWith('t:')) && [...byId.values()].find((o) =>
-        o.registry === 'ClinicalTrials.gov' && o.phase === study.phase && o.start && study.start && tests(o) <= 2 &&
-        Math.abs(Number(o.start.slice(0, 4)) - Number(study.start.slice(0, 4))) <= 1 &&
-        o._drugs.some((d) => d.key.startsWith('t:') && study._drugs.some((e) => e.key === d.key)) &&
-        (!earlyPhase || similarTitles(o.title, study.title)))
+      // Different groups often tested the same repurposed drug at the same time (lithium in 2008-09, say), so the
+      // trials must also share a country when both list countries.
+      const sameCountry = (o) => !o.countries.length || !study.countries.length || o.countries.some((c) => study.countries.includes(c))
+      const ownTitles = [s.protocolSection.identificationModule.briefTitle, s.protocolSection.identificationModule.officialTitle].filter(Boolean)
+      const years = (o) => Math.abs(Number(o.start.slice(0, 4)) - Number(study.start.slice(0, 4)))
+      // Registries word phases differently ("Phase 2/3" vs "Phase 3"), so any shared phase counts.
+      const phaseNums = (p) => new Set((p ?? '').match(/\d/g) ?? [])
+      const samePhase = (o) => [...phaseNums(o.phase)].some((n) => phaseNums(study.phase).has(n))
+      const twin = study.phase && study.start && [...byId.values()].find((o) => o.registry === 'ClinicalTrials.gov' && o.start && samePhase(o) && sameCountry(o) && (
+        // Same recognised drug, within a year.
+        (tests(study) <= 2 && tests(o) <= 2 && years(o) <= 1 &&
+          o._drugs.some((d) => d.key.startsWith('t:') && study._drugs.some((e) => e.key === d.key)) &&
+          (!earlyPhase || ownTitles.some((t) => similarTitles(o.title, t)))) ||
+        // Or near-identical titles, within three years (the old EU register only gives the date a trial was entered).
+        (years(o) <= 3 && ownTitles.some((t) => similarTitles(o.title, t)))))
       if (twin) {
-        console.log(`  ${study.id} looks like ${twin.id} (same drug, phase and start); skipped`)
+        console.log(`  ${study.id} looks like ${twin.id}: ${study.title.slice(0, 50)} | ${twin.title.slice(0, 50)}`)
         continue
       }
       byId.set(study.id, study)

@@ -2685,6 +2685,18 @@
    ],
    "modality": "Antibody",
    "source": null
+  },
+  {
+   "match": [
+    "guanabenz"
+   ],
+   "names": [],
+   "what": "Alpha-2 agonist that prolongs the integrated stress response (PROMISE trial)",
+   "targets": [
+    "PPP1R15A (integrated stress response)"
+   ],
+   "modality": "Small molecule",
+   "source": null
   }
  ]
 }

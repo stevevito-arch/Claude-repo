@@ -262,7 +262,7 @@ async function downloadEuctr() {
     if (!ALS.test(`${title} ${first(f, 'A.3.1')} ${conditions.join(' ')}`)) continue
     const statuses = fs.flatMap((x) => x['Trial Status'] ?? [])
     const status = EUCTR_STATUS_ORDER.find((s) => statuses.includes(s))
-    const entered = first(f, 'Date on which this record was first entered')
+    const entered = fs.map((x) => first(x, 'Date on which this record was first entered')).filter(Boolean).sort()[0] ?? ''
     const end = fs.flatMap((x) => all(x, 'P. Date of the global end')).sort().pop() ?? ''
     // "Ongoing" records that were never updated are as stale as ClinicalTrials.gov's "unknown status".
     const stale = (status === 'Ongoing' || status === 'Restarted') && entered && entered < `${Number(TODAY.slice(0, 4)) - 8}`
@@ -273,7 +273,12 @@ async function downloadEuctr() {
       .filter(([k]) => /^yes/i.test(first(f, k))).map(([, p]) => p)
     const names = [...new Set(fs.flatMap((x) => [...all(x, 'D.3.1 Product name'), ...all(x, 'D.3.2 Product code')]).filter((n) => !PLACEBO.test(n)))]
     const inns = [...new Set(fs.flatMap((x) => all(x, 'D.3.8 INN')).filter((n) => !PLACEBO.test(n)))]
-    const interventions = (names.length ? names : inns).slice(0, 4).map((name, i) => ({ name, type: 'DRUG', otherNames: inns[i] && inns[i] !== name ? [inns[i]] : [] }))
+    // One intervention per active substance (its international name), with the
+    // product names and codes as other names, so a brand, a code and the INN of
+    // one drug don't count as three drugs.
+    const interventions = inns.length
+      ? inns.slice(0, 4).map((name) => ({ name, type: 'DRUG', otherNames: names }))
+      : names.slice(0, 4).map((name) => ({ name, type: 'DRUG', otherNames: [] }))
     const block = parts.join('\n')
     out.push(record({
       id, registry: 'EudraCT', url: `https://www.clinicaltrialsregister.eu/ctr-search/search?query=${id}`,
