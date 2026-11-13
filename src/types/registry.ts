@@ -11,6 +11,15 @@ export interface RegistryDrug {
   source: string | null
 }
 
+// What became of a finished or stopped study (see scripts/outcomes.json).
+export interface RegistryOutcome {
+  verdict: string
+  summary: string | null
+  source: string | null
+  /** True when researched by hand; false when read off the registry record. */
+  curated: boolean
+}
+
 // One study from public/data/als-registry.json (see scripts/fetch-registry.mjs).
 export interface RegistryStudy {
   id: string
@@ -38,6 +47,9 @@ export interface RegistryStudy {
   enrollmentActual: boolean
   hasResults: boolean
   countries: string[]
+  /** Publications the registry lists as reporting this study's results. */
+  publications: { pmid: string; citation: string }[]
+  outcome: RegistryOutcome | null
 }
 
 export interface RegistrySnapshot {

@@ -12,12 +12,13 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises'
 const API = 'https://clinicaltrials.gov/api/v2/studies'
 const OUT = new URL('../public/data/als-registry.json', import.meta.url)
 const DRUGS = new URL('./drugs.json', import.meta.url)
+const OUTCOMES = new URL('./outcomes.json', import.meta.url)
 
 const FIELDS = [
   'NCTId', 'BriefTitle', 'OfficialTitle', 'Acronym', 'OverallStatus', 'WhyStopped', 'Phase', 'StudyType',
   'Condition', 'Keyword', 'InterventionName', 'InterventionType', 'InterventionOtherName', 'LeadSponsorName', 'LeadSponsorClass',
   'StartDate', 'PrimaryCompletionDate', 'CompletionDate', 'EnrollmentCount', 'EnrollmentType',
-  'HasResults', 'LocationCountry',
+  'HasResults', 'LocationCountry', 'ReferencesModule',
 ].join(',')
 
 function describedAs(s) {
@@ -107,6 +108,41 @@ function classify(interventions) {
   return { entries: [...drugs.entries()], modalities: [...modalities] }
 }
 
+// Hand-researched outcomes (scripts/outcomes.json), keyed by NCT ID.
+const curatedOutcomes = JSON.parse(await readFile(OUTCOMES, 'utf8')).outcomes
+
+// Sorts a registry stop reason into a few kinds. Checked in this order: e.g.
+// "enrolment rates could not meet protocol objectives" is about enrollment, and
+// "Data and Safety Monitoring Board recommended stopping for futility" is about
+// futility, not safety.
+const STOP_REASONS = [
+  ['Stopped: slow enrollment', /recruit|enrol|no inclusion|inclusion was stopped|including patients|no participants|participants were not|accrual|patients filling/i],
+  ['Stopped: no benefit', /futilit|no (clinical |survival )?benefit|lack of (efficacy|benefit)|no evidence of benefit|did not meet|not meet|unsuccessful|unlikely to demonstrat|no tendency|absence of benefit|benefit[- ]risk/i],
+  ['Stopped: safety', /adverse events|excess mortality|toxicit|threatful/i],
+  ['Stopped: business or funding', /fund|financ|economic|business|company|sponsor|strateg|development of|not moving forward|no longer required|change in study plans|restructur|closure|supply|shortage|human res/i],
+]
+
+// What became of a finished or stopped interventional study: the curated
+// outcome where there is one, otherwise what the registry itself shows.
+function outcomeOf(id, type, status, whyStopped, hasResults, publications) {
+  const curated = curatedOutcomes[id]
+  if (curated) return { ...curated, curated: true }
+  if (type !== 'INTERVENTIONAL') return null
+  const auto = (verdict) => ({ verdict, summary: null, source: null, curated: false })
+  if (status === 'WITHDRAWN') return auto('Withdrawn before enrolling')
+  if (status === 'SUSPENDED') return auto('Suspended')
+  if (status === 'TERMINATED') {
+    if (!whyStopped) return auto('Stopped: reason not given')
+    return auto(STOP_REASONS.find(([, re]) => re.test(whyStopped))?.[0] ?? 'Stopped: other reason')
+  }
+  if (status === 'COMPLETED') {
+    if (hasResults) return auto('Results posted, not yet summarised')
+    if (publications.length) return auto('Publication linked, not yet summarised')
+    return auto('No results posted')
+  }
+  return null
+}
+
 const PHASE_LABEL = { EARLY_PHASE1: 'Early Phase 1', PHASE1: 'Phase 1', PHASE2: 'Phase 2', PHASE3: 'Phase 3', PHASE4: 'Phase 4' }
 
 function slim(s) {
@@ -124,13 +160,20 @@ function slim(s) {
     ...interventions.filter((i) => !NOT_A_NAME.test(i.name)).flatMap((i) => i.otherNames ?? []),
     ...entries.flatMap(([e]) => e.names ?? []),
   ])].filter((a) => !NOT_A_NAME.test(a) && !lowerNames.has(norm(a))).slice(0, 8)
+  // Publications the registry lists as reporting this study's results.
+  const publications = (p.referencesModule?.references ?? [])
+    .filter((r) => r.type === 'RESULT' && r.pmid)
+    .map((r) => ({ pmid: r.pmid, citation: r.citation ?? '' }))
+    .slice(0, 3)
+  const status = st.overallStatus ?? 'UNKNOWN'
+  const type = p.designModule?.studyType ?? 'UNKNOWN'
   return {
     id: id.nctId,
     title: id.briefTitle,
     acronym: id.acronym ?? null,
-    status: st.overallStatus ?? 'UNKNOWN',
+    status,
     whyStopped: st.whyStopped ?? null,
-    type: p.designModule?.studyType ?? 'UNKNOWN',
+    type,
     // "Phase 1/Phase 2" style combined phases are kept as one label.
     phase: phases.length ? phases.map((x) => PHASE_LABEL[x]).join('/').replace(/\/Phase /g, '/') : null,
     interventions: names.slice(0, 6),
@@ -149,6 +192,8 @@ function slim(s) {
     enrollmentActual: de.enrollmentInfo?.type === 'ACTUAL',
     hasResults: Boolean(s.hasResults),
     countries: [...new Set((p.contactsLocationsModule?.locations ?? []).map((l) => l.country).filter(Boolean))],
+    publications,
+    outcome: outcomeOf(id.nctId, type, status, st.whyStopped ?? null, Boolean(s.hasResults), publications),
   }
 }
 
@@ -159,6 +204,9 @@ for (const { cond, keep } of SEARCHES) {
     if (!byId.has(id) && keep(s)) byId.set(id, slim(s))
   }
 }
+
+const missing = Object.keys(curatedOutcomes).filter((id) => !byId.has(id))
+if (missing.length) console.warn(`Curated outcomes for studies not in the catalog: ${missing.join(', ')}`)
 
 const studies = [...byId.values()].sort((a, b) => (b.start ?? '').localeCompare(a.start ?? ''))
 if (studies.length < 500) throw new Error(`Only ${studies.length} studies returned; refusing to overwrite the snapshot`)

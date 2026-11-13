@@ -1,0 +1,290 @@
+{
+ "about": "Hand-researched outcomes for finished ALS studies, used by scripts/fetch-registry.mjs. Keyed by NCT ID. verdict is one of: Met primary endpoint, Missed primary endpoint, No benefit shown (exploratory study with no formal primary endpoint), Mixed results, Inconclusive, Stopped: no benefit, Stopped: safety, Stopped: slow enrollment, Stopped: business or funding, Extension or access study, Safety study, Not a treatment study, No results found. summary says what happened in plain words; source is the checked publication or report it rests on (null only for facts that are part of the registry record itself or widely documented, e.g. a drug's market withdrawal). Studies not listed here get an automatic outcome from the registry (its stop reason, posted results and linked publications).",
+ "outcomes": {
+  "NCT00021697": {
+   "verdict": "Met primary endpoint",
+   "summary": "Dextromethorphan/quinidine (AVP-923) reduced pseudobulbar affect (uncontrolled laughing or crying) more than either drug alone. A symptom treatment, not a disease-slowing one.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/15505150/"
+  },
+  "NCT00573443": {
+   "verdict": "Met primary endpoint",
+   "summary": "Dextromethorphan/quinidine reduced pseudobulbar affect episodes in people with ALS or MS; this trial supported the drug's approval (Nuedexta) for pseudobulbar affect.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/20839238/"
+  },
+  "NCT00386464": {
+   "verdict": "No results found",
+   "summary": "Crossover trial of starting night-time non-invasive ventilation early, in patients with mild breathing involvement. No results were posted or found in a literature search.",
+   "source": null
+  },
+  "NCT00047723": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Minocycline did not help and appeared harmful: function declined about 25% faster on minocycline than on placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/17980667/"
+  },
+  "NCT00035815": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Two years of subcutaneous IGF-1 gave no benefit on muscle strength compared with placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/19029516/"
+  },
+  "NCT00125203": {
+   "verdict": "Met primary endpoint",
+   "summary": "In 20 patients, botulinum toxin B injected into the salivary glands reduced drooling for about four weeks without significant side effects. A symptom treatment.",
+   "source": "https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD006981.pub2"
+  },
+  "NCT00136110": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Valproate did not improve survival or slow functional decline in 163 patients.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/19743466/"
+  },
+  "NCT00353665": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Memantine showed no effect on functional decline over 12 months in 63 patients; the trial was small, so a modest effect could not be ruled out.",
+   "source": "https://neals.org/als-trials/NCT02118727"
+  },
+  "NCT00330681": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Edaravone's first phase 3 missed its primary endpoint across all patients. A post hoc analysis pointed to earlier, more typical patients, which the later MCI186-19 trial tested and confirmed.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/25286015/"
+  },
+  "NCT00349622": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Despite an early signal, the phase 3 stage (513 patients) found no slowing of functional decline, and ceftriaxone caused more gallbladder and liver problems (12% vs 0% on placebo).",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4216315"
+  },
+  "NCT00372879": {
+   "verdict": "No results found",
+   "summary": "Small crossover trial of high-dose vitamin E for muscle cramps. No results were posted or found.",
+   "source": null
+  },
+  "NCT00415519": {
+   "verdict": "No benefit shown",
+   "summary": "Exploratory study in 25 patients with more advanced ALS (Japanese severity grade 3): function declined about equally on edaravone and placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/28872915/"
+  },
+  "NCT00424463": {
+   "verdict": "Extension or access study",
+   "summary": "Double-blind extension of edaravone's first phase 3, testing whether continued treatment sustained any effect; published as exploratory.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/28872918/"
+  },
+  "NCT01492686": {
+   "verdict": "Met primary endpoint",
+   "summary": "In patients selected for early, typically progressing ALS, IV edaravone slowed functional decline by about a third over 24 weeks. This trial led to FDA approval (Radicava) in 2017.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/28522181/"
+  },
+  "NCT04577404": {
+   "verdict": "Safety study",
+   "summary": "Open-label safety study of oral edaravone in 185 patients: no new safety concerns over 48 weeks. It supported FDA approval of the oral form (Radicava ORS) in 2022.",
+   "source": "https://www.neurologylive.com/view/long-term-treatment-als-therapy-oral-edaravone-safe-up-to-2-years"
+  },
+  "NCT04569084": {
+   "verdict": "Stopped: no benefit",
+   "summary": "Tested whether daily oral edaravone beats the approved on/off schedule. Stopped in 2023 when an interim analysis showed no difference (futility).",
+   "source": "https://neurologylive.com/view/daily-oral-edaravone-fails-display-superiority-phase-3b-study-mt-1186-a02-als"
+  },
+  "NCT05568615": {
+   "verdict": "Extension or access study",
+   "summary": "Open-label safety extension of oral edaravone in Japan (15 patients), run until the drug was on the market there.",
+   "source": null
+  },
+  "NCT05178810": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Ferrer's oral edaravone (FAB122) did not slow functional decline over 48 weeks, and showed no survival benefit; it was safe.",
+   "source": "https://neurologylive.com/view/ferrer-als-agent-fab122-fails-meet-primary-secondary-end-points"
+  },
+  "NCT00444613": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Ultra-high-dose methylcobalamin (vitamin B12) missed both primary endpoints (time to death or ventilation, and function). A post hoc look at patients enrolled within a year of onset suggested benefit, which led to the JETALS trial.",
+   "source": "https://jnnp.bmj.com/content/early/2019/01/12/jnnp-2018-319294.abstract"
+  },
+  "NCT00445172": {
+   "verdict": "Extension or access study",
+   "summary": "Long-term open-label extension of Eisai's methylcobalamin trial.",
+   "source": null
+  },
+  "NCT03548311": {
+   "verdict": "Met primary endpoint",
+   "summary": "JETALS: in patients enrolled within a year of onset and with moderate progression, ultra-high-dose methylcobalamin slowed functional decline over 16 weeks compared with placebo.",
+   "source": "https://jamanetwork.com/journals/jamaneurology/fullarticle/2792228"
+  },
+  "NCT00833820": {
+   "verdict": "Inconclusive",
+   "summary": "Small sham-controlled trial of magnetic stimulation of the motor cortex. A Cochrane review of the rTMS trials in ALS found no clear benefit over sham.",
+   "source": "https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD008554.pub3"
+  },
+  "NCT00706147": {
+   "verdict": "Inconclusive",
+   "summary": "Small trial (36 patients) in rapidly progressing SOD1-ALS: arimoclomol was safe, and survival and function trended its way without reaching significance. The planned phase 3 part was dropped because recruitment was slow.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29367439/"
+  },
+  "NCT03491462": {
+   "verdict": "Missed primary endpoint",
+   "summary": "ORARIALS-01: arimoclomol missed its primary endpoint (function and survival combined) and all secondary endpoints over 76 weeks in 245 patients.",
+   "source": "https://alsnewstoday.com/news/arimoclomol-fails-phase-3-als-trial-does-not-show-efficacy-per-topline-data/"
+  },
+  "NCT00868166": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Olesoxime gave no survival benefit at 18 months (69% vs 68% alive) in 512 patients taking riluzole.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24447620/"
+  },
+  "NCT01285583": {
+   "verdict": "Extension or access study",
+   "summary": "Open-label safety extension of the olesoxime phase 3, which showed no benefit.",
+   "source": null
+  },
+  "NCT00965497": {
+   "verdict": "No results found",
+   "summary": "Small open-label study (13 patients) of escitalopram for depression in people with ALS or MS. No results were posted or found.",
+   "source": null
+  },
+  "NCT01016522": {
+   "verdict": "Stopped: slow enrollment",
+   "summary": "Safety study of a ketogenic tube-feed diet. Only one patient enrolled, and the study was stopped for low enrollment.",
+   "source": "https://informahealthcare.com/doi/full/10.1080/21678421.2021.1990346"
+  },
+  "NCT00876772": {
+   "verdict": "No results found",
+   "summary": "Olanzapine for appetite loss and weight loss. No published results were found; the EU trials register lists a results section.",
+   "source": "https://www.clinicaltrialsregister.eu/ctr-search/trial/2007-003775-39/results"
+  },
+  "NCT01281189": {
+   "verdict": "Missed primary endpoint",
+   "summary": "EMPOWER: dexpramipexole had no effect on function or survival in 943 patients, and Biogen ended its development in ALS.",
+   "source": "https://www.news-medical.net/news/20130103/Top-line-results-from-Biogen-Idecs-dexpramipexole-Phase-3-trial-on-amyotrophic-lateral-sclerosis.aspx"
+  },
+  "NCT01933321": {
+   "verdict": "No results found",
+   "summary": "Open-label study of the patient's own blood stem cells given into the spinal fluid (14 patients). No results were posted or found.",
+   "source": null
+  },
+  "NCT01583088": {
+   "verdict": "Stopped: safety",
+   "summary": "Stopped early: patients given diaphragm pacing with ventilation died sooner than those on ventilation alone. Diaphragm pacing is not recommended in ALS.",
+   "source": null
+  },
+  "NCT01160263": {
+   "verdict": "Not a treatment study",
+   "summary": "Brain imaging (SPECT) study, not a treatment trial.",
+   "source": null
+  },
+  "NCT01825551": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Five days of G-CSF did not slow progression over 3 months in 40 patients; women given G-CSF declined faster than those on placebo.",
+   "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4387482"
+  },
+  "NCT01776970": {
+   "verdict": "Met primary endpoint",
+   "summary": "CANALS: nabiximols (THC/CBD mouth spray) reduced spasticity over 6 weeks in 59 patients with ALS or primary lateral sclerosis. A symptom treatment; the authors called for larger trials.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30554828/"
+  },
+  "NCT02588677": {
+   "verdict": "Mixed results",
+   "summary": "Masitinib met its primary endpoint in the prespecified 'normal progressor' group (27% slower decline over 48 weeks) but not across all patients. It has not been approved, and a confirmatory phase 3 was required.",
+   "source": "https://www.pubmed.gov/31280619/"
+  },
+  "NCT01994109": {
+   "verdict": "Met primary endpoint",
+   "summary": "RimabotulinumtoxinB (Myobloc) reduced drooling compared with placebo in 187 adults with drooling from several causes; 12 had ALS.",
+   "source": "https://jamanetwork.com/journals/jama/article-abstract/2758316"
+  },
+  "NCT02496767": {
+   "verdict": "Missed primary endpoint",
+   "summary": "VITALITY-ALS: tirasemtiv did not slow the decline in breathing capacity, and many patients stopped it because of side effects (34% vs 12% on placebo).",
+   "source": "https://alsnewstoday.com/news/poor-tolerability-leads-to-failure-als-therapy-candidate-tirasemtiv-in-phase-3-trial/"
+  },
+  "NCT02936635": {
+   "verdict": "Extension or access study",
+   "summary": "Open-label extension of tirasemtiv; development stopped after VITALITY-ALS failed.",
+   "source": null
+  },
+  "NCT02623699": {
+   "verdict": "Missed primary endpoint",
+   "summary": "VALOR: tofersen did not significantly slow functional decline at 28 weeks, but it sharply lowered SOD1 and neurofilament light, a marker of nerve damage. On that biomarker evidence it received FDA accelerated approval (Qalsody) in 2023.",
+   "source": "https://hospitalhealthcare.com/specialisms/tofersen-reduces-levels-of-mutant-protein-in-patients-with-als/"
+  },
+  "NCT03070119": {
+   "verdict": "Extension or access study",
+   "summary": "Open-label extension of VALOR. Patients who started tofersen earlier declined less by 52 weeks than those who started later (exploratory).",
+   "source": "https://hospitalhealthcare.com/specialisms/tofersen-reduces-levels-of-mutant-protein-in-patients-with-als/"
+  },
+  "NCT03068754": {
+   "verdict": "Stopped: safety",
+   "summary": "PENNANT: stopped in 2019 because more patients developed pneumonia on Acthar Gel than on placebo, and too few had reached the endpoint to judge efficacy.",
+   "source": "https://alsnewstoday.com/news/pennant-clinical-trial-h-p-acthar-gel-als-terminated/"
+  },
+  "NCT03280056": {
+   "verdict": "Missed primary endpoint",
+   "summary": "NurOwn (MSC-NTF cells): 34.7% of treated patients responded vs 27.7% on placebo, not a significant difference. FDA advisers later voted against approval.",
+   "source": "https://www.americanpharmaceuticalreview.com/1315-News/570696-BrainStorm-Announces-Topline-Results-from-NurOwn-Phase-3-ALS-Study/"
+  },
+  "NCT03505021": {
+   "verdict": "Missed primary endpoint",
+   "summary": "REFALS: oral levosimendan did not slow the decline in breathing capacity at 12 weeks, nor overall function, in 496 patients.",
+   "source": "https://alsnewstoday.com/news/phase-3-update-orion-levosimendan-fail-breathing-problems-als/"
+  },
+  "NCT03293069": {
+   "verdict": "No results found",
+   "summary": "FAIR-ALS II: deferiprone (iron chelation) vs placebo over 12 months. No results were posted or found in a search in November 2026.",
+   "source": null
+  },
+  "NCT04436510": {
+   "verdict": "Missed primary endpoint",
+   "summary": "HEALEY Regimen B: verdiperstat showed no difference from placebo on disease progression.",
+   "source": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11833655/"
+  },
+  "NCT04436497": {
+   "verdict": "Stopped: no benefit",
+   "summary": "HEALEY Regimen A: zilucoplan was stopped early for futility, with no meaningful slowing of progression.",
+   "source": "https://www.massgeneral.org/news/press-release/healey-als-platform-trial-update-ilucoplan-arm-stopped-early-for-futility"
+  },
+  "NCT04414345": {
+   "verdict": "Missed primary endpoint",
+   "summary": "HEALEY Regimen C: CNM-Au8 missed its primary and secondary endpoints at 24 weeks. Exploratory analyses suggested longer survival at the 30 mg dose, which the RESTORE-ALS phase 3 is designed to test.",
+   "source": "https://www.neurologylive.com/view/cnm-au8-shows-survival-benefit-in-healey-als-trial-but-fails-to-meet-end-points"
+  },
+  "NCT04615923": {
+   "verdict": "Missed primary endpoint",
+   "summary": "HEALEY Regimen D: pridopidine had no effect on functional decline over 24 weeks. Later analyses in faster-progressing patients led to the PREVAiLS phase 3.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/40067755/"
+  },
+  "NCT05136885": {
+   "verdict": "Mixed results",
+   "summary": "HEALEY Regimen E: IV trehalose (SLS-005) missed its primary endpoint overall; a prespecified subgroup not taking AMX0035 declined 22% more slowly.",
+   "source": "https://www.neurologylive.com/view/sls-005-als-progression-better-without-amx0035-healey-als-platform-trial"
+  },
+  "NCT05740813": {
+   "verdict": "Missed primary endpoint",
+   "summary": "HEALEY Regimen F: fosigotifator (ABBV-CLS-7262) missed its primary and secondary endpoints.",
+   "source": "https://www.medthority.com/news/2025/1/als-platform-trial-with-fosigotifator-did-not-meet-its-primary-endpoint---calico-life-sciences/"
+  },
+  "NCT05842941": {
+   "verdict": "Missed primary endpoint",
+   "summary": "HEALEY Regimen G: DNL343 missed its primary endpoint (function and survival) at 24 weeks.",
+   "source": "https://www.neurologylive.com/view/dnl343-falls-short-primary-end-point-phase-2-3-healey-als-platform-trial"
+  },
+  "NCT04516096": {
+   "verdict": "Extension or access study",
+   "summary": "Compassionate-use access to AMX0035 for patients who finished earlier Amylyx trials; no efficacy comparison.",
+   "source": null
+  },
+  "NCT05619783": {
+   "verdict": "Extension or access study",
+   "summary": "Open-label extension of the PHOENIX phase 3. PHOENIX missed its primary endpoint, and Amylyx withdrew AMX0035 (Relyvrio) from the market in 2024.",
+   "source": null
+  },
+  "NCT04745299": {
+   "verdict": "Missed primary endpoint",
+   "summary": "ALSUMMIT: lenzumestrocel (Neuronata-R stem cells) missed its primary endpoint (function and survival) in the overall population. The company reports post hoc benefit in slower-progressing patients.",
+   "source": "https://alsnewstoday.com/news/neuronata-r-benefits-als-patients-slower-progression-trial-data/"
+  },
+  "NCT04944784": {
+   "verdict": "Stopped: no benefit",
+   "summary": "COURAGE-ALS: stopped for futility at a planned interim analysis; reldesemtiv did not slow functional decline.",
+   "source": "https://alsnewstoday.com/news/courage-als-trial-stopping-reldesemtiv-fails-show-benefits/"
+  },
+  "NCT06111014": {
+   "verdict": "Stopped: no benefit",
+   "summary": "Continuation study of latozinemab, stopped after its parent phase 3 in frontotemporal dementia due to GRN mutations (INFRONT-3) missed its clinical endpoint.",
+   "source": "https://www.biopharmadive.com/news/gsk-alector-frontotemporal-dementia-latozinemab-study-results/803463/"
+  }
+ }
+}

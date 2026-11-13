@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import type { RegistrySnapshot, RegistryStudy } from '../types/registry'
+import type { RegistryOutcome, RegistrySnapshot, RegistryStudy } from '../types/registry'
 import { statusLabel } from '../lib/clinicalTrialsApi'
 import { useFollowed } from '../lib/useFollowed'
 import { buildIndex, matchesQuery, parseQuery } from '../lib/search'
@@ -57,6 +57,28 @@ const MODALITY_BADGE_COLOR: Record<string, string> = {
   Antibody: 'var(--cat-yellow)',
   'Gene therapy': 'var(--cat-magenta)',
   Peptide: 'var(--cat-green)',
+}
+
+// Outcome verdicts (scripts/fetch-registry.mjs, scripts/outcomes.json) grouped
+// for the filter, in the order the chips appear.
+const OUTCOME_GROUPS: [string, string[]][] = [
+  ['Met primary endpoint', ['Met primary endpoint']],
+  ['Missed or no benefit', ['Missed primary endpoint', 'No benefit shown', 'Stopped: no benefit']],
+  ['Mixed or inconclusive', ['Mixed results', 'Inconclusive']],
+  ['Stopped for safety', ['Stopped: safety']],
+  ['Stopped for other reasons', ['Stopped: slow enrollment', 'Stopped: business or funding', 'Stopped: other reason', 'Stopped: reason not given', 'Withdrawn before enrolling', 'Suspended']],
+  ['Results available, not summarised', ['Results posted, not yet summarised', 'Publication linked, not yet summarised']],
+  ['No results available', ['No results posted', 'No results found']],
+  ['Extension, safety or other', ['Extension or access study', 'Safety study', 'Not a treatment study']],
+]
+const OUTCOME_GROUP_OF = new Map(OUTCOME_GROUPS.flatMap(([group, verdicts]) => verdicts.map((v) => [v, group] as const)))
+
+const VERDICT_COLOR: Record<string, string> = {
+  'Met primary endpoint': 'var(--status-good)',
+  'Missed or no benefit': 'var(--status-critical)',
+  'Stopped for safety': 'var(--status-critical)',
+  'Mixed or inconclusive': 'var(--cat-orange)',
+  'Stopped for other reasons': 'var(--text-secondary)',
 }
 
 // Set by scripts/fetch-registry.mjs for drugs the drug table doesn't cover yet.
@@ -120,6 +142,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const [resultsOnly, setResultsOnly] = useState(false)
   const [modalities, setModalities] = useState<Set<string>>(new Set())
   const [target, setTarget] = useState('')
+  const [outcomes, setOutcomes] = useState<Set<string>>(new Set())
   const [sort, setSort] = useState<SortKey>('newest')
   const [visible, setVisible] = useState(PAGE_SIZE)
   const { followed, toggleFollow } = useFollowed()
@@ -152,6 +175,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
           s.id, s.title, s.acronym, s.sponsor, ...s.interventions, ...s.aliases, ...s.targets, ...s.modalities,
           ...s.targets.flatMap(targetSynonyms),
           ...s.drugs.flatMap((d) => [...d.names, d.what]),
+          s.outcome?.verdict, s.outcome?.summary,
         ]),
       })),
     [snapshot],
@@ -165,6 +189,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
 
   // Counts for the modality chips and the target picker, most common first.
   const facetCounts = useMemo(() => {
+    const byOutcome = new Map<string, number>()
     const byModality = new Map<string, number>()
     const byTarget = new Map<string, number>()
     // Count only studies of the selected types, so the numbers match the list.
@@ -172,12 +197,15 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       if (types.size > 0 && !types.has(study.type)) continue
       for (const m of study.modalities) byModality.set(m, (byModality.get(m) ?? 0) + 1)
       for (const t of study.targets) byTarget.set(t, (byTarget.get(t) ?? 0) + 1)
+      const group = study.outcome && OUTCOME_GROUP_OF.get(study.outcome.verdict)
+      if (group) byOutcome.set(group, (byOutcome.get(group) ?? 0) + 1)
     }
     const sorted = (m: Map<string, number>) => [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     // "Not yet classified" goes last so it reads as a gap, not a category.
     const mods = sorted(byModality).filter(([k]) => k !== UNCLASSIFIED)
     if (byModality.has(UNCLASSIFIED)) mods.push([UNCLASSIFIED, byModality.get(UNCLASSIFIED)!])
-    return { modalities: mods, targets: sorted(byTarget) }
+    const outcomeCounts = OUTCOME_GROUPS.map(([g]) => [g, byOutcome.get(g) ?? 0] as const).filter(([, n]) => n > 0)
+    return { modalities: mods, targets: sorted(byTarget), outcomes: outcomeCounts }
   }, [indexed, types])
 
   const filtered = useMemo(() => {
@@ -189,6 +217,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       if (resultsOnly && !study.hasResults) return false
       if (modalities.size > 0 && !study.modalities.some((m) => modalities.has(m))) return false
       if (target && !study.targets.includes(target)) return false
+      if (outcomes.size > 0 && !(study.outcome && outcomes.has(OUTCOME_GROUP_OF.get(study.outcome.verdict) ?? ''))) return false
       return matchesQuery(index, terms)
     })
     const byStart = (a: RegistryStudy, b: RegistryStudy) => (a.start ?? '').localeCompare(b.start ?? '')
@@ -202,7 +231,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       return byStart(b.study, a.study)
     })
     return rows.map((r) => r.study)
-  }, [indexed, search, types, phases, groups, resultsOnly, modalities, target, sort])
+  }, [indexed, search, types, phases, groups, resultsOnly, modalities, target, outcomes, sort])
 
   // Followed studies are pinned above the filters whatever the filters say,
   // so the list below leaves them out rather than showing them twice.
@@ -214,10 +243,10 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const pinnedMatches = filtered.length - unpinned.length
 
   // Any change to what is shown starts the list from the top again.
-  useEffect(() => setVisible(PAGE_SIZE), [search, types, phases, groups, resultsOnly, modalities, target, sort])
+  useEffect(() => setVisible(PAGE_SIZE), [search, types, phases, groups, resultsOnly, modalities, target, outcomes, sort])
 
   const hasFilters =
-    search.length > 0 || phases.size > 0 || groups.size > 0 || resultsOnly || modalities.size > 0 || target !== '' ||
+    search.length > 0 || phases.size > 0 || groups.size > 0 || resultsOnly || modalities.size > 0 || target !== '' || outcomes.size > 0 ||
     !(types.size === 1 && types.has('INTERVENTIONAL'))
 
   if (loadError) {
@@ -323,6 +352,13 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
             Results posted
           </Chip>
         </ChipRow>
+        <ChipRow label="Outcome">
+          {facetCounts.outcomes.map(([o, n]) => (
+            <Chip key={o} active={outcomes.has(o)} onClick={() => setOutcomes((prev) => toggle(prev, o))}>
+              {o} · {n}
+            </Chip>
+          ))}
+        </ChipRow>
         <ChipRow label="Modality">
           {facetCounts.modalities.map(([m, n]) => (
             <Chip key={m} active={modalities.has(m)} onClick={() => setModalities((prev) => toggle(prev, m))}>
@@ -365,6 +401,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
               setResultsOnly(false)
               setModalities(new Set())
               setTarget('')
+              setOutcomes(new Set())
             }}
           >
             Reset filters
@@ -541,6 +578,27 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
           {otherNames.join(', ')}
         </p>
       )}
+      {study.outcome && <OutcomeLine study={study} outcome={study.outcome} />}
+      {study.publications.length > 0 && (
+        <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          <span style={{ color: 'var(--text-muted)' }}>Results published: </span>
+          {study.publications.map((pub, i) => (
+            <span key={pub.pmid}>
+              {i > 0 && '; '}
+              <a
+                href={`https://pubmed.ncbi.nlm.nih.gov/${pub.pmid}/`}
+                target="_blank"
+                rel="noreferrer"
+                title={pub.citation}
+                className="underline"
+                style={{ color: 'var(--cat-blue)' }}
+              >
+                {pub.citation.length > 90 ? `${pub.citation.slice(0, 87)}…` : pub.citation || `PubMed ${pub.pmid}`}
+              </a>
+            </span>
+          ))}
+        </p>
+      )}
       {study.whyStopped && group === 'Stopped early' && (
         <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           <span style={{ color: 'var(--text-muted)' }}>Why stopped: </span>
@@ -548,5 +606,42 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
         </p>
       )}
     </li>
+  )
+}
+
+function OutcomeLine({ study, outcome }: { study: RegistryStudy; outcome: RegistryOutcome }) {
+  const group = OUTCOME_GROUP_OF.get(outcome.verdict) ?? ''
+  const showResultsLink = !outcome.curated && study.hasResults
+  return (
+    <div className="mt-1.5 flex flex-col gap-1 text-xs leading-relaxed sm:flex-row sm:items-baseline sm:gap-2">
+      <span className="flex shrink-0 items-center gap-1.5">
+        <span style={{ color: 'var(--text-muted)' }}>Outcome:</span>
+        <Badge label={outcome.verdict} color={VERDICT_COLOR[group] ?? 'var(--text-muted)'} />
+      </span>
+      {(outcome.summary || outcome.source || showResultsLink) && (
+        <span style={{ color: 'var(--text-secondary)' }}>
+          {outcome.summary}
+          {outcome.source && (
+            <>
+              {' '}
+              <a href={outcome.source} target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
+                Source
+              </a>
+            </>
+          )}
+          {showResultsLink && (
+            <a
+              href={`https://clinicaltrials.gov/study/${study.id}?tab=results`}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+              style={{ color: 'var(--cat-blue)' }}
+            >
+              View posted results
+            </a>
+          )}
+        </span>
+      )}
+    </div>
   )
 }
