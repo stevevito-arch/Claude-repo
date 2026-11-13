@@ -796,6 +796,136 @@
    "verdict": "Descriptive results",
    "summary": "Early ventilation and nutrition study (153 patients): 35 accepted early non-invasive ventilation; design and early results published in 2011.",
    "source": "https://pubmed.ncbi.nlm.nih.gov/21271789/"
+  },
+  "NCT05981040": {
+   "verdict": "Inconclusive",
+   "summary": "Usnoflast (ZYIL1), 24 patients over 12 weeks: no significant difference from placebo; the 75 mg group was numerically better on function (about 2.8 points). Well tolerated.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/40511876/"
+  },
+  "NCT05357950": {
+   "verdict": "Mixed results",
+   "summary": "PARADIGM (68 patients): PrimeC was safe, its primary endpoint. Function at 6 months was not significantly better (2.2 points, p=0.12), but patients on PrimeC throughout were 7.9 points better at 18 months (p=0.007). Not powered for efficacy; a confirmatory trial is planned.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41837970/"
+  },
+  "NCT04788745": {
+   "verdict": "Safety study",
+   "summary": "Open-label (21 patients): trimetazidine was safe and well tolerated, and lowered a marker of oxidative stress and resting energy use. No placebo group, so clinical effects could not be judged.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/40008327/"
+  },
+  "NCT03693781": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Co-ALS (54 patients): the number of responders did not differ significantly from placebo (5 of 18 on the low dose vs 2 of 18, p=0.22). Functional decline was slower on the low dose (p=0.011). Colchicine was safe.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39291166/"
+  },
+  "NCT03792490": {
+   "verdict": "Safety study",
+   "summary": "ROCK-ALS (120 patients): 4 weeks of intravenous fasudil was safe and well tolerated, its primary endpoint. No clear effect on efficacy measures; a post hoc analysis suggested slower spread to new muscles.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39424560/"
+  },
+  "NCT03359538": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Rapamycin (63 patients) did not reach its primary endpoint, an increase in regulatory T cells; it was well tolerated and lowered some inflammation markers.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37591957/"
+  },
+  "NCT03019419": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Perampanel (66 patients) was harmful at 8 mg: function declined 8.4 points more than on placebo (p=0.015), mainly in speech and swallowing, with more serious adverse events.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/34191081/"
+  },
+  "NCT02868580": {
+   "verdict": "Safety study",
+   "summary": "Lighthouse (40 patients): long-term Triumeq was safe and well tolerated, with a suggestive 22% slower decline. The phase 3 Lighthouse II was later stopped for futility.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/31284774/"
+  },
+  "NCT04762589": {
+   "verdict": "Safety study",
+   "summary": "RT001 (43 patients) was safe and well tolerated; function at 24 weeks favoured RT001 by 1.9 points, not significant (p=0.25).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37550954/"
+  },
+  "NCT04165850": {
+   "verdict": "Safety study",
+   "summary": "Open-label (16 patients): PrimeC (ciprofloxacin plus celecoxib) was safe and well tolerated, leading to the PARADIGM phase 2b.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36106817/"
+  },
+  "NCT03204500": {
+   "verdict": "Inconclusive",
+   "summary": "Valproate plus lithium (43 patients): decline was slower than on placebo (0.51 vs 1.20 points a month between months 6 and 14), but many dropped out, especially on placebo; the authors call for a larger trial.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36049647/"
+  },
+  "NCT03618966": {
+   "verdict": "Met primary endpoint",
+   "summary": "Proof-of-concept (22 patients): magnetic stimulation of one arm's muscles preserved strength compared with sham stimulation of the other arm.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30808899/"
+  },
+  "NCT01854294": {
+   "verdict": "Inconclusive",
+   "summary": "Pilot (12 patients): the company-authored report describes favourable changes in blood biomarkers and breathing vs placebo; too small to judge efficacy.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30057745/"
+  },
+  "NCT00635960": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Growth hormone (40 patients) had no effect on a brain-imaging marker or on functional decline over 12 months.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/21706151/"
+  },
+  "NCT00355576": {
+   "verdict": "Inconclusive",
+   "summary": "Selection trial (86 patients): celecoxib plus creatine was chosen over minocycline plus creatine for further testing; neither was compared with placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/18608093/"
+  },
+  "NCT00244244": {
+   "verdict": "Safety study",
+   "summary": "Arimoclomol at up to 300 mg a day was well tolerated and safe (dose-ranging study, 80 patients).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/18551622/"
+  },
+  "NCT00140452": {
+   "verdict": "No benefit shown",
+   "summary": "Open-label thalidomide (23 patients): no improvement in function or breathing compared with historical controls, and several side effects.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/19922130/"
+  },
+  "NCT00072709": {
+   "verdict": "Missed primary endpoint",
+   "summary": "TCH346 (591 patients) did not slow functional decline or improve survival, breathing or strength.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/17709710/"
+  },
+  "NCT00230074": {
+   "verdict": "Extension or access study",
+   "summary": "Long-term extension of the TCH346 trial, which found no benefit.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/17709710/"
+  },
+  "NCT02794857": {
+   "verdict": "Inconclusive",
+   "summary": "NP001 phase 2. A 2024 pooled, post hoc analysis of the NP001 trials reported longer survival at 2 mg/kg (hazard ratio 0.77, p=0.07), mainly in patients aged 65 or under.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39457678/"
+  },
+  "NCT01281631": {
+   "verdict": "Inconclusive",
+   "summary": "NP001 phase 2 (136 patients). A 2024 pooled, post hoc analysis of the NP001 trials reported longer survival at 2 mg/kg (hazard ratio 0.77, p=0.07), mainly in patients aged 65 or under.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39457678/"
+  },
+  "NCT03114215": {
+   "verdict": "No benefit shown",
+   "summary": "High-dose biotin MD1003 (30 patients): safe and well tolerated, with no significant difference in function at 6 months (p=0.49).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/32140672/"
+  },
+  "NCT02487407": {
+   "verdict": "Missed primary endpoint",
+   "summary": "LEVALS: oral levosimendan did not improve breathing capacity measured sitting, its primary endpoint; a post hoc analysis favoured it lying down, which the REFALS phase 3 then failed to confirm.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/31315908/"
+  },
+  "NCT01879241": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Rasagiline added to riluzole (252 patients) did not improve survival; a post hoc analysis suggested possible benefit in faster-progressing patients.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29934198/"
+  },
+  "NCT01777646": {
+   "verdict": "Safety study",
+   "summary": "Phase 2a of NurOwn (14 patients): safe, with slower decline after treatment than before (uncontrolled). The phase 3 later missed its primary endpoint.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/26751635/"
+  },
+  "NCT01277315": {
+   "verdict": "No benefit shown",
+   "summary": "Anakinra (17 patients) was safe and lowered inflammatory markers at first, but did not slow progression vs historical controls; most patients developed antibodies against it.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/26444282/"
   }
  }
 }
