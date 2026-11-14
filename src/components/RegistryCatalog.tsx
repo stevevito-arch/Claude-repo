@@ -4,7 +4,7 @@ import type { RegistryOutcome, RegistrySnapshot, RegistryStudy } from '../types/
 import { statusLabel } from '../lib/clinicalTrialsApi'
 import { useFollowed } from '../lib/useFollowed'
 import { buildIndex, matchesQuery, parseQuery } from '../lib/search'
-import { targetSynonyms } from '../data/targets'
+import { MECHANISMS, PATHWAYS, pathwayOf, targetSynonyms } from '../data/targets'
 import { Badge } from './Badge'
 
 const PAGE_SIZE = 40
@@ -154,6 +154,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const [groups, setGroups] = useState<Set<StatusGroup>>(new Set())
   const [resultsOnly, setResultsOnly] = useState(false)
   const [modalities, setModalities] = useState<Set<string>>(new Set())
+  // "p:<pathway>" for a whole pathway, "t:<target>" for one target, or "" for any.
   const [target, setTarget] = useState('')
   const [outcomes, setOutcomes] = useState<Set<string>>(new Set())
   const [sort, setSort] = useState<SortKey>('newest')
@@ -208,6 +209,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     const byOutcome = new Map<string, number>()
     const byModality = new Map<string, number>()
     const byTarget = new Map<string, number>()
+    const byPathway = new Map<string, number>()
     // Count only studies of the selected types and focus, so the numbers match the list.
     for (const { study } of indexed) {
       if (types.size > 0 && !types.has(study.type)) continue
@@ -215,6 +217,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       if (focuses.size > 0 && !focuses.has(study.focus)) continue
       for (const m of study.modalities) byModality.set(m, (byModality.get(m) ?? 0) + 1)
       for (const t of study.targets) byTarget.set(t, (byTarget.get(t) ?? 0) + 1)
+      for (const p of new Set(study.targets.map(pathwayOf))) byPathway.set(p, (byPathway.get(p) ?? 0) + 1)
       const group = study.outcome && OUTCOME_GROUP_OF.get(study.outcome.verdict)
       if (group) byOutcome.set(group, (byOutcome.get(group) ?? 0) + 1)
     }
@@ -224,7 +227,13 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     if (byModality.has(UNCLASSIFIED)) mods.push([UNCLASSIFIED, byModality.get(UNCLASSIFIED)!])
     const outcomeCounts = OUTCOME_GROUPS.map(([g]) => [g, byOutcome.get(g) ?? 0] as const).filter(([, n]) => n > 0)
     const focusCounts = FOCUS_OPTIONS.map((f) => [f, byFocus.get(f) ?? 0] as const).filter(([, n]) => n > 0)
-    return { focuses: focusCounts, modalities: mods, targets: sorted(byTarget), outcomes: outcomeCounts }
+    // Targets grouped under their pathways, pathways in a fixed order, targets by count.
+    const targetGroups = PATHWAYS.map((p) => ({
+      pathway: p,
+      count: byPathway.get(p) ?? 0,
+      targets: sorted(byTarget).filter(([t]) => pathwayOf(t) === p),
+    })).filter((g) => g.targets.length > 0)
+    return { focuses: focusCounts, modalities: mods, targetGroups, outcomes: outcomeCounts }
   }, [indexed, types, focuses])
 
   const filtered = useMemo(() => {
@@ -236,7 +245,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       if (groups.size > 0 && !groups.has(group)) return false
       if (resultsOnly && !study.hasResults) return false
       if (modalities.size > 0 && !study.modalities.some((m) => modalities.has(m))) return false
-      if (target && !study.targets.includes(target)) return false
+      if (target.startsWith('t:') && !study.targets.includes(target.slice(2))) return false
+      if (target.startsWith('p:') && !study.targets.some((t) => pathwayOf(t) === target.slice(2))) return false
       if (outcomes.size > 0 && !(study.outcome && outcomes.has(OUTCOME_GROUP_OF.get(study.outcome.verdict) ?? ''))) return false
       return matchesQuery(index, terms)
     })
@@ -403,15 +413,22 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
           <select
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            aria-label="Filter by therapy target"
+            aria-label="Filter by therapy target or pathway"
             className="min-w-0 max-w-full rounded-lg border px-3 py-1.5 text-xs"
             style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)', color: 'var(--text-primary)' }}
           >
             <option value="">Any target</option>
-            {facetCounts.targets.map(([t, n]) => (
-              <option key={t} value={t}>
-                {t} ({n})
-              </option>
+            {facetCounts.targetGroups.map((g) => (
+              <optgroup key={g.pathway} label={g.pathway}>
+                <option value={`p:${g.pathway}`}>
+                  All {g.pathway.toLowerCase()} ({g.count})
+                </option>
+                {g.targets.map(([t, n]) => (
+                  <option key={t} value={`t:${t}`}>
+                    {t} ({n})
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </ChipRow>
@@ -591,10 +608,21 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
             {drug.names.length > 0 && <span style={{ color: 'var(--text-secondary)' }}> = {drug.names.join(', ')}</span>}
           </span>
           <span>
-            <span style={{ color: 'var(--text-muted)' }}>Target: </span>
-            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-              {drug.targets.join(', ')}
-            </span>
+            {/* Molecules the drug acts on are "Target"; broad processes are "Mechanism". */}
+            {[
+              ['Target', drug.targets.filter((t) => !MECHANISMS.has(t))],
+              ['Mechanism', drug.targets.filter((t) => MECHANISMS.has(t))],
+            ]
+              .filter(([, list]) => list.length > 0)
+              .map(([kind, list], i) => (
+                <span key={kind as string}>
+                  {i > 0 && <span style={{ color: 'var(--text-muted)' }}> · </span>}
+                  <span style={{ color: 'var(--text-muted)' }}>{kind}: </span>
+                  <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                    {(list as string[]).join(', ')}
+                  </span>
+                </span>
+              ))}
             <span style={{ color: 'var(--text-muted)' }}> · {drug.modality}</span>
             {drug.what && <span style={{ color: 'var(--text-secondary)' }}> · {drug.what}</span>}
             {drug.source && (

@@ -86,8 +86,11 @@ export const TARGET_SYNONYMS: Record<string, string[]> = {
   'Cannabinoid receptors': ['CB1', 'CB2', 'cannabinoid'],
   // Metabolism and oxidative stress
   'MPO (myeloperoxidase)': ['MPO', 'myeloperoxidase'],
-  'NAD+ metabolism': ['NAD', 'NAD+', 'nicotinamide adenine dinucleotide'],
-  'NAD+/NADH redox metabolism': ['NAD', 'NAD+', 'NADH', 'nicotinamide adenine dinucleotide'],
+  'NAD+ metabolism': ['NAD', 'NAD+', 'NADH', 'nicotinamide adenine dinucleotide'],
+  'Mitochondrial and energy metabolism': ['mitochondria', 'mitochondrial dysfunction', 'energy metabolism', 'bioenergetics', 'hypermetabolism'],
+  'Stem-cell trophic and immune support': ['stem cells', 'mesenchymal stem cells', 'MSC', 'secretome', 'exosomes', 'paracrine'],
+  'Fatty-acid oxidation (3-KAT)': ['3-ketoacyl-CoA thiolase', 'fatty-acid oxidation'],
+  'SNAP-25 (acetylcholine release)': ['SNAP-25', 'SNARE', 'botulinum toxin'],
   Nrf2: ['NFE2L2'],
   'ALOX15 (15-lipoxygenase)': ['15-LO', '15-lipoxygenase', 'ferroptosis'],
   'Lipid peroxidation': ['ferroptosis'],
@@ -108,6 +111,66 @@ export const TARGET_SYNONYMS: Record<string, string[]> = {
   'Glucocorticoid receptor': ['NR3C1', 'corticosteroid'],
 }
 
+// Pathways: each target belongs to one, so the target filter can be browsed by
+// pathway and a pathway name finds all its studies. Listed in display order.
+export const PATHWAYS = [
+  'Genetic targets',
+  'Nerve excitability and glutamate',
+  'Inflammation and immunity',
+  'Protein handling and stress responses',
+  'Mitochondria and energy metabolism',
+  'Oxidative stress',
+  'Axons, synapses and muscle',
+  'Growth factors and cell therapy',
+  'Neurotransmitter and hormone receptors',
+  'Other',
+] as const
+export type Pathway = (typeof PATHWAYS)[number]
+
+const PATHWAY_MEMBERS: Record<Exclude<Pathway, 'Other'>, string[]> = {
+  'Genetic targets': ['SOD1', 'FUS', 'TDP-43 (TARDBP)', 'C9orf72', 'ATXN2', 'STMN2', 'UNC13A', 'CHCHD10', 'SPTLC1', 'SMN2 splicing', 'Tau'],
+  'Nerve excitability and glutamate': ['Voltage-gated sodium channels', 'Glutamate release', 'AMPA receptor', 'NMDA receptor',
+    'EAAT2 (glutamate transporter)', 'KCNQ2/KCNQ3 (Kv7.2/7.3)', 'SV2A', 'T-type calcium channels', 'Na+/K+-ATPase', 'TRPA1', 'TRPV1'],
+  'Inflammation and immunity': ['C1q', 'C3 (complement)', 'C5 (complement)', 'TREM2', 'CSF1R', 'RIPK1', 'NLRP3 inflammasome', 'Regulatory T cells',
+    'IL-2 receptor α (CD25)', 'IL-6 receptor', 'IL-1 receptor', 'IL-10', 'TNF-α', 'CD14', 'CD2', 'CD3', 'CD20 (B cells)', 'CD40L', 'CD80/CD86',
+    'JAK', 'JAK1/JAK2', 'BTK', 'MPO (myeloperoxidase)', 'Microglial activation', 'Macrophage activation', 'Mast cells', 'KIT', 'PDGFR', 'FGFR3',
+    'Immune modulation', 'Immunosuppression', 'Neuroinflammation', 'Calcineurin', 'IMPDH', 'COX-2', 'TSPO (microglial activation)', 'PDE4B',
+    'Phosphodiesterases (PDE3/4/5/10)', 'Glucocorticoid receptor', 'S1P receptors', 'TGF-β receptor I (ALK5)', 'Melanocortin receptors (ACTH)',
+    'Albumin replacement (plasma exchange)', 'Stem-cell and regulatory T-cell mobilisation', 'PAR1 (activated protein C analogue)'],
+  'Protein handling and stress responses': ['eIF2B', 'PPP1R15A (integrated stress response)', 'Heat shock response (HSP70)', 'HSP90 (epichaperome)',
+    'Autophagy', 'mTOR', 'ER stress', 'Protein misfolding', 'XPO1', 'PIKFYVE', 'SORT1', 'GBA1 (glucocerebrosidase)', 'Histone deacetylases',
+    'Histone acetylation', 'SRC/ABL kinases', 'MEK1/2', 'GSK-3β', 'miRNA biogenesis (Dicer)'],
+  'Mitochondria and energy metabolism': ['Mitochondrial and energy metabolism', 'NAD+ metabolism', 'Fatty-acid oxidation (3-KAT)', 'PPAR-α', 'PPARγ',
+    'PGK1', 'AMPK', 'Copper delivery (SOD1, mitochondria)'],
+  'Oxidative stress': ['Oxidative stress', 'Lipid peroxidation', 'Nrf2', 'ALOX15 (15-lipoxygenase)', 'Iron chelation', 'Metal homeostasis', 'Urate'],
+  'Axons, synapses and muscle': ['SARM1', 'MAP3K12 (DLK)', 'MAP4K4', 'RTN4 (Nogo-A)', 'MuSK', 'Fast skeletal muscle troponin', 'ROCK (Rho kinase)',
+    'Tubulin', 'Microtubules', 'CAPN2', 'TRIM72', 'Synapse regeneration', 'SNAP-25 (acetylcholine release)', 'β2-adrenergic receptor'],
+  'Growth factors and cell therapy': ['Stem-cell trophic and immune support', 'Neurotrophic factors (BDNF, GDNF, VEGF, HGF)', 'Cell replacement', 'GDNF',
+    'HGF', 'VEGFA', 'VEGF receptors', 'TrkA (NGF receptor)', 'IGF-1 receptor', 'GH receptor', 'EPO receptor', 'G-CSF receptor', 'Astrocyte support',
+    'S100B (astrocytes)', 'Akt pathway'],
+  'Neurotransmitter and hormone receptors': ['SIGMAR1 (sigma-1 receptor)', 'Dopamine replacement', 'Dopamine D2 receptor', 'Dopamine transporter',
+    'Dopamine and serotonin receptors', 'Serotonin receptors', 'Serotonin transporter', '5-HT2A receptor', 'MAO-B', 'Monoamine reuptake',
+    'Cannabinoid receptors', 'Melatonin receptors', 'Muscarinic receptors', 'Estrogen receptor', 'Androgen receptor', 'GnRH receptor',
+    'SRD5A (5-alpha-reductase)', 'Retinoic acid receptors', 'Protein kinase C'],
+}
+const PATHWAY_OF = new Map(Object.entries(PATHWAY_MEMBERS).flatMap(([pathway, targets]) => targets.map((t) => [t, pathway as Pathway])))
+
+/** The pathway a target belongs to; targets not yet assigned count as "Other". */
+export function pathwayOf(target: string): Pathway {
+  return PATHWAY_OF.get(target) ?? 'Other'
+}
+
+// Labels that name a broad process or cell type rather than a molecule a drug
+// is known to act on. Shown as "Mechanism" instead of "Target".
+export const MECHANISMS = new Set([
+  'Mitochondrial and energy metabolism', 'NAD+ metabolism', 'Oxidative stress', 'Lipid peroxidation', 'Iron chelation', 'Metal homeostasis', 'Urate',
+  'ER stress', 'Autophagy', 'Protein misfolding', 'Heat shock response (HSP70)', 'Histone acetylation', 'Immune modulation', 'Immunosuppression',
+  'Neuroinflammation', 'Microglial activation', 'Macrophage activation', 'Mast cells', 'Regulatory T cells', 'Albumin replacement (plasma exchange)',
+  'Stem-cell and regulatory T-cell mobilisation', 'Stem-cell trophic and immune support', 'Cell replacement', 'Astrocyte support', 'Synapse regeneration',
+  'Glutamate release', 'Gut microbiome', 'Blood-brain barrier', 'Dopamine replacement', 'Monoamine reuptake', 'Copper delivery (SOD1, mitochondria)',
+  'Vitamin B12 (methylation)', 'Akt pathway', 'Undisclosed',
+])
+
 /**
  * Other names for the targets named in `text`. Matches a target given exactly,
  * or text that starts with the target's main name, so a free-text target such
@@ -116,7 +179,9 @@ export const TARGET_SYNONYMS: Record<string, string[]> = {
  */
 export function targetSynonyms(text: string): string[] {
   const exact = TARGET_SYNONYMS[text]
-  if (exact) return exact
+  const pathway = PATHWAY_OF.get(text)
+  // A target's pathway name finds it too ("mitochondria and energy metabolism").
+  if (exact || pathway) return [...(exact ?? []), ...(pathway ? [pathway] : [])]
   const lower = text.toLowerCase()
   const out: string[] = []
   for (const [name, synonyms] of Object.entries(TARGET_SYNONYMS)) {

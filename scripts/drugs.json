@@ -59,7 +59,7 @@
    "what": "Combination of sodium phenylbutyrate and taurursodiol",
    "targets": [
     "ER stress",
-    "Mitochondrial dysfunction"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Small molecule",
    "source": "https://clinicaltrials.gov/study/NCT03127514"
@@ -98,7 +98,7 @@
    "names": [],
    "what": "Cell-free protein complex derived from umbilical cord mesenchymal stem cells",
    "targets": [
-    "Undefined (stem-cell-derived protein mix)"
+    "Stem-cell trophic and immune support"
    ],
    "modality": "Protein",
    "source": "https://www.citybiz.co/?p=927207"
@@ -422,7 +422,7 @@
    "names": [],
    "what": "Peptide derived from motoneuronotrophic factor",
    "targets": [
-    "Undefined (neurotrophic peptide)"
+    "Undisclosed"
    ],
    "modality": "Peptide",
    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6051227"
@@ -552,7 +552,7 @@
    ],
    "what": "High-dose pharmaceutical-grade biotin",
    "targets": [
-    "Cellular energy metabolism"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Supplement or diet",
    "source": "https://doaj.org/article/808df3a8ac1b42b99b763bfd9e5f5b3c"
@@ -785,7 +785,7 @@
    "names": [],
    "what": "Autologous bone-marrow mesenchymal stem cells",
    "targets": [
-    "Undefined (stem cells)"
+    "Stem-cell trophic and immune support"
    ],
    "modality": "Cell therapy",
    "source": "https://ctv.veeva.com/study/a-study-of-stro4-in-patients-amyotrophic-lateral-sclerosis-als"
@@ -827,7 +827,7 @@
    ],
    "what": "Olesoxime, tested as an add-on to riluzole",
    "targets": [
-    "Mitochondria"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Small molecule",
    "source": "https://www.fiercebiotech.com/biotech/trophos-announces-results-of-phase-3-study-of-olesoxime-amyotrophic-lateral-sclerosis"
@@ -953,7 +953,7 @@
    ],
    "names": [],
    "targets": [
-    "Mitochondrial dysfunction",
+    "Mitochondrial and energy metabolism",
     "ER stress"
    ],
    "modality": "Small molecule",
@@ -970,7 +970,7 @@
    ],
    "names": [],
    "targets": [
-    "Mitochondria"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Small molecule",
    "source": null
@@ -1070,7 +1070,7 @@
    ],
    "names": [],
    "targets": [
-    "NAD+/NADH redox metabolism"
+    "NAD+ metabolism"
    ],
    "modality": "Small molecule",
    "source": "https://www.biospace.com/press-releases/clene-announces-statistically-significant-als-biomarker-results-supporting-accelerated-approval-pathway-for-cnm-au8",
@@ -1285,7 +1285,7 @@
    ],
    "names": [],
    "targets": [
-    "Iron (chelator)"
+    "Iron chelation"
    ],
    "modality": "Small molecule",
    "source": null
@@ -1807,7 +1807,7 @@
    ],
    "names": [],
    "targets": [
-    "Fatty-acid oxidation"
+    "Fatty-acid oxidation (3-KAT)"
    ],
    "modality": "Small molecule",
    "source": null
@@ -1818,7 +1818,7 @@
    ],
    "names": [],
    "targets": [
-    "Mitochondrial energy metabolism"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Small molecule",
    "source": null
@@ -1829,7 +1829,7 @@
    ],
    "names": [],
    "targets": [
-    "Mitochondrial energy metabolism"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Small molecule",
    "source": null
@@ -1903,7 +1903,7 @@
    ],
    "names": [],
    "targets": [
-    "Dopamine"
+    "Dopamine replacement"
    ],
    "modality": "Small molecule",
    "source": null
@@ -2041,7 +2041,7 @@
    ],
    "names": [],
    "targets": [
-    "Mitochondrial oxidative stress"
+    "Oxidative stress"
    ],
    "modality": "Small molecule",
    "source": null
@@ -2374,7 +2374,7 @@
    ],
    "names": [],
    "targets": [
-    "Acetylcholine release (SNARE proteins)"
+    "SNAP-25 (acetylcholine release)"
    ],
    "modality": "Protein",
    "source": null
@@ -2413,7 +2413,7 @@
    ],
    "names": [],
    "targets": [
-    "Neurotrophic and immune support"
+    "Stem-cell trophic and immune support"
    ],
    "modality": "Cell therapy",
    "source": null
@@ -2442,7 +2442,7 @@
    ],
    "names": [],
    "targets": [
-    "Cell replacement and neurotrophic support"
+    "Cell replacement"
    ],
    "modality": "Cell therapy",
    "source": null,
@@ -2481,7 +2481,7 @@
    ],
    "names": [],
    "targets": [
-    "Neurotrophic and immune support"
+    "Stem-cell trophic and immune support"
    ],
    "modality": "Cell therapy",
    "source": null,
@@ -2496,7 +2496,7 @@
    ],
    "names": [],
    "targets": [
-    "Paracrine factors (stem-cell secretome)"
+    "Stem-cell trophic and immune support"
    ],
    "modality": "Protein",
    "source": null,
@@ -2532,7 +2532,7 @@
    ],
    "names": [],
    "targets": [
-    "Cellular energy (phosphocreatine)"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Supplement or diet",
    "source": null
@@ -2543,7 +2543,7 @@
    ],
    "names": [],
    "targets": [
-    "Mitochondrial electron transport"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Supplement or diet",
    "source": null
@@ -2555,7 +2555,7 @@
    ],
    "names": [],
    "targets": [
-    "Mitochondrial fatty-acid metabolism"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Supplement or diet",
    "source": null
@@ -2566,7 +2566,7 @@
    ],
    "names": [],
    "targets": [
-    "Cellular energy metabolism"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Supplement or diet",
    "source": null
@@ -2598,7 +2598,7 @@
    ],
    "names": [],
    "targets": [
-    "Nutrition and energy metabolism"
+    "Mitochondrial and energy metabolism"
    ],
    "modality": "Supplement or diet",
    "source": null
