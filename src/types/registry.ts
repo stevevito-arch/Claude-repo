@@ -9,6 +9,18 @@ export interface RegistryDrug {
   modality: string
   /** A checked source, or null for standard, widely documented pharmacology. */
   source: string | null
+  /** How this study gives the drug, read from the registry text; null when it says nothing. */
+  dosing: RegistryDosing | null
+}
+
+// Read by scripts/dosing.mjs from intervention and arm descriptions (CTIS: its dose fields).
+export interface RegistryDosing {
+  /** Dose levels by unit, e.g. "3.0, 4.5 and 6.0 mg/kg/day". */
+  doses: string[]
+  frequency: string[]
+  route: string[]
+  /** The registry passages these were read from, labelled by intervention or arm. */
+  passages: { label: string; text: string }[]
 }
 
 // What became of a finished or stopped study (see scripts/outcomes.json).

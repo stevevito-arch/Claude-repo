@@ -11,6 +11,7 @@
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { fetchIsrctn, fetchCtis, fetchEuctr } from './other-registries.mjs'
+import { dosingOf } from './dosing.mjs'
 
 const API = 'https://clinicaltrials.gov/api/v2/studies'
 const OUT = new URL('../public/data/als-registry.json', import.meta.url)
@@ -24,6 +25,8 @@ const FIELDS = [
   'Condition', 'Keyword', 'InterventionName', 'InterventionType', 'InterventionOtherName', 'LeadSponsorName', 'LeadSponsorClass',
   'StartDate', 'PrimaryCompletionDate', 'CompletionDate', 'EnrollmentCount', 'EnrollmentType',
   'HasResults', 'LocationCountry', 'ReferencesModule', 'SecondaryIdInfo', 'PrimaryOutcomeMeasure', 'DesignPrimaryPurpose',
+  // Intervention and arm descriptions, for dosing.
+  'ArmsInterventionsModule',
 ].join(',')
 
 function describedAs(s) {
@@ -260,6 +263,17 @@ function slim(s) {
   const status = st.overallStatus ?? 'UNKNOWN'
   const type = p.designModule?.studyType ?? 'UNKNOWN'
   const registry = s.registry ?? 'ClinicalTrials.gov'
+  // Dose levels, frequency and route of each recognised drug, from the registry text.
+  const dosing = type === 'INTERVENTIONAL'
+    ? dosingOf(p.armsInterventionsModule, entries.map(([e], idx) => {
+      const own = interventions.filter((i) => !IS_COMPARATOR.test(i.name.trim()) && entryFor(i) === e)
+      return {
+        id: idx,
+        names: [...e.match, ...(e.names ?? []), ...own.flatMap((i) => [i.name, ...(i.otherNames ?? [])])],
+        interventions: new Set(own.map((i) => i.name)),
+      }
+    }))
+    : new Map()
   return {
     _drugs: type === 'INTERVENTIONAL' ? testedDrugs(interventions) : [],
     id: id.nctId,
@@ -276,7 +290,9 @@ function slim(s) {
     interventions: names.slice(0, 6),
     aliases,
     // What each recognised drug is: label, other names, target(s), modality, source.
-    drugs: entries.map(([e, label]) => ({ label, names: e.names ?? [], what: e.what ?? null, targets: e.targets, modality: e.modality, source: e.source })),
+    drugs: entries.map(([e, label], idx) => ({
+      label, names: e.names ?? [], what: e.what ?? null, targets: e.targets, modality: e.modality, source: e.source, dosing: dosing.get(idx) ?? null,
+    })),
     targets: [...new Set(entries.flatMap(([e]) => e.targets))],
     modalities,
     interventionTypes: [...new Set(interventions.map((i) => i.type))],

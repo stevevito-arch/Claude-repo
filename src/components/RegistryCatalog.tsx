@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import type { RegistryOutcome, RegistrySnapshot, RegistryStudy } from '../types/registry'
+import type { RegistryDosing, RegistryOutcome, RegistrySnapshot, RegistryStudy } from '../types/registry'
 import { statusLabel } from '../lib/clinicalTrialsApi'
 import { useFollowed } from '../lib/useFollowed'
 import { buildIndex, matchesQuery, parseQuery } from '../lib/search'
@@ -556,6 +556,72 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   )
 }
 
+// The doses, frequency and route a study gives a drug, folded away under its drug line.
+function DoseDetails({ dosing }: { dosing: RegistryDosing }) {
+  const [open, setOpen] = useState(false)
+  const panel = useId()
+  // "Single dose; every 2 weeks": only the first item keeps its capital.
+  const list = (items: string[]) => items.map((x, i) => (i ? x.charAt(0).toLowerCase() + x.slice(1) : x)).join('; ')
+  const rows: [string, string][] = [
+    ['Dose levels', dosing.doses.join('; ')],
+    ['Frequency', list(dosing.frequency)],
+    ['Route', list(dosing.route)],
+  ]
+  return (
+    <div className="mt-0.5">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={panel}
+        className="inline-flex min-h-6 items-center gap-1 text-xs font-medium"
+        style={{ color: 'var(--cat-blue)' }}
+      >
+        <Chevron open={open} />
+        Dose details
+      </button>
+      {open && (
+        <div
+          id={panel}
+          className="mt-1 rounded-md border p-2.5 text-xs leading-relaxed"
+          style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)' }}
+        >
+          <dl className="grid grid-cols-[5.5rem_1fr] gap-x-3 gap-y-1">
+            {rows.map(([label, value]) => (
+              <Fragment key={label}>
+                <dt style={{ color: 'var(--text-muted)' }}>{label}</dt>
+                <dd className="m-0" style={{ color: value ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                  {value || 'Not stated'}
+                </dd>
+              </Fragment>
+            ))}
+          </dl>
+          {dosing.passages.length > 0 && (
+            <div className="mt-2.5 border-t pt-2" style={{ borderColor: 'var(--border-hairline)' }}>
+              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                Registry wording
+              </p>
+              <ul className="flex flex-col gap-1.5">
+                {dosing.passages.map((p) => (
+                  <li key={`${p.label}|${p.text}`} style={{ color: 'var(--text-secondary)' }}>
+                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                      {p.label}:
+                    </span>{' '}
+                    {p.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <p className="mt-2 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+            Read automatically from the registry’s descriptions, so check it against the wording above.
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // Folds an opened timeline entry back to its summary. It takes focus when it
 // appears, since the summary button that opened it is gone.
 function CollapseButton({ onClick }: { onClick: () => void }) {
@@ -699,38 +765,41 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
         </p>
       )}
       {study.drugs.map((drug) => (
-        <div key={drug.label} className="mt-1.5 flex flex-col gap-0.5 text-xs leading-relaxed sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-2">
-          <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-            {drug.label.length > 60 ? `${drug.label.slice(0, 57)}…` : drug.label}
-            {drug.names.length > 0 && <span style={{ color: 'var(--text-secondary)' }}> = {drug.names.join(', ')}</span>}
-          </span>
-          <span>
-            {/* Molecules the drug acts on are "Target"; broad processes are "Mechanism". */}
-            {[
-              ['Target', drug.targets.filter((t) => !MECHANISMS.has(t))],
-              ['Mechanism', drug.targets.filter((t) => MECHANISMS.has(t))],
-            ]
-              .filter(([, list]) => list.length > 0)
-              .map(([kind, list], i) => (
-                <span key={kind as string}>
-                  {i > 0 && <span style={{ color: 'var(--text-muted)' }}> · </span>}
-                  <span style={{ color: 'var(--text-muted)' }}>{kind}: </span>
-                  <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {(list as string[]).join(', ')}
+        <div key={drug.label} className="mt-1.5">
+          <div className="flex flex-col gap-0.5 text-xs leading-relaxed sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-2">
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              {drug.label.length > 60 ? `${drug.label.slice(0, 57)}…` : drug.label}
+              {drug.names.length > 0 && <span style={{ color: 'var(--text-secondary)' }}> = {drug.names.join(', ')}</span>}
+            </span>
+            <span>
+              {/* Molecules the drug acts on are "Target"; broad processes are "Mechanism". */}
+              {[
+                ['Target', drug.targets.filter((t) => !MECHANISMS.has(t))],
+                ['Mechanism', drug.targets.filter((t) => MECHANISMS.has(t))],
+              ]
+                .filter(([, list]) => list.length > 0)
+                .map(([kind, list], i) => (
+                  <span key={kind as string}>
+                    {i > 0 && <span style={{ color: 'var(--text-muted)' }}> · </span>}
+                    <span style={{ color: 'var(--text-muted)' }}>{kind}: </span>
+                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                      {(list as string[]).join(', ')}
+                    </span>
                   </span>
-                </span>
-              ))}
-            <span style={{ color: 'var(--text-muted)' }}> · {drug.modality}</span>
-            {drug.what && <span style={{ color: 'var(--text-secondary)' }}> · {drug.what}</span>}
-            {drug.source && (
-              <>
-                {' · '}
-                <a href={drug.source} target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
-                  Source
-                </a>
-              </>
-            )}
-          </span>
+                ))}
+              <span style={{ color: 'var(--text-muted)' }}> · {drug.modality}</span>
+              {drug.what && <span style={{ color: 'var(--text-secondary)' }}> · {drug.what}</span>}
+              {drug.source && (
+                <>
+                  {' · '}
+                  <a href={drug.source} target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
+                    Source
+                  </a>
+                </>
+              )}
+            </span>
+          </div>
+          {drug.dosing && <DoseDetails dosing={drug.dosing} />}
         </div>
       ))}
       {study.laterDevelopment.map((dev) => (

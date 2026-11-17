@@ -98,8 +98,10 @@ export async function fetchIsrctn() {
       // Free-text descriptions make poor names, so non-drug interventions are named by type.
       // A drug trial with no drug names may still give a drug code in its title.
       const codes = type === 'DRUG' ? [...new Set(title.match(CODE) ?? [])] : []
-      if (drugs.length) for (const name of drugs) interventions.push({ name, type })
-      else if (codes.length) for (const name of codes) interventions.push({ name, type })
+      // The description often gives the dose and route, which dosing.mjs reads.
+      const description = /automatic deferral|will be added to the trial record/i.test(tag(iv, 'description')) ? undefined : tag(iv, 'description') || undefined
+      if (drugs.length) for (const name of drugs) interventions.push({ name, type, description })
+      else if (codes.length) for (const name of codes) interventions.push({ name, type, description })
       else interventions.push({ name: ISRCTN_TYPE_LABEL[type] ?? 'Other intervention', type })
     }
     const secondary = [...ft.matchAll(/canonicalSecondaryNumber="([^"]+)"/g)].map((m) => m[1])
@@ -169,7 +171,15 @@ export async function fetchCtis() {
       const product = p.productName || p.productDictionaryInfo?.prodName || ''
       const substance = p.productDictionaryInfo?.activeSubstanceName || ''
       const name = substance && substance.length < 40 ? substance : product
-      return [name.toLowerCase(), { name, type: 'DRUG', otherNames: product && product !== name ? [product] : [] }]
+      // CTIS gives route, form and maximum daily dose as fields; written out as
+      // a description so dosing.mjs reads them like any registry's text.
+      const uom = (p.doseUom ?? '').split(' ')[0]
+      const description = [
+        ...(p.routes ?? []).map((r) => `Route: ${r.toLowerCase()}.`),
+        p.productDictionaryInfo?.pharmForm && !/^n\/?a$/i.test(p.productDictionaryInfo.pharmForm) ? `Form: ${p.productDictionaryInfo.pharmForm.toLowerCase()}.` : null,
+        p.maxDailyDoseAmount && uom ? `Maximum daily dose: ${p.maxDailyDoseAmount} ${uom}.` : null,
+      ].filter(Boolean).join(' ') || undefined
+      return [name.toLowerCase(), { name, type: 'DRUG', otherNames: product && product !== name ? [product] : [], description }]
     })).values()].filter((p) => p.name.length > 1 && !PLACEBO.test(p.name))
     const codes = [...new Set(`${t.ctTitle} ${ids.publicTitle ?? ''}`.match(CODE) ?? [])]
     const interventions = products.length ? products : codes.map((name) => ({ name, type: 'DRUG' }))
