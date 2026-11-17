@@ -56,32 +56,41 @@ function toggle<T>(set: Set<T>, value: T): Set<T> {
   return next
 }
 
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
+interface ChipProps {
+  active: boolean
+  onClick: () => void
+  children: ReactNode
+  count?: number
+  dot?: string
+}
+
+function Chip({ active, onClick, children, count, dot }: ChipProps) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
-      style={
-        active
-          ? { backgroundColor: 'var(--text-primary)', borderColor: 'var(--text-primary)', color: 'var(--surface-page)' }
-          : { backgroundColor: 'transparent', borderColor: 'var(--border-hairline)', color: 'var(--text-secondary)' }
-      }
-    >
+    <button type="button" onClick={onClick} aria-pressed={active} className={`chip${count === 0 ? ' is-empty' : ''}`}>
+      {dot && <span className="chip-dot" style={{ backgroundColor: dot }} aria-hidden />}
       {children}
+      {count !== undefined && <span className="chip-count">{count.toLocaleString()}</span>}
     </button>
   )
 }
 
+// Label in its own column so wrapped chips line up under the first one.
 function ChipRow({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      <span className="mr-1 w-14 shrink-0 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+    <div className="grid gap-1.5 sm:grid-cols-[4.75rem_1fr] sm:gap-3">
+      <span className="text-[11px] font-semibold uppercase tracking-wider sm:pt-[0.45rem]" style={{ color: 'var(--text-muted)' }}>
         {label}
       </span>
-      {children}
+      <div className="flex min-w-0 flex-wrap gap-1.5">{children}</div>
     </div>
+  )
+}
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden className="transition-transform" style={{ transform: open ? 'rotate(90deg)' : 'none' }}>
+      <path d="M4.5 2.5 8 6l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   )
 }
 
@@ -105,6 +114,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const [target, setTarget] = useState('')
   const [outcomes, setOutcomes] = useState<Set<string>>(new Set())
   const [sort, setSort] = useState<SortKey>('newest')
+  const [moreOpen, setMoreOpen] = useState(false)
   const [visible, setVisible] = useState(PAGE_SIZE)
   const { followed, toggleFollow } = useFollowed()
   // The trial whose drug's development timeline is open, if any.
@@ -159,11 +169,18 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     const byModality = new Map<string, number>()
     const byTarget = new Map<string, number>()
     const byPathway = new Map<string, number>()
+    const byPhase = new Map<string, number>()
+    const byStatus = new Map<string, number>()
     // Count only studies of the selected types and focus, so the numbers match the list.
     for (const { study } of indexed) {
       if (types.size > 0 && !types.has(study.type)) continue
       byFocus.set(study.focus, (byFocus.get(study.focus) ?? 0) + 1)
       if (focuses.size > 0 && !focuses.has(study.focus)) continue
+      const phase = study.phase ?? 'No phase'
+      byPhase.set(phase, (byPhase.get(phase) ?? 0) + 1)
+      const status = statusGroup(study.status)
+      byStatus.set(status, (byStatus.get(status) ?? 0) + 1)
+      if (study.hasResults) byStatus.set('results', (byStatus.get('results') ?? 0) + 1)
       for (const m of study.modalities) byModality.set(m, (byModality.get(m) ?? 0) + 1)
       for (const t of study.targets) byTarget.set(t, (byTarget.get(t) ?? 0) + 1)
       for (const p of new Set(study.targets.map(pathwayOf))) byPathway.set(p, (byPathway.get(p) ?? 0) + 1)
@@ -182,7 +199,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       count: byPathway.get(p) ?? 0,
       targets: sorted(byTarget).filter(([t]) => pathwayOf(t) === p),
     })).filter((g) => g.targets.length > 0)
-    return { focuses: focusCounts, modalities: mods, targetGroups, outcomes: outcomeCounts }
+    return { focuses: focusCounts, modalities: mods, targetGroups, outcomes: outcomeCounts, phases: byPhase, statuses: byStatus }
   }, [indexed, types, focuses])
 
   const filtered = useMemo(() => {
@@ -212,8 +229,6 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     return rows.map((r) => r.study)
   }, [indexed, search, types, focuses, phases, groups, resultsOnly, modalities, target, outcomes, sort])
 
-  // Followed studies are pinned above the filters whatever the filters say,
-  // so the list below leaves them out rather than showing them twice.
   // Every trial of each drug, for development timelines.
   const studiesByDrug = useMemo(() => {
     const map = new Map<string, RegistryStudy[]>()
@@ -228,6 +243,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       ? { label: st.drugKeys[0].label, count: studiesByDrug.get(st.drugKeys[0].key)?.length ?? 1, onOpen: () => setTimelineStudy(st) }
       : undefined
 
+  // Followed studies are pinned above the filters whatever the filters say,
+  // so the list below leaves them out rather than showing them twice.
   const pinned = useMemo(() => {
     const byId = new Map(indexed.map(({ study }) => [study.id, study]))
     return followed.map((id) => byId.get(id)).filter((s): s is RegistryStudy => s !== undefined)
@@ -242,6 +259,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     search.length > 0 || phases.size > 0 || groups.size > 0 || resultsOnly || modalities.size > 0 || target !== '' || outcomes.size > 0 ||
     !(types.size === 1 && types.has('INTERVENTIONAL')) ||
     !(focuses.size === 1 && focuses.has(DEFAULT_FOCUS))
+  const moreActive = outcomes.size + modalities.size + (target ? 1 : 0)
 
   const otherRegistries = snapshot ? snapshot.studies.filter((st) => st.registry !== 'ClinicalTrials.gov').length : 0
 
@@ -304,22 +322,28 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
         </p>
       )}
 
-      <div className="flex flex-col gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card)' }}>
+      <div className="flex flex-col gap-4 rounded-xl border p-4 sm:p-5" style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card)' }}>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <input
-            type="search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by drug name or code, target, sponsor, or NCT ID…"
-            aria-label="Search registered studies"
-            className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
-            style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)', color: 'var(--text-primary)' }}
-          />
+          <div className="relative w-full">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }}>
+              <circle cx="7" cy="7" r="4.75" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <path d="m10.5 10.5 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search drug, target, sponsor or trial ID…"
+              aria-label="Search registered studies"
+              className="w-full rounded-lg border py-2.5 pl-9 pr-3 text-sm outline-none focus:ring-2"
+              style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)', color: 'var(--text-primary)' }}
+            />
+          </div>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
             aria-label="Sort studies"
-            className="rounded-lg border px-3 py-2 text-sm"
+            className="rounded-lg border px-3 py-2.5 text-sm sm:w-56"
             style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)', color: 'var(--text-primary)' }}
           >
             <option value="newest">Newest start first</option>
@@ -328,85 +352,133 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
           </select>
         </div>
 
-        <ChipRow label="Focus">
-          {facetCounts.focuses.map(([f, n]) => (
-            <Chip key={f} active={focuses.has(f)} onClick={() => setFocuses((prev) => toggle(prev, f))}>
-              {f} · {n}
-            </Chip>
-          ))}
-        </ChipRow>
-        <ChipRow label="Type">
-          {TYPE_OPTIONS.map((t) => (
-            <Chip key={t.key} active={types.has(t.key)} onClick={() => setTypes((prev) => toggle(prev, t.key))}>
-              {t.label} · {(typeCounts[t.key] ?? 0).toLocaleString()}
-            </Chip>
-          ))}
-        </ChipRow>
-        <ChipRow label="Phase">
-          {PHASE_OPTIONS.map((p) => (
-            <Chip key={p} active={phases.has(p)} onClick={() => setPhases((prev) => toggle(prev, p))}>
-              {p}
-            </Chip>
-          ))}
-        </ChipRow>
-        <ChipRow label="Status">
-          {STATUS_GROUPS.map((g) => (
-            <Chip key={g} active={groups.has(g)} onClick={() => setGroups((prev) => toggle(prev, g))}>
-              {g}
-            </Chip>
-          ))}
-          <Chip active={resultsOnly} onClick={() => setResultsOnly((v) => !v)}>
-            Results posted
-          </Chip>
-        </ChipRow>
-        <ChipRow label="Outcome">
-          {facetCounts.outcomes.map(([o, n]) => (
-            <Chip key={o} active={outcomes.has(o)} onClick={() => setOutcomes((prev) => toggle(prev, o))}>
-              {o} · {n}
-            </Chip>
-          ))}
-        </ChipRow>
-        <ChipRow label="Modality">
-          {facetCounts.modalities.map(([m, n]) => (
-            <Chip key={m} active={modalities.has(m)} onClick={() => setModalities((prev) => toggle(prev, m))}>
-              {m} · {n}
-            </Chip>
-          ))}
-        </ChipRow>
-        <ChipRow label="Target">
-          <select
-            value={target}
-            onChange={(e) => setTarget(e.target.value)}
-            aria-label="Filter by therapy target or pathway"
-            className="min-w-0 max-w-full rounded-lg border px-3 py-1.5 text-xs"
-            style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card-raised)', color: 'var(--text-primary)' }}
-          >
-            <option value="">Any target</option>
-            {facetCounts.targetGroups.map((g) => (
-              <optgroup key={g.pathway} label={g.pathway}>
-                <option value={`p:${g.pathway}`}>
-                  All {g.pathway.toLowerCase()} ({g.count})
-                </option>
-                {g.targets.map(([t, n]) => (
-                  <option key={t} value={`t:${t}`}>
-                    {t} ({n})
-                  </option>
-                ))}
-              </optgroup>
+        <div className="flex flex-col gap-3">
+          <ChipRow label="Focus">
+            {facetCounts.focuses.map(([f, n]) => (
+              <Chip key={f} active={focuses.has(f)} count={n} onClick={() => setFocuses((prev) => toggle(prev, f))}>
+                {f}
+              </Chip>
             ))}
-          </select>
-        </ChipRow>
+          </ChipRow>
+          <ChipRow label="Type">
+            {TYPE_OPTIONS.map((t) => (
+              <Chip key={t.key} active={types.has(t.key)} count={typeCounts[t.key] ?? 0} onClick={() => setTypes((prev) => toggle(prev, t.key))}>
+                {t.label}
+              </Chip>
+            ))}
+          </ChipRow>
+          <ChipRow label="Phase">
+            {PHASE_OPTIONS.map((p) => (
+              <Chip
+                key={p}
+                active={phases.has(p)}
+                count={facetCounts.phases.get(p) ?? 0}
+                dot={PHASE_COLOR[p] ?? 'var(--text-muted)'}
+                onClick={() => setPhases((prev) => toggle(prev, p))}
+              >
+                {p}
+              </Chip>
+            ))}
+          </ChipRow>
+          <ChipRow label="Status">
+            {STATUS_GROUPS.map((g) => (
+              <Chip
+                key={g}
+                active={groups.has(g)}
+                count={facetCounts.statuses.get(g) ?? 0}
+                dot={STATUS_GROUP_COLOR[g]}
+                onClick={() => setGroups((prev) => toggle(prev, g))}
+              >
+                {g}
+              </Chip>
+            ))}
+            <Chip active={resultsOnly} count={facetCounts.statuses.get('results') ?? 0} onClick={() => setResultsOnly((v) => !v)}>
+              Results posted
+            </Chip>
+          </ChipRow>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t pt-3" style={{ borderColor: 'var(--border-hairline)' }}>
+          <button
+            type="button"
+            onClick={() => setMoreOpen((v) => !v)}
+            aria-expanded={moreOpen}
+            className="flex items-center gap-2 self-start text-xs font-medium"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            <Chevron open={moreOpen} />
+            More filters
+            <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>Outcome, modality, target</span>
+            {moreActive > 0 && (
+              <span className="rounded-full px-1.5 text-[11px] tabular-nums" style={{ backgroundColor: 'color-mix(in srgb, var(--cat-blue) 20%, transparent)', color: 'var(--text-primary)' }}>
+                {moreActive} active
+              </span>
+            )}
+          </button>
+          {moreOpen && (
+            <>
+              <ChipRow label="Outcome">
+                {facetCounts.outcomes.map(([o, n]) => (
+                  <Chip
+                    key={o}
+                    active={outcomes.has(o)}
+                    count={n}
+                    dot={VERDICT_COLOR[o] ?? 'var(--text-muted)'}
+                    onClick={() => setOutcomes((prev) => toggle(prev, o))}
+                  >
+                    {o}
+                  </Chip>
+                ))}
+              </ChipRow>
+              <ChipRow label="Modality">
+                {facetCounts.modalities.map(([m, n]) => (
+                  <Chip key={m} active={modalities.has(m)} count={n} onClick={() => setModalities((prev) => toggle(prev, m))}>
+                    {m}
+                  </Chip>
+                ))}
+              </ChipRow>
+              <ChipRow label="Target">
+                <select
+                  value={target}
+                  onChange={(e) => setTarget(e.target.value)}
+                  aria-label="Filter by therapy target or pathway"
+                  className="w-full min-w-0 rounded-lg border px-3 py-1.5 text-xs sm:w-80"
+                  style={{
+                    borderColor: target ? 'color-mix(in srgb, var(--cat-blue) 75%, transparent)' : 'var(--border-hairline)',
+                    backgroundColor: target ? 'color-mix(in srgb, var(--cat-blue) 16%, var(--surface-card-raised))' : 'var(--surface-card-raised)',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  <option value="">Any target</option>
+                  {facetCounts.targetGroups.map((g) => (
+                    <optgroup key={g.pathway} label={g.pathway}>
+                      <option value={`p:${g.pathway}`}>
+                        All {g.pathway.toLowerCase()} ({g.count})
+                      </option>
+                      {g.targets.map(([t, n]) => (
+                        <option key={t} value={`t:${t}`}>
+                          {t} ({n})
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </ChipRow>
+            </>
+          )}
+        </div>
       </div>
 
-      <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
+      <div className="flex min-h-7 items-center justify-between gap-3 px-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
         <span>
-          Showing {Math.min(visible, unpinned.length).toLocaleString()} of {unpinned.length.toLocaleString()} studies
+          Showing <strong className="font-semibold tabular-nums" style={{ color: 'var(--text-primary)' }}>{Math.min(visible, unpinned.length).toLocaleString()}</strong> of{' '}
+          <strong className="font-semibold tabular-nums" style={{ color: 'var(--text-primary)' }}>{unpinned.length.toLocaleString()}</strong> studies
           {pinnedMatches > 0 && ` (plus ${pinnedMatches} you follow, pinned above)`}
         </span>
         {hasFilters && (
           <button
             type="button"
-            className="underline"
+            className="chip shrink-0"
             onClick={() => {
               setSearch('')
               setTypes(new Set(['INTERVENTIONAL']))
@@ -419,6 +491,9 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
               setOutcomes(new Set())
             }}
           >
+            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
+              <path d="m2 2 6 6M8 2 2 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
             Reset filters
           </button>
         )}
