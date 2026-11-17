@@ -128,10 +128,18 @@ function testedDrugs(interventions) {
   const found = new Map()
   for (const i of interventions) {
     if (!DRUG_TYPES.has(i.type) || IS_COMPARATOR.test(i.name.trim()) || HELPER.test(i.name)) continue
-    const label = i.name.replace(DOSE_PREFIX, '').replace(DOSE, '')
-      // "(125 mg)" and formulation words aren't part of the drug's name.
+    const label = i.name
+      .normalize('NFKC') // full-width brackets and commas, as in some Chinese records
+      .replace(/^test drug\s+/i, '')
+      .replace(/\s*(\/|\bor\b)\s*placebo\b.*$/i, '')
+      .replace(DOSE_PREFIX, '').replace(DOSE, '')
+      // Doses, regimens and formulations aren't part of the drug's name:
+      // "(125 mg)", "(6.0)", "(fasting)", ", 10% solution for", " High dose".
       .replace(/\s*\([^)]*\d\s*(mg|g|mcg|µg|ug|ml|iu|%)\b[^)]*\)/gi, '')
-      .replace(/\s+(injection|infusion( solution)?|tablets?|capsules?|oral (solution|suspension)|for injection)\s*$/i, '')
+      .replace(/\s*\((?:[\d.,\s/]+|fasting|fed|postprandial|dose \d+|part [a-z\d]+|phase \d part)\)/gi, '')
+      .replace(/\s*,\s*(\d.*)?$/, '')
+      .replace(/\s+(?:(?:high|low|mid|medium)[- ]dose|dose\s*\d+)$/i, '')
+      .replace(/\s+(injection|infusion( solution)?|tablets?|capsules?|oral (solution|suspension)|for injection|nasal drops|intrathecal)\s*$/i, '')
       .trim()
     const entry = entryFor(i)
     // Group entries (various stem-cell products, say) are tracked by the study's own name.

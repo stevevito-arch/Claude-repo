@@ -81,8 +81,18 @@ interface DevelopmentTimelineProps {
   study: RegistryStudy
   studiesByDrug: Map<string, RegistryStudy[]>
   /** Full details of a trial, as in the catalog. */
-  renderStudy: (study: RegistryStudy) => ReactNode
+  /** The full catalog entry, shown in place of the trial's summary when it is opened. */
+  renderStudy: (study: RegistryStudy, options: ExpandedStudyOptions) => ReactNode
   onClose: () => void
+}
+
+export interface ExpandedStudyOptions {
+  /** Shown first in the badge row: the trial's start year. */
+  lead: ReactNode
+  /** Shown last in the badge row: timeline-only markers. */
+  tail: ReactNode
+  onCollapse: () => void
+  highlighted: boolean
 }
 
 export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose }: DevelopmentTimelineProps) {
@@ -224,6 +234,21 @@ export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose
           {trials.map((t) => {
             const isOpen = expanded.has(t.id)
             const group = t.outcome ? OUTCOME_GROUP_OF.get(t.outcome.verdict) : undefined
+            const yearMark = (
+              <span className="mr-1 text-xs font-semibold tabular-nums" style={{ color: 'var(--text-primary)' }}>
+                {t.start ? year(t.start) : '—'}
+              </span>
+            )
+            const markers = (
+              <>
+                {isPlatform(t) && <Badge label="Platform trial" color="var(--text-muted)" />}
+                {t.id === study.id && (
+                  <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                    · this trial
+                  </span>
+                )}
+              </>
+            )
             return (
               <li key={t.id} className="relative">
                 <span
@@ -235,52 +260,53 @@ export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose
                     borderColor: t.id === study.id ? 'var(--text-primary)' : 'var(--surface-page)',
                   }}
                 />
-                <button
-                  type="button"
-                  onClick={() => toggle(t.id)}
-                  aria-expanded={isOpen}
-                  className="w-full rounded-lg border p-2.5 text-left"
-                  style={{
-                    borderColor: t.id === study.id ? 'var(--text-primary)' : 'var(--border-hairline)',
-                    backgroundColor: 'var(--surface-card)',
-                  }}
-                >
-                  <span className="flex flex-wrap items-center gap-1.5">
-                    <span className="mr-1 text-xs font-semibold tabular-nums" style={{ color: 'var(--text-primary)' }}>
-                      {t.start ? year(t.start) : '—'}
+                {isOpen ? (
+                  renderStudy(t, {
+                    lead: yearMark,
+                    tail: markers,
+                    onCollapse: () => toggle(t.id),
+                    highlighted: t.id === study.id,
+                  })
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => toggle(t.id)}
+                    aria-expanded={false}
+                    className="w-full rounded-lg border p-2.5 text-left"
+                    style={{
+                      borderColor: t.id === study.id ? 'var(--text-primary)' : 'var(--border-hairline)',
+                      backgroundColor: 'var(--surface-card)',
+                    }}
+                  >
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      {yearMark}
+                      {t.phase && (
+                        <Badge
+                          label={t.phase}
+                          color={PHASE_COLOR[t.phase] ?? 'var(--seq-450)'}
+                          variant="solid"
+                          textColor={LIGHT_PHASES.has(t.phase) ? DARK_INK : undefined}
+                        />
+                      )}
+                      <Badge label={statusLabel(t.status)} color={STATUS_GROUP_COLOR[statusGroup(t.status)]} />
+                      {t.outcome && group && VERDICT_COLOR[group] && <Badge label={t.outcome.verdict} color={VERDICT_COLOR[group]} />}
+                      {markers}
                     </span>
-                    {t.phase && (
-                      <Badge
-                        label={t.phase}
-                        color={PHASE_COLOR[t.phase] ?? 'var(--seq-450)'}
-                        variant="solid"
-                        textColor={LIGHT_PHASES.has(t.phase) ? DARK_INK : undefined}
-                      />
-                    )}
-                    <Badge label={statusLabel(t.status)} color={STATUS_GROUP_COLOR[statusGroup(t.status)]} />
-                    {t.outcome && group && VERDICT_COLOR[group] && <Badge label={t.outcome.verdict} color={VERDICT_COLOR[group]} />}
-                    {isPlatform(t) && <Badge label="Platform trial" color="var(--text-muted)" />}
-                    {t.id === study.id && (
-                      <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-                        · this trial
+                    <span className="mt-1 block text-sm font-medium leading-snug" style={{ color: 'var(--text-primary)' }}>
+                      {t.title}
+                      {t.acronym && !t.title.includes(t.acronym) && <span style={{ color: 'var(--text-secondary)' }}> ({t.acronym})</span>}
+                    </span>
+                    <span className="mt-0.5 flex items-center justify-between gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+                      <span>
+                        <span className="font-mono">{t.id}</span>
+                        {t.sponsor && <> · {t.sponsor}</>}
                       </span>
-                    )}
-                  </span>
-                  <span className="mt-1 block text-sm font-medium leading-snug" style={{ color: 'var(--text-primary)' }}>
-                    {t.title}
-                    {t.acronym && !t.title.includes(t.acronym) && <span style={{ color: 'var(--text-secondary)' }}> ({t.acronym})</span>}
-                  </span>
-                  <span className="mt-0.5 flex items-center justify-between gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
-                    <span>
-                      <span className="font-mono">{t.id}</span>
-                      {t.sponsor && <> · {t.sponsor}</>}
+                      <span aria-hidden="true" style={{ color: 'var(--text-muted)' }}>
+                        Details ▾
+                      </span>
                     </span>
-                    <span aria-hidden="true" style={{ color: 'var(--text-muted)' }}>
-                      {isOpen ? 'Hide details ▴' : 'Details ▾'}
-                    </span>
-                  </span>
-                </button>
-                {isOpen && <ul className="mt-2 flex flex-col gap-2">{renderStudy(t)}</ul>}
+                  </button>
+                )}
               </li>
             )
           })}

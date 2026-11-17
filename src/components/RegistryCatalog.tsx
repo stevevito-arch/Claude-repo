@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { RegistryOutcome, RegistrySnapshot, RegistryStudy } from '../types/registry'
 import { statusLabel } from '../lib/clinicalTrialsApi'
@@ -536,8 +536,13 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
           study={timelineStudy}
           studiesByDrug={studiesByDrug}
           onClose={() => setTimelineStudy(null)}
-          renderStudy={(st) => (
+          renderStudy={(st, { lead, tail, onCollapse, highlighted }) => (
             <StudyRow
+              as="div"
+              lead={lead}
+              tail={tail}
+              onCollapse={onCollapse}
+              highlighted={highlighted}
               study={st}
               featured={featuredIds.has(st.id)}
               onOpenFeatured={() => onOpenFeatured(st.id)}
@@ -548,6 +553,25 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
         />
       )}
     </div>
+  )
+}
+
+// Folds an opened timeline entry back to its summary. It takes focus when it
+// appears, since the summary button that opened it is gone.
+function CollapseButton({ onClick }: { onClick: () => void }) {
+  const ref = useRef<HTMLButtonElement>(null)
+  useEffect(() => ref.current?.focus({ preventScroll: true }), [])
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={onClick}
+      aria-expanded={true}
+      className="inline-flex min-h-8 items-center rounded-full px-2 text-xs"
+      style={{ color: 'var(--text-muted)' }}
+    >
+      Hide details ▴
+    </button>
   )
 }
 
@@ -573,9 +597,16 @@ interface StudyRowProps {
   onToggleFollow: () => void
   /** Opens the development timeline of the trial's (first) drug. */
   timeline?: { label: string; count: number; onOpen: () => void }
+  /** In the development timeline: rendered as a plain block, with the
+   *  timeline's own markers first and a control to fold it back up. */
+  as?: 'li' | 'div'
+  lead?: ReactNode
+  tail?: ReactNode
+  onCollapse?: () => void
+  highlighted?: boolean
 }
 
-function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, timeline }: StudyRowProps) {
+function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, timeline, as: Tag = 'li', lead, tail, onCollapse, highlighted }: StudyRowProps) {
   const group = statusGroup(study.status)
   const end = study.completion ?? study.primaryCompletion
   // Registry "other names" not already shown on a drug line below.
@@ -588,9 +619,13 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
   ].filter(Boolean)
 
   return (
-    <li className="rounded-lg border p-3" style={{ borderColor: 'var(--border-hairline)', backgroundColor: 'var(--surface-card)' }}>
+    <Tag
+      className="rounded-lg border p-3"
+      style={{ borderColor: highlighted ? 'var(--text-primary)' : 'var(--border-hairline)', backgroundColor: 'var(--surface-card)' }}
+    >
       <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="flex flex-wrap items-center gap-1.5">
+          {lead}
           {study.phase && (
             <Badge
               label={study.phase}
@@ -612,6 +647,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
               <Badge label="Featured · open summary" color="var(--cat-violet)" />
             </button>
           )}
+          {tail}
         </div>
         <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
           <span className="text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>
@@ -637,6 +673,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
             <StarIcon filled={followed} />
             {followed ? 'Following' : 'Follow'}
           </button>
+          {onCollapse && <CollapseButton onClick={onCollapse} />}
         </div>
       </div>
 
@@ -767,7 +804,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
           {study.whyStopped}
         </p>
       )}
-    </li>
+    </Tag>
   )
 }
 
