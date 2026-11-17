@@ -11,14 +11,29 @@ import { ConcludedList } from './components/ConcludedList'
 import { RegistryCatalog } from './components/RegistryCatalog'
 import { buildIndex, matchesQuery, parseQuery } from './lib/search'
 import { targetSynonyms } from './data/targets'
+import { DISEASES, DiseaseContext } from './lib/disease'
+import type { Disease } from './lib/disease'
 
 type View = 'featured' | 'all'
-
-// The catalog is the landing page; "#featured" opens the curated view. Old
-// "#all" links still land on the catalog.
-function viewFromHash(): View {
-  return window.location.hash === '#featured' ? 'featured' : 'all'
+interface Route {
+  disease: Disease
+  view: View
 }
+
+// The ALS catalog is the landing page; "#parkinsons" opens Parkinson's and
+// "#featured" the curated ALS view. Old "#all" links still land on the ALS catalog.
+function routeFromHash(): Route {
+  const hash = window.location.hash.slice(1)
+  if (hash === 'featured') return { disease: DISEASES[0], view: 'featured' }
+  return { disease: DISEASES.find((d) => d.hash === hash) ?? DISEASES[0], view: 'all' }
+}
+
+const TITLES: Record<Disease['id'], string> = {
+  als: 'ALS Clinical Trials Dashboard',
+  pd: "Parkinson's Disease Clinical Trials Dashboard",
+}
+
+const NO_FEATURED = new Set<string>()
 
 function toggleInSet<T>(set: Set<T>, value: T): Set<T> {
   const next = new Set(set)
@@ -33,20 +48,28 @@ function App() {
   const [activePhases, setActivePhases] = useState<Set<TrialPhase>>(new Set())
   const [activeStatuses, setActiveStatuses] = useState<Set<TrialStatus>>(new Set())
   const [selectedTrial, setSelectedTrial] = useState<Trial | null>(null)
-  const [view, setView] = useState<View>(viewFromHash)
+  const [route, setRoute] = useState<Route>(routeFromHash)
+  const { disease, view } = route
 
   useEffect(() => {
-    const onHash = () => setView(viewFromHash())
+    const onHash = () => setRoute(routeFromHash())
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  const showView = (next: View) => {
-    // Keeps the view in the URL so it survives reloads and can be shared,
-    // without adding a history entry per tab click.
-    history.replaceState(null, '', next === 'featured' ? '#featured' : window.location.pathname + window.location.search)
-    setView(next)
+  useEffect(() => {
+    document.title = TITLES[disease.id]
+  }, [disease.id])
+
+  const show = (next: Route) => {
+    // Keeps the disease and view in the URL so they survive reloads and can be
+    // shared, without adding a history entry per click.
+    const hash = next.view === 'featured' ? '#featured' : next.disease.id === 'als' ? '' : `#${next.disease.hash}`
+    history.replaceState(null, '', hash || window.location.pathname + window.location.search)
+    setRoute(next)
   }
+  const showView = (next: View) => show({ disease, view: next })
+  const showDisease = (next: Disease) => show({ disease: next, view: 'all' })
 
   const nctIds = useMemo(() => trials.map((t) => t.nctId).filter((id): id is string => Boolean(id)), [])
   const featuredIds = useMemo(() => new Set(nctIds), [nctIds])
@@ -81,18 +104,24 @@ function App() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <header className="mb-6">
+        <div role="group" aria-label="Disease" className="disease-switch mb-5">
+          {DISEASES.map((d) => (
+            <button key={d.id} type="button" aria-pressed={d.id === disease.id} onClick={() => showDisease(d)}>
+              {d.short}
+            </button>
+          ))}
+        </div>
         <h1 className="text-2xl font-semibold sm:text-3xl" style={{ color: 'var(--text-primary)' }}>
-          ALS Clinical Trials Dashboard
+          {TITLES[disease.id]}
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Every amyotrophic lateral sclerosis (ALS) study registered on{' '}
+          Every {disease.full} study registered on{' '}
           <a href="https://clinicaltrials.gov" target="_blank" rel="noreferrer" className="underline" style={{ color: 'var(--cat-blue)' }}>
             ClinicalTrials.gov
           </a>
-          , plus trials found only in the UK and EU registries, with its therapy target and modality. Follow the studies you care about to pin them to the top. Featured
-          trials are late-stage
-          programs with hand-researched summaries of the therapy, preclinical evidence, design, results and expected
-          timeframes.
+          , plus trials found only in the UK and EU registries, with its therapy target and modality. Follow the studies you care about to pin them to the top.
+          {disease.hasFeatured &&
+            ' Featured trials are late-stage programs with hand-researched summaries of the therapy, preclinical evidence, design, results and expected timeframes.'}
         </p>
       </header>
 
@@ -100,7 +129,7 @@ function App() {
         {(
           [
             ['all', 'All registered studies'],
-            ['featured', 'Featured trials'],
+            ...(disease.hasFeatured ? [['featured', 'Featured trials'] as const] : []),
           ] as const
         ).map(([key, label]) => (
           <button
@@ -121,10 +150,14 @@ function App() {
       </div>
 
       {view === 'all' ? (
-        <RegistryCatalog
-          featuredIds={featuredIds}
-          onOpenFeatured={(id) => setSelectedTrial(trials.find((t) => t.nctId === id) ?? null)}
-        />
+        <DiseaseContext.Provider value={disease}>
+          {/* Keyed by disease, so switching starts from that disease's own defaults. */}
+          <RegistryCatalog
+            key={disease.id}
+            featuredIds={disease.hasFeatured ? featuredIds : NO_FEATURED}
+            onOpenFeatured={(id) => setSelectedTrial(trials.find((t) => t.nctId === id) ?? null)}
+          />
+        </DiseaseContext.Provider>
       ) : (
       <>
       <div className="mb-6">

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import type { RegistryStudy } from '../types/registry'
 import { statusLabel } from '../lib/clinicalTrialsApi'
 import { Badge } from './Badge'
+import { useDisease } from '../lib/disease'
 import {
   DARK_INK, LIGHT_PHASES, OUTCOME_GROUP_OF, PHASE_COLOR, STATUS_GROUP_COLOR, VERDICT_COLOR, statusGroup, year,
 } from '../lib/registryPresentation'
@@ -13,7 +14,7 @@ const PHASE_RANK: Record<string, number> = {
 }
 const RANK_LABEL: Record<number, string> = { 1: 'Phase 1', 1.5: 'Phase 1/2', 2: 'Phase 2', 2.5: 'Phase 2/3', 3: 'Phase 3', 4: 'Phase 4' }
 const ACTIVE = new Set(['RECRUITING', 'NOT_YET_RECRUITING', 'ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION', 'AVAILABLE'])
-// A drug whose last ALS trial ended within this many years may simply be between trials.
+// A drug whose last trial ended within this many years may simply be between trials.
 const RECENT_YEARS = 2
 
 type EndState = { kind: 'approved' | 'withdrawn' | 'ongoing' | 'pending' | 'stopped'; title: string; detail: string | null }
@@ -37,7 +38,7 @@ const EXTENSION = /extension|continuation|rollover|roll-over|long[- ]term|compas
 const endYear = (s: RegistryStudy) => Number(year(s.completion ?? s.primaryCompletion ?? s.start)) || 0
 
 // Where the drug stands now, from its trials and (for approved drugs) the drug table.
-function endStateOf(trials: RegistryStudy[], approval: { text: string; withdrawn?: boolean } | null): EndState {
+function endStateOf(trials: RegistryStudy[], approval: { text: string; withdrawn?: boolean } | null, disease: string): EndState {
   if (approval) return { kind: approval.withdrawn ? 'withdrawn' : 'approved', title: approval.text, detail: null }
   const own = trials.filter((t) => !isPlatform(t))
   if (own.length) trials = own
@@ -67,11 +68,11 @@ function endStateOf(trials: RegistryStudy[], approval: { text: string; withdrawn
     return { kind: 'stopped', title: 'Never started: its only registered trial was withdrawn before enrolling', detail: deciding?.whyStopped ?? null }
   }
   if (lastYear >= new Date().getFullYear() - RECENT_YEARS) {
-    return { kind: 'pending', title: `Latest trial ended ${lastYear || 'recently'}; no next ALS trial registered yet`, detail: reason }
+    return { kind: 'pending', title: `Latest trial ended ${lastYear || 'recently'}; no next ${disease} trial registered yet`, detail: reason }
   }
   return {
     kind: 'stopped',
-    title: `No ALS trial registered since ${lastYear || 'then'}: development in ALS appears to have stopped${furthest ? ` after ${RANK_LABEL[furthest] ?? 'Phase ' + furthest}` : ''}`,
+    title: `No ${disease} trial registered since ${lastYear || 'then'}: development in ${disease} appears to have stopped${furthest ? ` after ${RANK_LABEL[furthest] ?? 'Phase ' + furthest}` : ''}`,
     detail: reason,
   }
 }
@@ -96,6 +97,7 @@ export interface ExpandedStudyOptions {
 }
 
 export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose }: DevelopmentTimelineProps) {
+  const disease = useDisease()
   const [drugKey, setDrugKey] = useState(study.drugKeys[0]?.key ?? '')
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
@@ -113,7 +115,7 @@ export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose
     [studiesByDrug, drugKey, study],
   )
   const approval = trials.flatMap((t) => t.drugKeys).find((d) => d.key === drugKey && d.approval)?.approval ?? null
-  const end = endStateOf(trials, approval)
+  const end = endStateOf(trials, approval, disease.short)
   const furthest = Math.max(0, ...trials.filter((t) => t.status !== 'WITHDRAWN').map((t) => PHASE_RANK[t.phase ?? ''] ?? 0))
   // What the drug is, from the opened trial's drug lines when they cover it.
   const info = drug
@@ -193,7 +195,7 @@ export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose
           </div>
         )}
 
-        {/* Phase ladder: how far the drug has got in ALS. */}
+        {/* Phase ladder: how far the drug has got in the disease. */}
         <ol className="mt-4 grid grid-cols-4 gap-1.5" aria-label="Phases reached">
           {[1, 2, 3].map((step) => {
             const done = furthest >= step
@@ -225,7 +227,7 @@ export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose
           </li>
         </ol>
         <p className="mt-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
-          {trials.length} ALS {trials.length === 1 ? 'trial' : 'trials'}
+          {trials.length} {disease.short} {trials.length === 1 ? 'trial' : 'trials'}
           {years.length > 0 && <>, {years[0] === years[years.length - 1] ? years[0] : `${years[0]}–${years[years.length - 1]}`}</>}. Tap a
           trial to see its full details.
         </p>
@@ -332,9 +334,9 @@ export function DevelopmentTimeline({ study, studiesByDrug, renderStudy, onClose
         </ol>
 
         <p className="mt-6 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-          Built from ALS trials registered on ClinicalTrials.gov, ISRCTN and the EU registers, matching the drug by its names and
+          Built from {disease.short} trials registered on ClinicalTrials.gov, ISRCTN and the EU registers, matching the drug by its names and
           codes. A drug may have continued under another name, outside these registries or in another disease; “appears to have
-          stopped” means only that no later ALS trial is registered. Trials of the same drug by different groups appear together;
+          stopped” means only that no later {disease.short} trial is registered. Trials of the same drug by different groups appear together;
           platform trials, which test several drugs at once, are shown but don’t decide where a drug stands.
         </p>
       </div>

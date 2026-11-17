@@ -15,12 +15,24 @@ export default defineConfig(({ command }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
-      // Precache the registry catalog too, so the installed app can browse it offline.
-      workbox: { globPatterns: ['**/*.{js,css,html,png,svg,json}'] },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,svg}', 'manifest.webmanifest'],
+        // The registry catalogs (one per disease, up to several MB) are cached
+        // when first opened rather than precached, so installing the app doesn't
+        // download every disease. The network is tried first so a new deploy's
+        // data shows up; the cached copy serves offline.
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.endsWith('-registry.json'),
+            handler: 'NetworkFirst',
+            options: { cacheName: 'registry-catalogs', networkTimeoutSeconds: 6, expiration: { maxEntries: 8 } },
+          },
+        ],
+      },
       manifest: {
-        name: 'ALS Clinical Trials Dashboard',
-        short_name: 'ALS Trials',
-        description: 'Tracking ongoing ALS clinical trials: modality, preclinical evidence, phase, results, and estimated timeframes.',
+        name: "ALS and Parkinson's Clinical Trials Dashboard",
+        short_name: 'Trials Dashboard',
+        description: "Every registered ALS and Parkinson's disease study: therapy target, modality, phase, outcome and development timeline.",
         display: 'standalone',
         background_color: '#0d0d0d',
         theme_color: '#2a78d6',

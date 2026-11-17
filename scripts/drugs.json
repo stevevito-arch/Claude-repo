@@ -112,7 +112,8 @@
     "levodopa/carbidopa intestinal gel",
     "LCIG",
     "carbidopa-levodopa enteral suspension",
-    "carbidopa/levodopa enteral suspension"
+    "carbidopa/levodopa enteral suspension",
+    "ABT-SLV187"
    ],
    "names": [],
    "what": "Levodopa-carbidopa gel pumped into the small intestine",
@@ -120,7 +121,7 @@
     "Dopamine replacement"
    ],
    "modality": "Small molecule",
-   "source": null,
+   "source": "https://clinicaltrials.gov/study/NCT01479127",
    "approvals": {
     "pd": {
      "text": "Approved for advanced Parkinson's disease (EU 2004, US 2015)"

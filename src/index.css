@@ -163,3 +163,36 @@ body {
   border-radius: 9999px;
   flex-shrink: 0;
 }
+
+/* Disease switch at the top of the page. */
+.disease-switch {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--border-hairline);
+  border-radius: 9999px;
+  background: var(--surface-card);
+}
+.disease-switch button {
+  border-radius: 9999px;
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 120ms, color 120ms;
+}
+@media (hover: hover) {
+  .disease-switch button:hover {
+    color: var(--text-primary);
+  }
+}
+.disease-switch button:focus-visible {
+  outline: 2px solid var(--cat-blue);
+  outline-offset: 2px;
+}
+.disease-switch button[aria-pressed="true"] {
+  background: var(--text-primary);
+  color: var(--surface-page);
+}

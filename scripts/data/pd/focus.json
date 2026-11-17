@@ -1,6 +1,10 @@
 {
  "about": "Hand corrections to what scripts/fetch-registry.mjs decides a Parkinson's study is mainly for, keyed by trial ID. One of: Slowing or reversing Parkinson's, Symptom management, Supportive care, Diagnostics & biomarkers, Other-disease studies, Natural history & other research.",
  "focus": {
-  "NCT04284436": "Slowing or reversing Parkinson's"
+  "NCT04284436": "Slowing or reversing Parkinson's",
+  "NCT00211224": "Other-disease studies",
+  "NCT01662791": "Symptom management",
+  "NCT02470780": "Symptom management",
+  "2022-503089-57-00": "Diagnostics & biomarkers"
  }
 }

@@ -1,4 +1,85 @@
 {
  "about": "Hand-researched outcomes for finished Parkinson's disease studies, used by scripts/fetch-registry.mjs. Keyed by NCT ID. verdict is one of: Met primary endpoint, Missed primary endpoint, No benefit shown (exploratory study with no formal primary endpoint), Mixed results, Inconclusive, Stopped: no benefit, Stopped: safety, Stopped: slow enrollment, Stopped: business or funding, Extension or access study, Safety study, Descriptive results (no comparison or formal test, e.g. a feasibility or physiology study), Not a treatment study, No results found. summary says what happened in plain words; source is the checked publication or report it rests on (null only for facts that are part of the registry record itself or widely documented, e.g. a drug's market withdrawal). ignorePublications: true hides publications the registry links as results when they are really background or a different study. Studies not listed here get an automatic outcome from the registry (its stop reason, posted results and linked publications).",
- "outcomes": {}
+ "outcomes": {
+  "NCT00256204": {
+   "verdict": "Mixed results",
+   "summary": "ADAGIO delayed-start trial: rasagiline 1 mg met all three primary endpoints, consistent with slowing progression, but 2 mg did not, so a disease-modifying effect wasn't established.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/19776408/"
+  },
+  "NCT00449865": {
+   "verdict": "Stopped: no benefit",
+   "summary": "NET-PD LS-1: stopped early for futility; creatine taken for at least five years did not slow clinical progression.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/25668262/"
+  },
+  "NCT00740714": {
+   "verdict": "Stopped: no benefit",
+   "summary": "QE3: stopped early for futility; high-dose coenzyme Q10 gave no evidence of benefit in early Parkinson's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24664227/"
+  },
+  "NCT02168842": {
+   "verdict": "Missed primary endpoint",
+   "summary": "STEADY-PD III: isradipine did not slow progression of early Parkinson's over 36 months (change in UPDRS parts I-III).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/32227247/"
+  },
+  "NCT02642393": {
+   "verdict": "Stopped: no benefit",
+   "summary": "SURE-PD3: stopped early for futility; inosine raised blood urate but did not slow progression of early Parkinson's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/34519802/"
+  },
+  "NCT04232969": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Exenatide-PD3: exenatide once weekly for two years did not slow motor progression compared with placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39919773/"
+  },
+  "NCT00040404": {
+   "verdict": "Stopped: no benefit",
+   "summary": "PRECEPT: the mixed-lineage kinase inhibitor CEP-1347 failed to delay disability and the trial was stopped for futility.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/17881719/"
+  },
+  "NCT03100149": {
+   "verdict": "Missed primary endpoint",
+   "summary": "PASADENA: prasinezumab did not change overall progression (MDS-UPDRS total) over 52 weeks; signals on motor-exam secondary measures led to the follow-on PADOVA trial.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/35921451/"
+  },
+  "NCT03318523": {
+   "verdict": "Missed primary endpoint",
+   "summary": "SPARK: cinpanemab did not slow progression compared with placebo and the trial was ended early.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/35921450/"
+  },
+  "NCT01971242": {
+   "verdict": "Met primary endpoint",
+   "summary": "Exenatide once weekly for 48 weeks gave better off-medication motor scores than placebo 12 weeks after stopping; the larger Phase 3 trial later failed.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/28781108/"
+  },
+  "NCT03439943": {
+   "verdict": "Met primary endpoint",
+   "summary": "LixiPark: lixisenatide gave less motor-score progression than placebo over 12 months in early Parkinson's, with nausea and other gut side effects.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/38598572/"
+  },
+  "NCT03205488": {
+   "verdict": "No benefit shown",
+   "summary": "NILO-PD: nilotinib was reasonably tolerated but showed no clinical benefit and reached the brain only at low levels; the authors did not support further testing.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/33315105/"
+  },
+  "NCT02655315": {
+   "verdict": "Missed primary endpoint",
+   "summary": "FAIRPARK-II: in newly diagnosed patients not on levodopa, deferiprone was followed by worse progression than placebo over 36 weeks.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36449420/"
+  },
+  "NCT01280123": {
+   "verdict": "No benefit shown",
+   "summary": "FS-ZONE futility trial: pioglitazone was unlikely to slow progression of early Parkinson's and was not recommended for a Phase 3 trial.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/26116315/"
+  },
+  "NCT01560754": {
+   "verdict": "Missed primary endpoint",
+   "summary": "NIC-PD: transdermal nicotine for a year did not slow progression of early Parkinson's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/38320207/"
+  },
+  "NCT04777331": {
+   "verdict": "Missed primary endpoint",
+   "summary": "PADOVA: prasinezumab narrowly missed its primary endpoint (time to confirmed motor progression), with supportive trends; a Phase 3 trial (PARAISO) followed.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/42208564/"
+  }
+ }
 }

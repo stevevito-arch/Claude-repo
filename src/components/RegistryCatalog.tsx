@@ -7,6 +7,7 @@ import { buildIndex, matchesQuery, parseQuery } from '../lib/search'
 import { MECHANISMS, PATHWAYS, pathwayOf, targetSynonyms } from '../data/targets'
 import { Badge } from './Badge'
 import { DevelopmentTimeline } from './DevelopmentTimeline'
+import { useDisease } from '../lib/disease'
 import {
   DARK_INK, LIGHT_PHASES, OUTCOME_GROUPS, OUTCOME_GROUP_OF, PHASE_COLOR, STATUS_GROUPS, STATUS_GROUP_COLOR, VERDICT_COLOR, statusGroup, year,
 } from '../lib/registryPresentation'
@@ -33,16 +34,15 @@ const MODALITY_BADGE_COLOR: Record<string, string> = {
 }
 
 // What a study is mainly for, set by scripts/fetch-registry.mjs. The catalog
-// opens on trials aimed at slowing the disease itself.
-const FOCUS_OPTIONS = [
-  'Slowing ALS progression',
+// opens on trials aimed at slowing the disease itself (the disease's
+// progressionFocus), listed first.
+const OTHER_FOCUS_OPTIONS = [
   'Symptom management',
   'Supportive care',
   'Diagnostics & biomarkers',
   'Natural history & other research',
   'Other-disease studies',
 ]
-const DEFAULT_FOCUS = 'Slowing ALS progression'
 
 // Set by scripts/fetch-registry.mjs for drugs the drug table doesn't cover yet.
 const UNCLASSIFIED = 'Not yet classified'
@@ -100,6 +100,8 @@ interface RegistryCatalogProps {
 }
 
 export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalogProps) {
+  const disease = useDisease()
+  const DEFAULT_FOCUS = disease.progressionFocus
   const [snapshot, setSnapshot] = useState<RegistrySnapshot | null>(null)
   const [loadError, setLoadError] = useState(false)
 
@@ -123,7 +125,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
 
   useEffect(() => {
     let cancelled = false
-    fetch(`${import.meta.env.BASE_URL}data/als-registry.json`)
+    fetch(`${import.meta.env.BASE_URL}data/${disease.id}-registry.json`)
       .then((r) => {
         if (!r.ok) throw new Error(String(r.status))
         return r.json() as Promise<RegistrySnapshot>
@@ -137,7 +139,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [disease.id])
 
   const indexed = useMemo(
     () =>
@@ -192,7 +194,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
     const mods = sorted(byModality).filter(([k]) => k !== UNCLASSIFIED)
     if (byModality.has(UNCLASSIFIED)) mods.push([UNCLASSIFIED, byModality.get(UNCLASSIFIED)!])
     const outcomeCounts = OUTCOME_GROUPS.map(([g]) => [g, byOutcome.get(g) ?? 0] as const).filter(([, n]) => n > 0)
-    const focusCounts = FOCUS_OPTIONS.map((f) => [f, byFocus.get(f) ?? 0] as const).filter(([, n]) => n > 0)
+    const focusCounts = [DEFAULT_FOCUS, ...OTHER_FOCUS_OPTIONS].map((f) => [f, byFocus.get(f) ?? 0] as const).filter(([, n]) => n > 0)
     // Targets grouped under their pathways, pathways in a fixed order, targets by count.
     const targetGroups = PATHWAYS.map((p) => ({
       pathway: p,
@@ -200,7 +202,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
       targets: sorted(byTarget).filter(([t]) => pathwayOf(t) === p),
     })).filter((g) => g.targets.length > 0)
     return { focuses: focusCounts, modalities: mods, targetGroups, outcomes: outcomeCounts, phases: byPhase, statuses: byStatus }
-  }, [indexed, types, focuses])
+  }, [indexed, types, focuses, DEFAULT_FOCUS])
 
   const filtered = useMemo(() => {
     const terms = parseQuery(search)
@@ -282,11 +284,11 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   return (
     <div className="flex flex-col gap-4">
       <p className="max-w-3xl text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-        Every ALS study registered on ClinicalTrials.gov, plus ALS trials found only in the UK’s ISRCTN registry or the EU’s
+        Every {disease.full} study registered on ClinicalTrials.gov, plus {disease.short} trials found only in the UK’s ISRCTN registry or the EU’s
         trial registers (CTIS and the older EU Clinical Trials Register) — {snapshot.studies.length.toLocaleString()} in total
         {otherRegistries > 0 && <>, {otherRegistries.toLocaleString()} of them from outside ClinicalTrials.gov</>}, as of{' '}
         {new Date(snapshot.generatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}. It opens on
-        trials aimed at slowing ALS itself; use Focus to see symptom, supportive-care, diagnostic and other studies. These
+        trials aimed at {disease.id === 'pd' ? "slowing or reversing Parkinson's itself (including cell and gene therapies that aim to restore dopamine neurons)" : 'slowing ALS itself'}; use Focus to see symptom, supportive-care, diagnostic and other studies. These
         entries are the registries’ own records, not curated summaries. Coverage before about 2000 is thin, and trials registered
         only in other countries’ registries (Australia, China, Japan and others) are not included yet.
       </p>
@@ -673,6 +675,7 @@ interface StudyRowProps {
 }
 
 function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, timeline, as: Tag = 'li', lead, tail, onCollapse, highlighted }: StudyRowProps) {
+  const disease = useDisease()
   const group = statusGroup(study.status)
   const end = study.completion ?? study.primaryCompletion
   // Registry "other names" not already shown on a drug line below.
@@ -701,7 +704,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
             />
           )}
           <Badge label={statusLabel(study.status)} color={STATUS_GROUP_COLOR[group]} />
-          {study.focus !== DEFAULT_FOCUS && <Badge label={study.focus} color="var(--text-muted)" />}
+          {study.focus !== disease.progressionFocus && <Badge label={study.focus} color="var(--text-muted)" />}
           {study.registry !== 'ClinicalTrials.gov' && <Badge label={study.registry} color="var(--cat-violet)" />}
           {study.type !== 'INTERVENTIONAL' && <Badge label={study.type === 'OBSERVATIONAL' ? 'Observational' : 'Expanded access'} color="var(--text-muted)" />}
           {study.modalities.map((m) => (
@@ -805,7 +808,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
       {study.laterDevelopment.map((dev) => (
         <p key={dev.drug} className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           <span style={{ color: 'var(--text-muted)' }}>
-            Furthest phase in ALS{study.laterDevelopment.length > 1 && ` (${dev.drug.length > 40 ? `${dev.drug.slice(0, 37)}…` : dev.drug})`}:{' '}
+            Furthest phase in {disease.short}{study.laterDevelopment.length > 1 && ` (${dev.drug.length > 40 ? `${dev.drug.slice(0, 37)}…` : dev.drug})`}:{' '}
           </span>
           {dev.phase && dev.id ? (
             <>
@@ -825,7 +828,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
               ({[dev.start ? `started ${year(dev.start)}` : null, dev.status ? statusLabel(dev.status).toLowerCase() : null].filter(Boolean).join(', ')})
             </>
           ) : (
-            'this trial; no later-phase ALS trial registered'
+            `this trial; no later-phase ${disease.short} trial registered`
           )}
         </p>
       ))}
@@ -836,7 +839,7 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, t
           className="mt-1.5 inline-flex min-h-8 items-center gap-1 text-left text-xs font-medium underline"
           style={{ color: 'var(--cat-blue)' }}
         >
-          Development timeline of {timeline.label.length > 40 ? `${timeline.label.slice(0, 37)}…` : timeline.label} · {timeline.count} ALS{' '}
+          Development timeline of {timeline.label.length > 40 ? `${timeline.label.slice(0, 37)}…` : timeline.label} · {timeline.count} {disease.short}{' '}
           {timeline.count === 1 ? 'trial' : 'trials'} →
         </button>
       )}
