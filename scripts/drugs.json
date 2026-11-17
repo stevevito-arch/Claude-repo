@@ -1,5 +1,5 @@
 {
- "about": "Drug table used by scripts/fetch-registry.mjs. For each drug: the names and codes it is matched by (an intervention matches the first entry with a name it starts with, so specific products come before the generic ingredients they contain), other names, its target(s) and modality, and a source. Entries for company codes cite the public source that identifies the code. Entries for well-characterised drugs give a source where one was checked (e.g. ChEMBL); entries with source null state standard, widely documented pharmacology. Entries marked group: true cover a class of different products (e.g. various mesenchymal stem-cell preparations), so they are not treated as one drug when tracking whether a drug went on to a later phase. approval notes a drug approved by a major regulator (and withdrawn, if it was), shown at the end of its development timeline. Drugs whose target could not be established are left out and show as 'Not yet classified'.",
+ "about": "Drug table used by scripts/fetch-registry.mjs. For each drug: the names and codes it is matched by (an intervention matches the first entry with a name it starts with, so specific products come before the generic ingredients they contain), other names, its target(s) and modality, and a source. Entries for company codes cite the public source that identifies the code. Entries for well-characterised drugs give a source where one was checked (e.g. ChEMBL); entries with source null state standard, widely documented pharmacology. Entries marked group: true cover a class of different products (e.g. various mesenchymal stem-cell preparations), so they are not treated as one drug when tracking whether a drug went on to a later phase. approvals notes, per disease (als, pd), a drug approved for that disease by a major regulator (and withdrawn, if it was), shown at the end of its development timeline. The table is shared by every disease's catalog. Drugs whose target could not be established are left out and show as 'Not yet classified'.",
  "drugs": [
   {
    "match": [
@@ -63,9 +63,11 @@
    ],
    "modality": "Small molecule",
    "source": "https://clinicaltrials.gov/study/NCT03127514",
-   "approval": {
-    "text": "Approved for ALS (Canada and US 2022), withdrawn in 2024 after the PHOENIX trial failed",
-    "withdrawn": true
+   "approvals": {
+    "als": {
+     "text": "Approved for ALS (Canada and US 2022), withdrawn in 2024 after the PHOENIX trial failed",
+     "withdrawn": true
+    }
    }
   },
   {
@@ -204,8 +206,10 @@
    ],
    "modality": "Small molecule",
    "source": "https://scholars.houstonmethodist.org/en/publications/treatment-of-pseudobulbar-affect-in-als-with-dextromethorphanquin/",
-   "approval": {
-    "text": "Approved for pseudobulbar affect, a symptom, not for ALS itself (US 2010)"
+   "approvals": {
+    "als": {
+     "text": "Approved for pseudobulbar affect, a symptom, not for ALS itself (US 2010)"
+    }
    }
   },
   {
@@ -906,8 +910,10 @@
    "modality": "Antisense oligonucleotide",
    "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3833346",
    "what": "Antisense oligonucleotide that lowers SOD1",
-   "approval": {
-    "text": "Approved for SOD1-ALS (US accelerated approval 2023, EU 2024)"
+   "approvals": {
+    "als": {
+     "text": "Approved for SOD1-ALS (US accelerated approval 2023, EU 2024)"
+    }
    }
   },
   {
@@ -925,8 +931,10 @@
    ],
    "modality": "Small molecule",
    "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL744",
-   "approval": {
-    "text": "Approved for ALS (US 1995, EU 1996)"
+   "approvals": {
+    "als": {
+     "text": "Approved for ALS (US 1995, EU 1996)"
+    }
    }
   },
   {
@@ -945,8 +953,10 @@
    "modality": "Small molecule",
    "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL290916",
    "what": "Free-radical scavenger",
-   "approval": {
-    "text": "Approved for ALS (Japan 2015, US 2017; oral form US 2022)"
+   "approvals": {
+    "als": {
+     "text": "Approved for ALS (Japan 2015, US 2017; oral form US 2022)"
+    }
    }
   },
   {
@@ -1898,8 +1908,10 @@
    ],
    "modality": "Small molecule",
    "source": null,
-   "approval": {
-    "text": "Approved for pseudobulbar affect, a symptom, not for ALS itself (US 2010)"
+   "approvals": {
+    "als": {
+     "text": "Approved for pseudobulbar affect, a symptom, not for ALS itself (US 2010)"
+    }
    }
   },
   {

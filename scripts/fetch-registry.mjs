@@ -1,9 +1,11 @@
-// Builds public/data/als-registry.json: every ALS study registered on
-// ClinicalTrials.gov, plus ALS trials found only in ISRCTN, the EU's CTIS or
-// the EU Clinical Trials Register (see other-registries.mjs), trimmed to the
-// fields the catalog view uses.
+// Builds public/data/<disease>-registry.json: every study of the disease
+// registered on ClinicalTrials.gov, plus its trials found only in ISRCTN, the
+// EU's CTIS or the EU Clinical Trials Register (see other-registries.mjs),
+// trimmed to the fields the catalog view uses. Diseases and their settings are
+// in diseases.mjs.
 //
-//   node scripts/fetch-registry.mjs
+//   node scripts/fetch-registry.mjs als
+//   node scripts/fetch-registry.mjs pd
 //
 // Behind an HTTPS proxy on Node 22+, run with NODE_USE_ENV_PROXY=1.
 // Exits non-zero (leaving the existing file untouched) if the API fails, so CI
@@ -11,14 +13,16 @@
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { fetchIsrctn, fetchCtis, fetchEuctr } from './other-registries.mjs'
+import { diseaseFrom } from './diseases.mjs'
 import { dosingOf } from './dosing.mjs'
 
 const API = 'https://clinicaltrials.gov/api/v2/studies'
-const OUT = new URL('../public/data/als-registry.json', import.meta.url)
+const disease = diseaseFrom(process.argv)
+const OUT = new URL(`../public/data/${disease.id}-registry.json`, import.meta.url)
 const DRUGS = new URL('./drugs.json', import.meta.url)
-const OUTCOMES = new URL('./outcomes.json', import.meta.url)
-const FOCUS = new URL('./focus.json', import.meta.url)
-const DUPLICATES = new URL('./duplicates.json', import.meta.url)
+const OUTCOMES = new URL(`./data/${disease.id}/outcomes.json`, import.meta.url)
+const FOCUS = new URL(`./data/${disease.id}/focus.json`, import.meta.url)
+const DUPLICATES = new URL(`./data/${disease.id}/duplicates.json`, import.meta.url)
 
 const FIELDS = [
   'NCTId', 'BriefTitle', 'OfficialTitle', 'Acronym', 'OverallStatus', 'WhyStopped', 'Phase', 'StudyType',
@@ -34,19 +38,8 @@ function describedAs(s) {
   return [p.identificationModule.briefTitle, p.identificationModule.officialTitle,
     ...(p.conditionsModule?.conditions ?? []), ...(p.conditionsModule?.keywords ?? [])].join(' ')
 }
-const NAMES_ALS = /amyotrophic|\bALS\b|lou gehrig/i
-const NAMES_ALS_OR_MND = /amyotrophic|\bALS\b|lou gehrig|motor neurone? disease|\bMND\b/i
-
-// The registry's ALS condition search expands synonyms, which pulls in a few
-// studies of other diseases (e.g. "Charcot disease" also matches Charcot foot
-// neuropathy), so its results must still name ALS or motor neuron disease.
-// It also misses a few ALS studies indexed only under "motor neuron disease";
-// those come from the broader search, but only when they name ALS itself,
-// since that search is otherwise mostly spinal muscular atrophy and others.
-const SEARCHES = [
-  { cond: 'Amyotrophic Lateral Sclerosis', keep: (s) => NAMES_ALS_OR_MND.test(describedAs(s)) },
-  { cond: 'Motor Neuron Disease', keep: (s) => NAMES_ALS.test(describedAs(s)) },
-]
+// Condition searches expand synonyms, so each result must still name the disease.
+const SEARCHES = disease.searches.map(({ cond, names }) => ({ cond, keep: (s) => names.test(describedAs(s)) }))
 
 async function fetchAll(cond) {
   const studies = []
@@ -120,7 +113,7 @@ function classify(interventions) {
 // table entry when there is one (so a code and its later name match), otherwise
 // the intervention name without its dose. Riluzole is left out when it is only
 // the background treatment alongside the drug under test.
-const BACKGROUND = /^riluzole\b/i
+const BACKGROUND = disease.background
 // Placeholder names (other registries' interventions without a drug name) aren't drugs to track.
 const GENERIC_NAME = /^(drug|biological product|genetic therapy|other intervention|behavioural intervention|device|procedure|supplement or diet)$/i
 // Medicines given alongside the one under test, e.g. steroids before a gene therapy.
@@ -148,7 +141,7 @@ function testedDrugs(interventions) {
     // Group entries (various stem-cell products, say) are tracked by the study's own name.
     const known = Boolean(entry)
     const key = entry && !entry.group ? `t:${entry.match[0].toLowerCase()}` : `n:${spaced(label)}`
-    if (key !== 'n:' && !GENERIC_NAME.test(label) && !found.has(key)) found.set(key, { key, label, known, approval: entry?.group ? null : entry?.approval ?? null })
+    if (key !== 'n:' && !GENERIC_NAME.test(label) && !found.has(key)) found.set(key, { key, label, known, approval: entry?.group ? null : entry?.approvals?.[disease.id] ?? null })
   }
   let tested = [...found.values()].filter((d) => !BACKGROUND.test(d.label))
   if (!tested.length) tested = [...found.values()]
@@ -199,16 +192,16 @@ function outcomeOf(id, type, status, whyStopped, hasResults, publications) {
 // What a study is mainly for. Decided from the registry record by the rules
 // below, with hand corrections in scripts/focus.json where the rules get it wrong.
 const focusOverrides = JSON.parse(await readFile(FOCUS, 'utf8')).focus
-const SYMPTOM = /pseudobulbar|emotional labil|\bPBA\b|pathological (laughing|crying)|sialorrh|drool|saliva|secretion|cramp|spastic|fasciculation|depress|anxiety|\bpain\b|insomnia|\bsleep|fatigue|appetite|constipation|dyspn|breathless|cough|itch|pruritus|cognitive (impair|symptom)|apathy|muscle stiffness/i
-const SUPPORT = /muscle (strength )?training|expiratory muscle|inspiratory muscle|ventilat|\bNIV\b|bipap|tracheost|diaphragm(atic)? pac|insufflat|airway clearance|respiratory (muscle )?training|gastrostom|\bPEG\b|\bRIG\b|feeding|nutrition|\bdiet|caloric|calorie|exercise|rehabilit|physiotherap|physical therap|occupational therap|speech therap|communication|brain[- ]computer|\bBCI\b|eye[- ]track|augmentative|voice bank|palliative|end[- ]of[- ]life|caregiver|carer|telehealth|telemedicine|multidisciplinary|quality of life|psycholog|mindfulness|music|exoskeleton|wheelchair|orthos|robot|advance care|decision aid|dysphagia|swallow|home care|assistive|neural interface|neuroprosthe|intracortical|tetrapleg|paralysis|brain[- ]machine|cortical communication|neurotechnology|manipulation device|\\bbrace\\b|dysarthria|advance care/i
+const SYMPTOM = disease.symptom
+const SUPPORT = disease.support
 const DIAGNOSTIC = /\bPET\b|positron|SPECT|\bMRI\b|magnetic resonance imaging|imaging|tracer|radioligand|biomarker|diagnos|electromyograph|\bEMG\b|nerve conduction|electrical impedance|ultrasound|spectroscopy/i
-const ALS_IN_TITLE = /amyotrophic|\bALS\b|motor neurone? disease|\bMND\b|lou gehrig/i
-const ALS_LIKE_CONDITION = /amyotrophic|\bALS\b|motor neuron|\bMND\b|lou gehrig|frontotemporal|\bFTD\b|neurodegenerat|primary lateral|progressive muscular atrophy|bulbar palsy|healthy/i
+const IN_TITLE = disease.inTitle
+const LIKE_CONDITION = disease.likeConditions
 
 const THERAPEUTIC_TYPES = new Set(['DRUG', 'BIOLOGICAL', 'GENETIC', 'COMBINATION_PRODUCT'])
 const TRACER = /\bPET\b|positron|SPECT|tracer|radioligand|dosimetry|imaging/i
 
-function focusOf(id, p, type, modalities) {
+function focusOf(id, p, type, modalities, entries) {
   if (focusOverrides[id]) return focusOverrides[id]
   const ident = p.identificationModule
   const titles = `${ident.briefTitle} ${ident.officialTitle ?? ''}`
@@ -231,11 +224,18 @@ function focusOf(id, p, type, modalities) {
   if (supportTitle) return 'Supportive care'
   if (conditions.some((c) => SYMPTOM.test(c))) return treats ? 'Symptom management' : 'Supportive care'
   if (purpose === 'SUPPORTIVE_CARE') return treats && SYMPTOM.test(text) ? 'Symptom management' : 'Supportive care'
-  // ALS is one of several conditions, and not what the title is about.
-  if (!ALS_IN_TITLE.test(titles) && conditions.some((c) => !ALS_LIKE_CONDITION.test(c))) return 'Other-disease studies'
+  // The disease is one of several conditions, and not what the title is about.
+  if (!IN_TITLE.test(titles) && conditions.some((c) => !LIKE_CONDITION.test(c))) return 'Other-disease studies'
   if (type === 'OBSERVATIONAL') return DIAGNOSTIC.test(text) ? 'Diagnostics & biomarkers' : 'Natural history & other research'
   if (!treats && DIAGNOSTIC.test(titles)) return 'Diagnostics & biomarkers'
-  return 'Slowing ALS progression'
+  // Diseases with established symptomatic drug classes (Parkinson's): a trial
+  // whose recognised drugs are all of those classes treats symptoms, unless its
+  // title says it aims at progression.
+  const progressionTitle = disease.progressionCue?.test(titles)
+  if (disease.symptomaticTargets && treats && !progressionTitle && entries.length &&
+    entries.every(([e]) => e.targets.length && e.targets.every((t) => disease.symptomaticTargets.has(t)))) return 'Symptom management'
+  if (disease.symptomaticProcedure && !treats && !progressionTitle && disease.symptomaticProcedure.test(titles)) return 'Symptom management'
+  return disease.progressionFocus
 }
 
 const PHASE_LABEL = { EARLY_PHASE1: 'Early Phase 1', PHASE1: 'Phase 1', PHASE2: 'Phase 2', PHASE3: 'Phase 3', PHASE4: 'Phase 4' }
@@ -307,7 +307,7 @@ function slim(s) {
     countries: [...new Set((p.contactsLocationsModule?.locations ?? []).map((l) => l.country).filter(Boolean))],
     // Curated outcomes can mark the registry's "result" papers as background or another study.
     publications: curatedOutcomes[id.nctId]?.ignorePublications ? [] : publications,
-    focus: focusOf(id.nctId, p, type, modalities),
+    focus: focusOf(id.nctId, p, type, modalities, entries),
     outcome: outcomeOf(id.nctId, type, status, st.whyStopped ?? null, Boolean(s.hasResults), publications),
   }
 }
@@ -358,7 +358,7 @@ try {
 for (const [registry, fetchFrom] of [['EU CTIS', fetchCtis], ['ISRCTN', fetchIsrctn], ['EudraCT', fetchEuctr]]) {
   let added = 0
   try {
-    for (const s of await fetchFrom()) {
+    for (const s of await fetchFrom(disease)) {
       const ids = s.otherIds.map(normId)
       const duplicate = ids.some((x) => knownIds.has(x)) || Boolean(knownDuplicates[s.protocolSection.identificationModule.nctId])
       // A duplicate's other numbers still count: a third registry may list only those.
@@ -409,7 +409,7 @@ if (missing.length) console.warn(`Curated outcomes for studies not in the catalo
 
 const studies = [...byId.values()].sort((a, b) => (b.start ?? '').localeCompare(a.start ?? ''))
 
-// Whether each drug tested before Phase 3 reached a later phase in ALS: the
+// Whether each drug tested before Phase 3 reached a later phase in the disease: the
 // furthest phase of any trial of the same drug, with that trial's ID, start
 // and status. Phase 1 studies sometimes run alongside a drug's Phase 3 (e.g.
 // drug-interaction studies), so the other trial may have started first.
@@ -420,6 +420,8 @@ const EXTENSION = /extension|continuation|rollover|roll-over|long[- ]term (safet
 // Phase 4 (post-approval) studies are left out: they say nothing about
 // whether a new drug advanced. So is riluzole, approved since 1995, when a
 // study tests a new form of it.
+// Any name that includes the background drug ("Intrathecal riluzole").
+const NAMES_BACKGROUND = new RegExp(BACKGROUND.source.replace(/^\^/, ''), 'i')
 const PHASE_RANK = { 'Early Phase 1': 0, 'Phase 1': 1, 'Phase 1/2': 1.5, 'Phase 2': 2, 'Phase 2/3': 2.5, 'Phase 3': 3 }
 const byDrug = new Map()
 for (const st of studies) for (const { key } of st._drugs) {
@@ -428,7 +430,7 @@ for (const st of studies) for (const { key } of st._drugs) {
 }
 for (const st of studies) {
   const rank = PHASE_RANK[st.phase]
-  st.laterDevelopment = rank === undefined || rank >= 3 ? [] : st._drugs.filter((x) => !/riluzole/i.test(x.label)).slice(0, 3).map(({ key, label }) => {
+  st.laterDevelopment = rank === undefined || rank >= 3 ? [] : st._drugs.filter((x) => !NAMES_BACKGROUND.test(x.label)).slice(0, 3).map(({ key, label }) => {
     const later = byDrug.get(key)
       .filter((o) => o !== st && o.status !== 'WITHDRAWN' && o.focus === st.focus && (PHASE_RANK[o.phase] ?? -1) > rank)
       .sort((a, b) => PHASE_RANK[b.phase] - PHASE_RANK[a.phase] ||
@@ -446,7 +448,7 @@ for (const st of studies) {
   st.drugKeys = st._drugs.map(({ key, label, approval }) => ({ key, label, approval }))
   delete st._drugs
 }
-if (studies.length < 500) throw new Error(`Only ${studies.length} studies returned; refusing to overwrite the snapshot`)
+if (studies.length < disease.minStudies) throw new Error(`Only ${studies.length} studies returned; refusing to overwrite the snapshot`)
 
 await mkdir(new URL('.', OUT), { recursive: true })
 await writeFile(OUT, JSON.stringify({ generatedAt: new Date().toISOString(), source: 'ClinicalTrials.gov API v2', studies }))

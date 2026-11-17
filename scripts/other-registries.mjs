@@ -1,4 +1,4 @@
-// ALS trials from registries other than ClinicalTrials.gov: ISRCTN (UK), the
+// A disease's trials from registries other than ClinicalTrials.gov: ISRCTN (UK), the
 // EU's CTIS (trials authorised from 2023) and the older EU Clinical Trials
 // Register (EudraCT, 2004-2023). Each record is reshaped into the same form as a
 // ClinicalTrials.gov API record, so the catalog's drug, focus and outcome logic
@@ -10,7 +10,6 @@ const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; ALS trials dashboard)' }
 const PLACEBO = /placebo|vehicle|saline|sodium chloride|kochsalz|artificial c(erebro|erebral )?spinal fluid|\bacsf\b/i
 // Drug codes in a title (LY4256984, QRL-101), for records that list no products.
 const CODE = /\b[A-Z]{2,5}-?\d{3,7}[A-Z]?\b/g
-const ALS = /amyotrophic|\bALS\b|motor neurone? disease|\bMND\b|lou gehrig/i
 const TODAY = new Date().toISOString().slice(0, 10)
 
 function record({ id, registry, url, title, officialTitle, acronym, status, whyStopped, type, phases, interventions, conditions,
@@ -78,8 +77,8 @@ function isrctnStatus(ft) {
   return 'ACTIVE_NOT_RECRUITING'
 }
 
-export async function fetchIsrctn() {
-  const q = 'condition:"amyotrophic lateral sclerosis" OR condition:"motor neurone disease" OR condition:"motor neuron disease"'
+export async function fetchIsrctn(disease) {
+  const q = disease.isrctnQuery
   const res = await fetch(`https://www.isrctn.com/api/query/format/default?limit=500&q=${encodeURIComponent(q)}`, { headers: UA, signal: AbortSignal.timeout(60_000) })
   if (!res.ok) throw new Error(`ISRCTN: HTTP ${res.status}`)
   const xml = await res.text()
@@ -90,7 +89,7 @@ export async function fetchIsrctn() {
     const title = tag(ft, 'title')
     if (/^deferred registration/i.test(title)) continue
     const conditions = tags(tags(ft, 'conditions')[0] ?? '', 'condition').map((c) => tag(c, 'description')).filter(Boolean)
-    if (!ALS.test(`${title} ${tag(ft, 'scientificTitle')} ${conditions.join(' ')}`)) continue
+    if (!disease.names.test(`${title} ${tag(ft, 'scientificTitle')} ${conditions.join(' ')}`)) continue
     const interventions = []
     for (const iv of tags(ft, 'intervention')) {
       const type = ISRCTN_TYPE[tag(iv, 'interventionType').toLowerCase()] ?? 'OTHER'
@@ -150,10 +149,10 @@ async function ctisSearch(text) {
   return found
 }
 
-export async function fetchCtis() {
+export async function fetchCtis(disease) {
   const byId = new Map()
-  for (const text of ['amyotrophic lateral sclerosis', 'motor neurone disease', 'motor neuron disease']) {
-    for (const t of await ctisSearch(text)) if (ALS.test(`${t.conditions} ${t.ctTitle}`)) byId.set(t.ctNumber, t)
+  for (const text of disease.ctisTerms) {
+    for (const t of await ctisSearch(text)) if (disease.names.test(`${t.conditions} ${t.ctTitle}`)) byId.set(t.ctNumber, t)
   }
   const out = []
   for (const t of byId.values()) {
@@ -204,24 +203,24 @@ export async function fetchCtis() {
 // ---------- EU Clinical Trials Register (EudraCT) ----------
 // The register closed to new trials when the EU moved to CTIS, so its records
 // rarely change, and its firewall rejects repeated bulk downloads. The build
-// therefore reads a saved copy (scripts/euctr-als.json); refresh it now and
-// then with `npm run fetch-euctr`, which downloads slowly and stops at the
-// first rejection.
-const EUCTR_SNAPSHOT = new URL('./euctr-als.json', import.meta.url)
+// therefore reads a saved copy (scripts/data/<disease>/euctr.json); refresh it
+// now and then with `npm run fetch-euctr -- <disease>`, which downloads slowly
+// and stops at the first rejection.
+const euctrSnapshot = (disease) => new URL(`./data/${disease.id}/euctr.json`, import.meta.url)
 
-export async function fetchEuctr() {
+export async function fetchEuctr(disease) {
   const { readFile } = await import('node:fs/promises')
   try {
-    return JSON.parse(await readFile(EUCTR_SNAPSHOT, 'utf8')).records
+    return JSON.parse(await readFile(euctrSnapshot(disease), 'utf8')).records
   } catch {
     return []
   }
 }
 
-export async function saveEuctrSnapshot() {
+export async function saveEuctrSnapshot(disease) {
   const { writeFile } = await import('node:fs/promises')
-  const records = await downloadEuctr()
-  await writeFile(EUCTR_SNAPSHOT, JSON.stringify({ downloadedAt: new Date().toISOString(), records }) + '\n')
+  const records = await downloadEuctr(disease)
+  await writeFile(euctrSnapshot(disease), JSON.stringify({ downloadedAt: new Date().toISOString(), records }) + '\n')
   return records.length
 }
 
@@ -240,10 +239,10 @@ function euctrFields(block) {
 const first = (f, prefix) => Object.entries(f).find(([k]) => k.startsWith(prefix))?.[1].find((v) => v) ?? ''
 const all = (f, prefix) => Object.entries(f).filter(([k]) => k.startsWith(prefix)).flatMap(([, v]) => v).filter(Boolean)
 
-async function downloadEuctr() {
+async function downloadEuctr(disease) {
   const blocks = new Map()
   let lastFirst
-  for (const query of ['amyotrophic lateral sclerosis', 'motor neurone disease']) {
+  for (const query of disease.euctrQueries) {
     for (let page = 1; page <= 15; page++) {
       const res = await fetch(`https://www.clinicaltrialsregister.eu/ctr-search/rest/download/full?query=${encodeURIComponent(query)}&mode=current_page&page=${page}`,
         { headers: UA, signal: AbortSignal.timeout(120_000) })
@@ -269,7 +268,7 @@ async function downloadEuctr() {
     const f = fs[0]
     const title = first(f, 'A.3 Full title of the trial')
     const conditions = [...new Set(fs.flatMap((x) => all(x, 'E.1.1 Medical condition')))].slice(0, 3)
-    if (!ALS.test(`${title} ${first(f, 'A.3.1')} ${conditions.join(' ')}`)) continue
+    if (!disease.names.test(`${title} ${first(f, 'A.3.1')} ${conditions.join(' ')}`)) continue
     const statuses = fs.flatMap((x) => x['Trial Status'] ?? [])
     const status = EUCTR_STATUS_ORDER.find((s) => statuses.includes(s))
     const entered = fs.map((x) => first(x, 'Date on which this record was first entered')).filter(Boolean).sort()[0] ?? ''
