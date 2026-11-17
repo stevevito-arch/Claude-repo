@@ -243,7 +243,7 @@ async function downloadEuctr(disease) {
   const blocks = new Map()
   let lastFirst
   for (const query of disease.euctrQueries) {
-    for (let page = 1; page <= 15; page++) {
+    for (let page = 1; page <= (disease.euctrMaxPages ?? 15); page++) {
       const res = await fetch(`https://www.clinicaltrialsregister.eu/ctr-search/rest/download/full?query=${encodeURIComponent(query)}&mode=current_page&page=${page}`,
         { headers: UA, signal: AbortSignal.timeout(120_000) })
       if (!res.ok) throw new Error(`EU CTR: HTTP ${res.status}`)

@@ -50,6 +50,11 @@ async function fetchAll(cond) {
     const res = await fetch(`${API}?${params}`, { signal: AbortSignal.timeout(60_000) })
     if (!res.ok) throw new Error(`${cond}: HTTP ${res.status}`)
     const page = await res.json()
+    // A few records list an intervention with no name; there's nothing to show for it.
+    for (const st of page.studies) {
+      const m = st.protocolSection.armsInterventionsModule
+      if (m?.interventions) m.interventions = m.interventions.filter((i) => i.name)
+    }
     studies.push(...page.studies)
     pageToken = page.nextPageToken
   } while (pageToken)
@@ -72,14 +77,27 @@ function startsWithName(name, term) {
   // Same code written with different separators, e.g. "ISIS-333611".
   return norm(name) === norm(term)
 }
+// "Cohort 1: Nilotinib", "Arm A - Drug X": the arm label isn't part of the name.
+const ARM_PREFIX = /^(cohort|arm|group|part|stage|period)\s*[a-z0-9]{1,3}\s*[:\-–]\s*/i
 function entryFor(intervention) {
-  for (const name of [intervention.name, ...(intervention.otherNames ?? [])]) {
+  for (const raw of [intervention.name, ...(intervention.otherNames ?? [])]) {
+    const name = raw.replace(ARM_PREFIX, '')
     const entry = drugTable.find((e) => e.match.some((term) => startsWithName(name, term)))
     if (entry) return entry
   }
   return null
 }
 const NOT_A_NAME = /placebo|vehicle|sham|saline|matching|control/i
+// Drugs given only to measure how the drug under test changes their
+// pharmacokinetics (or as a QT-study positive control), in studies whose title
+// says so. Dropped when the study also gives another drug.
+const PROBE = /^(midazolam|caffeine|warfarin|omeprazole|digoxin|rosuvastatin|metoprolol|bupropion|flurbiprofen|repaglinide|itraconazole|rifampi|carbamazepine|fexofenadine|moxifloxacin|probenecid|ketoconazole|dabigatran|pitavastatin|metformin)\b/i
+const INTERACTION_STUDY = /interaction|pharmacokinetic|\bDDI\b|cocktail|\bQTc?\b|cardiac repolari[sz]ation/i
+function probesDropped(interventions, title) {
+  if (!INTERACTION_STUDY.test(title ?? '')) return interventions
+  const rest = interventions.filter((i) => !PROBE.test(i.name.trim()))
+  return rest.some((i) => DRUG_TYPES.has(i.type) && !IS_COMPARATOR.test(i.name.trim())) ? rest : interventions
+}
 // An intervention that is itself a comparator ("Placebo", "Matching placebo"),
 // as opposed to a drug named alongside one ("TBN tablet / Placebo").
 const IS_COMPARATOR = /^(matching\s+|matched\s+)?(placebo|sham|vehicle|saline|control|standard of care|usual care|best supportive care)/i
@@ -88,10 +106,10 @@ const IS_COMPARATOR = /^(matching\s+|matched\s+)?(placebo|sham|vehicle|saline|co
 const TYPE_MODALITY = { DEVICE: 'Device', BEHAVIORAL: 'Behavioral', PROCEDURE: 'Procedure', DIAGNOSTIC_TEST: 'Diagnostic', RADIATION: 'Radiation', DIETARY_SUPPLEMENT: 'Supplement or diet' }
 const DRUG_TYPES = new Set(['DRUG', 'BIOLOGICAL', 'GENETIC', 'COMBINATION_PRODUCT'])
 
-function classify(interventions) {
+function classify(interventions, title) {
   const drugs = new Map()
   const modalities = new Set()
-  for (const i of interventions) {
+  for (const i of probesDropped(interventions, title)) {
     if (IS_COMPARATOR.test(i.name.trim())) continue
     const entry = entryFor(i)
     if (entry) {
@@ -120,12 +138,13 @@ const GENERIC_NAME = /^(drug|biological product|genetic therapy|other interventi
 const HELPER = /prevent|prophyla|premedicat|pre-medicat/i
 const DOSE = /\s+\d+(\.\d+)?\s*(mg|g|mcg|ug|µg|ml|iu|units?|cells|x)\b.*$/i
 const DOSE_PREFIX = /^((single|multiple) ascending doses? of|\d+(\.\d+)?\s*(mg|g|mcg|ug|µg|ml))\s+/i
-function testedDrugs(interventions) {
+function testedDrugs(interventions, title) {
   const found = new Map()
-  for (const i of interventions) {
+  for (const i of probesDropped(interventions, title)) {
     if (!DRUG_TYPES.has(i.type) || IS_COMPARATOR.test(i.name.trim()) || HELPER.test(i.name)) continue
     const label = i.name
       .normalize('NFKC') // full-width brackets and commas, as in some Chinese records
+      .replace(ARM_PREFIX, '')
       .replace(/^test drug\s+/i, '')
       .replace(/\s*(\/|\bor\b)\s*placebo\b.*$/i, '')
       .replace(DOSE_PREFIX, '').replace(DOSE, '')
@@ -235,6 +254,10 @@ function focusOf(id, p, type, modalities, entries) {
   if (disease.symptomaticTargets && treats && !progressionTitle && entries.length &&
     entries.every(([e]) => e.targets.length && e.targets.every((t) => disease.symptomaticTargets.has(t)))) return 'Symptom management'
   if (disease.symptomaticProcedure && !treats && !progressionTitle && disease.symptomaticProcedure.test(titles)) return 'Symptom management'
+  // Supplements (nicotinamide riboside, say) are often tested as disease-modifying, so they keep the default.
+  if (disease.nonDrugDefault && !treats && !progressionTitle && !interventions.some((i) => i.type === 'DIETARY_SUPPLEMENT')) {
+    return purpose === 'BASIC_SCIENCE' || disease.research.test(titles) ? 'Natural history & other research' : 'Supportive care'
+  }
   return disease.progressionFocus
 }
 
@@ -248,7 +271,8 @@ function slim(s) {
   const interventions = p.armsInterventionsModule?.interventions ?? []
   const phases = (de.phases ?? []).filter((x) => PHASE_LABEL[x])
   const names = [...new Set(interventions.map((i) => i.name))]
-  const { entries, modalities } = classify(interventions)
+  const titles = `${id.briefTitle} ${id.officialTitle ?? ''}`
+  const { entries, modalities } = classify(interventions, titles)
   const lowerNames = new Set(names.map(norm))
   // Search terms: the registry's own "other names" plus curated names.
   const aliases = [...new Set([
@@ -275,7 +299,7 @@ function slim(s) {
     }))
     : new Map()
   return {
-    _drugs: type === 'INTERVENTIONAL' ? testedDrugs(interventions) : [],
+    _drugs: type === 'INTERVENTIONAL' ? testedDrugs(interventions, titles) : [],
     id: id.nctId,
     registry,
     url: s.url ?? `https://clinicaltrials.gov/study/${id.nctId}`,
