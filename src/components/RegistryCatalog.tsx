@@ -6,6 +6,11 @@ import { useFollowed } from '../lib/useFollowed'
 import { buildIndex, matchesQuery, parseQuery } from '../lib/search'
 import { MECHANISMS, PATHWAYS, pathwayOf, targetSynonyms } from '../data/targets'
 import { Badge } from './Badge'
+import { DevelopmentTimeline } from './DevelopmentTimeline'
+import {
+  DARK_INK, LIGHT_PHASES, OUTCOME_GROUPS, OUTCOME_GROUP_OF, PHASE_COLOR, STATUS_GROUPS, STATUS_GROUP_COLOR, VERDICT_COLOR, statusGroup, year,
+} from '../lib/registryPresentation'
+import type { StatusGroup } from '../lib/registryPresentation'
 
 const PAGE_SIZE = 40
 
@@ -16,38 +21,6 @@ const TYPE_OPTIONS = [
 ] as const
 
 const PHASE_OPTIONS = ['Early Phase 1', 'Phase 1', 'Phase 1/2', 'Phase 2', 'Phase 2/3', 'Phase 3', 'Phase 4', 'No phase'] as const
-
-// Ordinal ramp, same tokens as the curated cards: later phase = darker.
-const PHASE_COLOR: Record<string, string> = {
-  'Early Phase 1': 'var(--seq-250)',
-  'Phase 1': 'var(--seq-250)',
-  'Phase 1/2': 'var(--seq-350)',
-  'Phase 2': 'var(--seq-450)',
-  'Phase 2/3': 'var(--seq-550)',
-  'Phase 3': 'var(--seq-650)',
-  'Phase 4': 'var(--seq-650)',
-}
-
-// The two lightest ramp steps need dark text to stay readable.
-const LIGHT_PHASES = new Set(['Early Phase 1', 'Phase 1', 'Phase 1/2'])
-const DARK_INK = '#0d366b'
-
-type StatusGroup ='Ongoing' | 'Completed' | 'Stopped early' | 'Status unknown'
-const STATUS_GROUPS: StatusGroup[] = ['Ongoing', 'Completed', 'Stopped early', 'Status unknown']
-
-function statusGroup(status: string): StatusGroup {
-  if (['COMPLETED', 'ENDED', 'APPROVED_FOR_MARKETING', 'NO_LONGER_AVAILABLE'].includes(status)) return 'Completed'
-  if (['TERMINATED', 'WITHDRAWN', 'SUSPENDED'].includes(status)) return 'Stopped early'
-  if (status === 'UNKNOWN') return 'Status unknown'
-  return 'Ongoing'
-}
-
-const STATUS_GROUP_COLOR: Record<StatusGroup, string> = {
-  Ongoing: 'var(--cat-blue)',
-  Completed: 'var(--text-secondary)',
-  'Stopped early': 'var(--status-critical)',
-  'Status unknown': 'var(--text-muted)',
-}
 
 // Same colours the featured cards use for each modality; others stay neutral.
 const MODALITY_BADGE_COLOR: Record<string, string> = {
@@ -71,36 +44,10 @@ const FOCUS_OPTIONS = [
 ]
 const DEFAULT_FOCUS = 'Slowing ALS progression'
 
-// Outcome verdicts (scripts/fetch-registry.mjs, scripts/outcomes.json) grouped
-// for the filter, in the order the chips appear.
-const OUTCOME_GROUPS: [string, string[]][] = [
-  ['Met primary endpoint', ['Met primary endpoint']],
-  ['Missed or no benefit', ['Missed primary endpoint', 'No benefit shown', 'Stopped: no benefit']],
-  ['Mixed or inconclusive', ['Mixed results', 'Inconclusive']],
-  ['Stopped for safety', ['Stopped: safety']],
-  ['Stopped for other reasons', ['Stopped: slow enrollment', 'Stopped: business or funding', 'Stopped: other reason', 'Stopped: reason not given', 'Withdrawn before enrolling', 'Suspended']],
-  ['Results available, not summarised', ['Results posted, not yet summarised', 'Publication linked, not yet summarised']],
-  ['No results available', ['No results posted', 'No results found']],
-  ['Safety, extension or descriptive', ['Safety study', 'Extension or access study', 'Descriptive results', 'Not a treatment study']],
-]
-const OUTCOME_GROUP_OF = new Map(OUTCOME_GROUPS.flatMap(([group, verdicts]) => verdicts.map((v) => [v, group] as const)))
-
-const VERDICT_COLOR: Record<string, string> = {
-  'Met primary endpoint': 'var(--status-good)',
-  'Missed or no benefit': 'var(--status-critical)',
-  'Stopped for safety': 'var(--status-critical)',
-  'Mixed or inconclusive': 'var(--cat-orange)',
-  'Stopped for other reasons': 'var(--text-secondary)',
-}
-
 // Set by scripts/fetch-registry.mjs for drugs the drug table doesn't cover yet.
 const UNCLASSIFIED = 'Not yet classified'
 
 type SortKey = 'newest' | 'oldest' | 'enrollment'
-
-function year(date: string | null): string {
-  return date ? date.slice(0, 4) : '?'
-}
 
 function toggle<T>(set: Set<T>, value: T): Set<T> {
   const next = new Set(set)
@@ -160,6 +107,8 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
   const [sort, setSort] = useState<SortKey>('newest')
   const [visible, setVisible] = useState(PAGE_SIZE)
   const { followed, toggleFollow } = useFollowed()
+  // The trial whose drug's development timeline is open, if any.
+  const [timelineStudy, setTimelineStudy] = useState<RegistryStudy | null>(null)
   const followedSet = useMemo(() => new Set(followed), [followed])
 
   useEffect(() => {
@@ -265,6 +214,20 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
 
   // Followed studies are pinned above the filters whatever the filters say,
   // so the list below leaves them out rather than showing them twice.
+  // Every trial of each drug, for development timelines.
+  const studiesByDrug = useMemo(() => {
+    const map = new Map<string, RegistryStudy[]>()
+    for (const st of snapshot?.studies ?? []) for (const { key } of st.drugKeys) {
+      if (!map.has(key)) map.set(key, [])
+      map.get(key)!.push(st)
+    }
+    return map
+  }, [snapshot])
+  const timelineFor = (st: RegistryStudy) =>
+    st.drugKeys.length
+      ? { label: st.drugKeys[0].label, count: studiesByDrug.get(st.drugKeys[0].key)?.length ?? 1, onOpen: () => setTimelineStudy(st) }
+      : undefined
+
   const pinned = useMemo(() => {
     const byId = new Map(indexed.map(({ study }) => [study.id, study]))
     return followed.map((id) => byId.get(id)).filter((s): s is RegistryStudy => s !== undefined)
@@ -329,6 +292,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
                 onOpenFeatured={() => onOpenFeatured(s.id)}
                 followed
                 onToggleFollow={() => toggleFollow(s.id)}
+                timeline={timelineFor(s)}
               />
             ))}
           </ul>
@@ -474,6 +438,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
               onOpenFeatured={() => onOpenFeatured(s.id)}
               followed={false}
               onToggleFollow={() => toggleFollow(s.id)}
+              timeline={timelineFor(s)}
             />
           ))}
         </ul>
@@ -488,6 +453,24 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
         >
           Show {Math.min(PAGE_SIZE, unpinned.length - visible)} more
         </button>
+      )}
+
+      {timelineStudy && (
+        <DevelopmentTimeline
+          key={timelineStudy.id}
+          study={timelineStudy}
+          studiesByDrug={studiesByDrug}
+          onClose={() => setTimelineStudy(null)}
+          renderStudy={(st) => (
+            <StudyRow
+              study={st}
+              featured={featuredIds.has(st.id)}
+              onOpenFeatured={() => onOpenFeatured(st.id)}
+              followed={followedSet.has(st.id)}
+              onToggleFollow={() => toggleFollow(st.id)}
+            />
+          )}
+        />
       )}
     </div>
   )
@@ -513,9 +496,11 @@ interface StudyRowProps {
   onOpenFeatured: () => void
   followed: boolean
   onToggleFollow: () => void
+  /** Opens the development timeline of the trial's (first) drug. */
+  timeline?: { label: string; count: number; onOpen: () => void }
 }
 
-function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }: StudyRowProps) {
+function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow, timeline }: StudyRowProps) {
   const group = statusGroup(study.status)
   const end = study.completion ?? study.primaryCompletion
   // Registry "other names" not already shown on a drug line below.
@@ -663,6 +648,17 @@ function StudyRow({ study, featured, onOpenFeatured, followed, onToggleFollow }:
           )}
         </p>
       ))}
+      {timeline && (
+        <button
+          type="button"
+          onClick={timeline.onOpen}
+          className="mt-1.5 inline-flex min-h-8 items-center gap-1 text-left text-xs font-medium underline"
+          style={{ color: 'var(--cat-blue)' }}
+        >
+          Development timeline of {timeline.label.length > 40 ? `${timeline.label.slice(0, 37)}…` : timeline.label} · {timeline.count} ALS{' '}
+          {timeline.count === 1 ? 'trial' : 'trials'} →
+        </button>
+      )}
       {otherNames.length > 0 && (
         <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           <span style={{ color: 'var(--text-muted)' }}>Also listed as: </span>

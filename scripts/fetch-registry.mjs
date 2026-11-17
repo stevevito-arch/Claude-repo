@@ -128,19 +128,23 @@ function testedDrugs(interventions) {
   const found = new Map()
   for (const i of interventions) {
     if (!DRUG_TYPES.has(i.type) || IS_COMPARATOR.test(i.name.trim()) || HELPER.test(i.name)) continue
-    const label = i.name.replace(DOSE_PREFIX, '').replace(DOSE, '').trim()
+    const label = i.name.replace(DOSE_PREFIX, '').replace(DOSE, '')
+      // "(125 mg)" and formulation words aren't part of the drug's name.
+      .replace(/\s*\([^)]*\d\s*(mg|g|mcg|µg|ug|ml|iu|%)\b[^)]*\)/gi, '')
+      .replace(/\s+(injection|infusion( solution)?|tablets?|capsules?|oral (solution|suspension)|for injection)\s*$/i, '')
+      .trim()
     const entry = entryFor(i)
     // Group entries (various stem-cell products, say) are tracked by the study's own name.
     const known = Boolean(entry)
     const key = entry && !entry.group ? `t:${entry.match[0].toLowerCase()}` : `n:${spaced(label)}`
-    if (key !== 'n:' && !GENERIC_NAME.test(label) && !found.has(key)) found.set(key, { key, label, known })
+    if (key !== 'n:' && !GENERIC_NAME.test(label) && !found.has(key)) found.set(key, { key, label, known, approval: entry?.group ? null : entry?.approval ?? null })
   }
   let tested = [...found.values()].filter((d) => !BACKGROUND.test(d.label))
   if (!tested.length) tested = [...found.values()]
   // When the table recognises a drug, other names in the study are usually
   // helpers (e.g. a drug-interaction cocktail), so keep only the recognised ones.
   if (tested.some((d) => d.known)) tested = tested.filter((d) => d.known)
-  return tested.map(({ key, label }) => ({ key, label }))
+  return tested.map(({ key, label, approval }) => ({ key, label, approval }))
 }
 
 // Hand-researched outcomes (scripts/outcomes.json), keyed by NCT ID.
@@ -412,7 +416,12 @@ for (const st of studies) {
       : { drug: label, phase: null, id: null, url: null, start: null, status: null }
   })
 }
-for (const st of studies) delete st._drugs
+// Each study keeps its drugs' identities, so the app can line up every trial of
+// a drug as a development timeline.
+for (const st of studies) {
+  st.drugKeys = st._drugs.map(({ key, label, approval }) => ({ key, label, approval }))
+  delete st._drugs
+}
 if (studies.length < 500) throw new Error(`Only ${studies.length} studies returned; refusing to overwrite the snapshot`)
 
 await mkdir(new URL('.', OUT), { recursive: true })

@@ -61,6 +61,12 @@ export interface RegistryStudy {
    * ALS trial of that drug reached (null phase: none beyond this trial).
    */
   laterDevelopment: { drug: string; phase: string | null; id: string | null; url: string | null; start: string | null; status: string | null }[]
+  /**
+   * The drugs this trial tests, as keys shared by every trial of the same drug
+   * (so a code and its later name match), for the development timeline.
+   * `approval` is set for drugs approved by a major regulator.
+   */
+  drugKeys: { key: string; label: string; approval: { text: string; withdrawn?: boolean } | null }[]
   /** What the study is mainly for (see focusOf in scripts/fetch-registry.mjs). */
   focus: string
 }
