@@ -1,0 +1,230 @@
+{
+ "about": "Hand-researched outcomes for finished Alzheimer's disease studies, used by scripts/fetch-registry.mjs. Keyed by NCT ID. verdict is one of: Met primary endpoint, Missed primary endpoint, No benefit shown (exploratory study with no formal primary endpoint), Mixed results, Inconclusive, Stopped: no benefit, Stopped: safety, Stopped: slow enrollment, Stopped: business or funding, Extension or access study, Safety study, Descriptive results (no comparison or formal test, e.g. a feasibility or physiology study), Not a treatment study, No results found. summary says what happened in plain words; source is the checked publication or report it rests on (null only for facts that are part of the registry record itself or widely documented, e.g. a drug's market withdrawal). ignorePublications: true hides publications the registry links as results when they are really background or a different study. Studies not listed here get an automatic outcome from the registry (its stop reason, posted results and linked publications).",
+ "outcomes": {
+  "NCT00574132": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Bapineuzumab did not improve cognition or daily function in mild-to-moderate Alzheimer's, in APOE4 carriers or non-carriers; brain swelling (ARIA-E) was common.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24450891/"
+  },
+  "NCT00575055": {
+   "verdict": "Missed primary endpoint",
+   "summary": "Bapineuzumab did not improve cognition or daily function in mild-to-moderate Alzheimer's, in APOE4 carriers or non-carriers; brain swelling (ARIA-E) was common.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24450891/"
+  },
+  "NCT00594568": {
+   "verdict": "Stopped: safety",
+   "summary": "IDENTITY: the gamma-secretase inhibitor semagacestat was stopped early because cognition and daily function worsened compared with placebo, with more skin cancers and infections.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/23883379/"
+  },
+  "NCT00762411": {
+   "verdict": "Stopped: safety",
+   "summary": "IDENTITY: the gamma-secretase inhibitor semagacestat was stopped early because cognition and daily function worsened compared with placebo, with more skin cancers and infections.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/23883379/"
+  },
+  "NCT00905372": {
+   "verdict": "Missed primary endpoint",
+   "summary": "EXPEDITION 1 and 2: solanezumab did not improve cognition or function in mild-to-moderate Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24450890/"
+  },
+  "NCT00904683": {
+   "verdict": "Missed primary endpoint",
+   "summary": "EXPEDITION 1 and 2: solanezumab did not improve cognition or function in mild-to-moderate Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24450890/"
+  },
+  "NCT01900665": {
+   "verdict": "Missed primary endpoint",
+   "summary": "EXPEDITION3: solanezumab did not slow cognitive decline in mild Alzheimer's dementia with confirmed amyloid.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29365294/"
+  },
+  "NCT02008357": {
+   "verdict": "Missed primary endpoint",
+   "summary": "A4 prevention trial: solanezumab did not slow cognitive decline in older people with amyloid but no symptoms (preclinical Alzheimer's).",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37458272/"
+  },
+  "NCT01224106": {
+   "verdict": "Stopped: no benefit",
+   "summary": "SCarlet RoAD: dosing was stopped after a futility analysis in prodromal Alzheimer's; later analyses suggested the doses were too low.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29221491/"
+  },
+  "NCT03444870": {
+   "verdict": "Missed primary endpoint",
+   "summary": "GRADUATE I and II: gantenerumab removed less amyloid than expected and did not slow clinical decline (CDR-SB) over 116 weeks.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37966285/"
+  },
+  "NCT03443973": {
+   "verdict": "Missed primary endpoint",
+   "summary": "GRADUATE I and II: gantenerumab removed less amyloid than expected and did not slow clinical decline (CDR-SB) over 116 weeks.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37966285/"
+  },
+  "NCT01739348": {
+   "verdict": "Stopped: no benefit",
+   "summary": "EPOCH: the BACE inhibitor verubecestat was stopped for futility in mild-to-moderate Alzheimer's, with more adverse events than placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29719179/"
+  },
+  "NCT01953601": {
+   "verdict": "Stopped: no benefit",
+   "summary": "APECS: verubecestat was stopped for futility in prodromal Alzheimer's; cognition and function were somewhat worse than on placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30970186/"
+  },
+  "NCT02245737": {
+   "verdict": "Stopped: no benefit",
+   "summary": "AMARANTH and DAYBREAK-ALZ: the BACE inhibitor lanabecestat was stopped for futility; it lowered amyloid but did not slow decline.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/31764959/"
+  },
+  "NCT02783573": {
+   "verdict": "Stopped: no benefit",
+   "summary": "AMARANTH and DAYBREAK-ALZ: the BACE inhibitor lanabecestat was stopped for futility; it lowered amyloid but did not slow decline.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/31764959/"
+  },
+  "NCT02569398": {
+   "verdict": "Stopped: safety",
+   "summary": "EARLY: atabecestat was stopped for liver-enzyme rises; people taking it also did worse on cognitive tests, which recovered after stopping.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/33464300/"
+  },
+  "NCT02670083": {
+   "verdict": "Stopped: no benefit",
+   "summary": "CREAD 1 and 2: crenezumab was stopped after an interim analysis showed it was unlikely to slow decline in early Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36121669/"
+  },
+  "NCT03114657": {
+   "verdict": "Stopped: no benefit",
+   "summary": "CREAD 1 and 2: crenezumab was stopped after an interim analysis showed it was unlikely to slow decline in early Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36121669/"
+  },
+  "NCT01689246": {
+   "verdict": "Missed primary endpoint",
+   "summary": "The tau-aggregation inhibitor LMTM (hydromethylthionine) gave no benefit over its low-dose control as an add-on treatment in mild-to-moderate Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/27863809/"
+  },
+  "NCT01955161": {
+   "verdict": "Missed primary endpoint",
+   "summary": "STARSHINE, STARBEAM and STARBRIGHT: the 5-HT6 antagonist idalopirdine, added to cholinesterase inhibitors, did not improve cognition.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29318278/"
+  },
+  "NCT02006641": {
+   "verdict": "Missed primary endpoint",
+   "summary": "STARSHINE, STARBEAM and STARBRIGHT: the 5-HT6 antagonist idalopirdine, added to cholinesterase inhibitors, did not improve cognition.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29318278/"
+  },
+  "NCT02006654": {
+   "verdict": "Missed primary endpoint",
+   "summary": "STARSHINE, STARBEAM and STARBRIGHT: the 5-HT6 antagonist idalopirdine, added to cholinesterase inhibitors, did not improve cognition.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/29318278/"
+  },
+  "NCT02585934": {
+   "verdict": "Missed primary endpoint",
+   "summary": "MINDSET: the 5-HT6 antagonist intepirdine, added to donepezil, did not improve cognition or daily function.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/34095437/"
+  },
+  "NCT02477800": {
+   "verdict": "Mixed results",
+   "summary": "ENGAGE and EMERGE were stopped after a futility analysis; later analysis found EMERGE's high dose slowed decline on CDR-SB while ENGAGE did not. The basis of aducanumab's 2021 US accelerated approval.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/35542991/"
+  },
+  "NCT02484547": {
+   "verdict": "Mixed results",
+   "summary": "ENGAGE and EMERGE were stopped after a futility analysis; later analysis found EMERGE's high dose slowed decline on CDR-SB while ENGAGE did not. The basis of aducanumab's 2021 US accelerated approval.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/35542991/"
+  },
+  "NCT01931566": {
+   "verdict": "Stopped: no benefit",
+   "summary": "TOMMORROW: low-dose pioglitazone did not delay mild cognitive impairment in genetically at-risk older people and was stopped for futility.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/34146512/"
+  },
+  "NCT02017340": {
+   "verdict": "Missed primary endpoint",
+   "summary": "NILVAD: the blood-pressure drug nilvadipine did not slow cognitive decline in mild-to-moderate Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/30248105/"
+  },
+  "NCT01872598": {
+   "verdict": "Met primary endpoint",
+   "summary": "Masitinib 4.5 mg/kg/day, added to standard treatment, showed less decline on cognition (ADAS-Cog) and daily function than placebo; a confirmatory trial was required.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36849969/"
+  },
+  "NCT03790709": {
+   "verdict": "Mixed results",
+   "summary": "Blarcamesine was reported to slow decline on cognition (ADAS-Cog13) and CDR-SB but not on the daily-function co-primary endpoint; the analysis has been disputed.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/39800452/"
+  },
+  "NCT04777396": {
+   "verdict": "Missed primary endpoint",
+   "summary": "evoke and evoke+: oral semaglutide did not slow progression of early Alzheimer's compared with placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41865758/"
+  },
+  "NCT04777409": {
+   "verdict": "Missed primary endpoint",
+   "summary": "evoke and evoke+: oral semaglutide did not slow progression of early Alzheimer's compared with placebo.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41865758/"
+  },
+  "NCT04770220": {
+   "verdict": "Missed primary endpoint",
+   "summary": "APOLLOE4: valiltramiprosate (ALZ-801) did not slow cognitive decline overall in APOE4 homozygotes with early Alzheimer's; a benefit was suggested in the MCI subgroup.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41015981/"
+  },
+  "NCT04994483": {
+   "verdict": "Missed primary endpoint",
+   "summary": "RETHINK-ALZ: simufilam did not slow cognitive or functional decline in mild-to-moderate Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41500915/"
+  },
+  "NCT05026177": {
+   "verdict": "Stopped: no benefit",
+   "summary": "REFOCUS-ALZ: ended early after simufilam failed in RETHINK-ALZ.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/41500915/"
+  },
+  "NCT04437511": {
+   "verdict": "Met primary endpoint",
+   "summary": "TRAILBLAZER-ALZ 2: donanemab slowed clinical decline (iADRS) over 76 weeks in early symptomatic Alzheimer's, with amyloid-related imaging abnormalities as the main risk. Basis of its 2024 US approval.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37459141/"
+  },
+  "NCT03887455": {
+   "verdict": "Met primary endpoint",
+   "summary": "CLARITY AD: lecanemab slowed decline on CDR-SB by 27% over 18 months in early Alzheimer's, with amyloid-related imaging abnormalities as the main risk. Basis of its 2023 US approval.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/36449413/"
+  },
+  "NCT01760005": {
+   "verdict": "Missed primary endpoint",
+   "summary": "DIAN-TU-001: neither gantenerumab nor solanezumab slowed cognitive decline in inherited (autosomal dominant) Alzheimer's; gantenerumab lowered amyloid and other biomarkers.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/34155411/"
+  },
+  "NCT04623242": {
+   "verdict": "Missed primary endpoint",
+   "summary": "DIAN-TU-001: neither gantenerumab nor solanezumab slowed cognitive decline in inherited (autosomal dominant) Alzheimer's; gantenerumab lowered amyloid and other biomarkers.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/34155411/"
+  },
+  "NCT00007189": {
+   "verdict": "Stopped: safety",
+   "summary": "ADAPT: naproxen and celecoxib prevention trial stopped early over cardiovascular concerns; neither drug improved cognition.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/18474729/"
+  },
+  "NCT00010803": {
+   "verdict": "Missed primary endpoint",
+   "summary": "GEM: Ginkgo biloba did not reduce the rate of dementia or Alzheimer's in older adults.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/19017911/"
+  },
+  "NCT00440050": {
+   "verdict": "Missed primary endpoint",
+   "summary": "DHA (omega-3) supplementation did not slow cognitive or functional decline in mild-to-moderate Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/21045096/"
+  },
+  "NCT00235716": {
+   "verdict": "Mixed results",
+   "summary": "TEAM-AD: vitamin E slowed functional decline in mild-to-moderate Alzheimer's; memantine, alone or with vitamin E, did not.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/24381967/"
+  },
+  "NCT00818662": {
+   "verdict": "Missed primary endpoint",
+   "summary": "IV immunoglobulin (Gammagard) did not slow cognitive or functional decline in mild-to-moderate Alzheimer's.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/28381506/"
+  },
+  "NCT03548584": {
+   "verdict": "Met primary endpoint",
+   "summary": "Brexpiprazole 2-3 mg reduced agitation in Alzheimer's dementia compared with placebo; it was approved in the US for this use in 2023.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/37930669/"
+  },
+  "NCT02750306": {
+   "verdict": "Met primary endpoint",
+   "summary": "Suvorexant improved total sleep time in people with Alzheimer's dementia and insomnia.",
+   "source": "https://pubmed.ncbi.nlm.nih.gov/31944580/"
+  }
+ }
+}

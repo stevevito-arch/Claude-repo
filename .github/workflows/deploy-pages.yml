@@ -31,6 +31,8 @@ jobs:
         run: npm run fetch-registry -- als || echo "::warning::ALS registry refresh failed; deploying the committed snapshot"
       - name: Refresh Parkinson's registry catalog
         run: npm run fetch-registry -- pd || echo "::warning::Parkinson's registry refresh failed; deploying the committed snapshot"
+      - name: Refresh Alzheimer's registry catalog
+        run: npm run fetch-registry -- ad || echo "::warning::Alzheimer's registry refresh failed; deploying the committed snapshot"
       - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

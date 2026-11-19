@@ -67,7 +67,7 @@ export const TARGET_SYNONYMS: Record<string, string[]> = {
   'TrkA (NGF receptor)': ['TrkA', 'NTRK1', 'nerve growth factor'],
   'IGF-1 receptor': ['IGF-1', 'IGF1R', 'insulin-like growth factor'],
   'Neurotrophic factors (BDNF, GDNF, VEGF, HGF)': ['neurotrophic factors', 'BDNF', 'GDNF', 'VEGF', 'HGF'],
-  Tau: ['MAPT'],
+  Tau: ['MAPT', 'tau protein', 'neurofibrillary tangles'],
   'SMN2 splicing': ['SMN2', 'SMN'],
   // Excitability and neurotransmission
   'SIGMAR1 (sigma-1 receptor)': ['sigma-1 receptor', 'sigma 1', 'S1R'],
@@ -144,7 +144,26 @@ export const TARGET_SYNONYMS: Record<string, string[]> = {
   'TYK2/JAK1': ['TYK2', 'JAK1'],
   'Galectin-3': ['LGALS3'],
   'GM-CSF receptor': ['GM-CSF', 'CSF2RA'],
-  'Amyloid-β': ['amyloid beta', 'APP'],
+  'Amyloid-β': ['amyloid beta', 'Abeta', 'Aβ', 'amyloid plaques', 'APP', 'anti-amyloid'],
+  // Alzheimer's disease.
+  BACE1: ['beta-secretase', 'β-secretase', 'BACE inhibitor'],
+  'γ-secretase': ['gamma-secretase', 'presenilin', 'gamma secretase'],
+  'Glutaminyl cyclase': ['QPCT', 'pyroglutamate amyloid'],
+  'O-GlcNAcase (tau)': ['OGA', 'O-GlcNAc'],
+  APOE: ['apolipoprotein E', 'ApoE4', 'APOE4', 'APOE2'],
+  RAGE: ['AGER', 'receptor for advanced glycation end products'],
+  'Filamin A': ['FLNA'],
+  'Sigma-2 receptor (TMEM97)': ['TMEM97', 'sigma-2'],
+  'Gingipains (P. gingivalis)': ['Porphyromonas gingivalis', 'gingipain'],
+  '5-HT6 receptor': ['HTR6', 'serotonin 6'],
+  'p38α MAPK': ['MAPK14', 'p38 alpha'],
+  'Phosphodiesterase 9': ['PDE9A', 'PDE9'],
+  'Insulin receptor': ['INSR', 'insulin'],
+  'Angiotensin II receptor': ['AGTR1', 'angiotensin receptor blocker', 'ARB'],
+  'L-type calcium channels': ['calcium channel blocker', 'dihydropyridine'],
+  'Senescent cells': ['senolytic', 'cellular senescence'],
+  'Plasma fractions': ['young plasma', 'plasma infusion'],
+  'CETP': ['cholesteryl ester transfer protein'],
   GPR6: ['G protein-coupled receptor 6'],
 }
 
@@ -153,6 +172,7 @@ export const TARGET_SYNONYMS: Record<string, string[]> = {
 export const PATHWAYS = [
   'Genetic targets',
   'Dopamine system',
+  'Amyloid and tau',
   'Nerve excitability and glutamate',
   'Inflammation and immunity',
   'Protein handling and stress responses',
@@ -166,8 +186,9 @@ export const PATHWAYS = [
 export type Pathway = (typeof PATHWAYS)[number]
 
 const PATHWAY_MEMBERS: Record<Exclude<Pathway, 'Other'>, string[]> = {
-  'Genetic targets': ['SOD1', 'FUS', 'TDP-43 (TARDBP)', 'C9orf72', 'ATXN2', 'STMN2', 'UNC13A', 'CHCHD10', 'SPTLC1', 'SMN2 splicing', 'Tau',
-    'LRRK2'],
+  'Genetic targets': ['SOD1', 'FUS', 'TDP-43 (TARDBP)', 'C9orf72', 'ATXN2', 'STMN2', 'UNC13A', 'CHCHD10', 'SPTLC1', 'SMN2 splicing',
+    'LRRK2', 'APOE'],
+  'Amyloid and tau': ['Amyloid-β', 'Tau', 'BACE1', 'γ-secretase', 'Glutaminyl cyclase', 'O-GlcNAcase (tau)'],
   'Dopamine system': ['Dopamine replacement', 'Dopamine D2 receptor', 'Dopamine D2/D3 receptors', 'Dopamine D1/D5 receptors', 'Dopamine D3 receptor',
     'Dopamine transporter', 'MAO-B', 'COMT', 'AADC (dopa decarboxylase)', 'VMAT2'],
   'Nerve excitability and glutamate': ['Voltage-gated sodium channels', 'Glutamate release', 'AMPA receptor', 'NMDA receptor',
@@ -180,13 +201,15 @@ const PATHWAY_MEMBERS: Record<Exclude<Pathway, 'Other'>, string[]> = {
     'Immune modulation', 'Immunosuppression', 'Neuroinflammation', 'Calcineurin', 'IMPDH', 'COX-2', 'TSPO (microglial activation)', 'PDE4B',
     'Phosphodiesterases (PDE3/4/5/10)', 'Glucocorticoid receptor', 'S1P receptors', 'TGF-β receptor I (ALK5)', 'Melanocortin receptors (ACTH)',
     'Albumin replacement (plasma exchange)', 'Stem-cell and regulatory T-cell mobilisation', 'PAR1 (activated protein C analogue)',
-    'TYK2/JAK1', 'Galectin-3', 'GM-CSF receptor', 'Leukotriene receptor (CysLT1)'],
+    'TYK2/JAK1', 'Galectin-3', 'GM-CSF receptor', 'Leukotriene receptor (CysLT1)', 'RAGE', 'Gingipains (P. gingivalis)', 'Senescent cells',
+    'Plasma fractions'],
   'Protein handling and stress responses': ['eIF2B', 'PPP1R15A (integrated stress response)', 'Heat shock response (HSP70)', 'HSP90 (epichaperome)',
     'Autophagy', 'mTOR', 'ER stress', 'Protein misfolding', 'XPO1', 'PIKFYVE', 'SORT1', 'GBA1 (glucocerebrosidase)', 'Histone deacetylases',
     'Histone acetylation', 'SRC/ABL kinases', 'MEK1/2', 'GSK-3β', 'miRNA biogenesis (Dicer)', 'Alpha-synuclein', 'Glucosylceramide synthase',
-    'Amyloid-β', 'GM1 ganglioside'],
+    'GM1 ganglioside', 'Filamin A', 'Sigma-2 receptor (TMEM97)', 'p38α MAPK'],
   'Mitochondria and energy metabolism': ['Mitochondrial and energy metabolism', 'NAD+ metabolism', 'Fatty-acid oxidation (3-KAT)', 'PPAR-α', 'PPARγ',
-    'PGK1', 'AMPK', 'Copper delivery (SOD1, mitochondria)', 'GLP-1 receptor', 'DPP-4 (GLP-1 breakdown)', 'SGLT2', 'HMG-CoA reductase (statins)'],
+    'PGK1', 'AMPK', 'Copper delivery (SOD1, mitochondria)', 'GLP-1 receptor', 'DPP-4 (GLP-1 breakdown)', 'SGLT2', 'HMG-CoA reductase (statins)',
+    'Insulin receptor', 'CETP'],
   'Oxidative stress': ['Oxidative stress', 'Lipid peroxidation', 'Nrf2', 'ALOX15 (15-lipoxygenase)', 'Iron chelation', 'Metal homeostasis', 'Urate'],
   'Axons, synapses and muscle': ['SARM1', 'MAP3K12 (DLK)', 'MAP4K4', 'RTN4 (Nogo-A)', 'MuSK', 'Fast skeletal muscle troponin', 'ROCK (Rho kinase)',
     'Tubulin', 'Microtubules', 'CAPN2', 'TRIM72', 'Synapse regeneration', 'SNAP-25 (acetylcholine release)', 'β2-adrenergic receptor'],
@@ -197,7 +220,7 @@ const PATHWAY_MEMBERS: Record<Exclude<Pathway, 'Other'>, string[]> = {
     'Dopamine and serotonin receptors', 'Serotonin receptors', 'Serotonin transporter', '5-HT2A receptor', '5-HT1A receptor', 'TAAR1', 'Monoamine reuptake',
     'Adenosine A2A receptor', 'Acetylcholinesterase', 'Nicotinic receptors', 'Noradrenaline precursor', 'Noradrenaline transporter',
     'α1-adrenergic receptor', 'α2-adrenergic receptor', 'β3-adrenergic receptor', 'Mineralocorticoid receptor', 'Histamine H3 receptor',
-    'Orexin receptors', 'Opioid receptors', 'GPR6', 'Chloride channels (gut)', 'Guanylate cyclase-C', 'NHE3 (gut sodium transport)', 'Osmotic laxative',
+    'Orexin receptors', 'Opioid receptors', 'GPR6', '5-HT6 receptor', 'Phosphodiesterase 9', 'Angiotensin II receptor', 'L-type calcium channels', 'Chloride channels (gut)', 'Guanylate cyclase-C', 'NHE3 (gut sodium transport)', 'Osmotic laxative',
     'Cannabinoid receptors', 'Melatonin receptors', 'Muscarinic receptors', 'Estrogen receptor', 'Androgen receptor', 'GnRH receptor',
     'SRD5A (5-alpha-reductase)', 'Retinoic acid receptors', 'Protein kinase C'],
 }
@@ -216,7 +239,7 @@ export const MECHANISMS = new Set([
   'Neuroinflammation', 'Microglial activation', 'Macrophage activation', 'Mast cells', 'Regulatory T cells', 'Albumin replacement (plasma exchange)',
   'Stem-cell and regulatory T-cell mobilisation', 'Stem-cell trophic and immune support', 'Cell replacement', 'Astrocyte support', 'Synapse regeneration',
   'Glutamate release', 'Gut microbiome', 'Blood-brain barrier', 'Dopamine replacement', 'Monoamine reuptake', 'Copper delivery (SOD1, mitochondria)',
-  'Vitamin B12 (methylation)', 'Akt pathway', 'Undisclosed', 'Osmotic laxative', 'GABA synthesis (GAD)',
+  'Vitamin B12 (methylation)', 'Akt pathway', 'Undisclosed', 'Osmotic laxative', 'GABA synthesis (GAD)', 'Senescent cells', 'Plasma fractions',
 ])
 
 /**

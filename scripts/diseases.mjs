@@ -81,6 +81,45 @@ export const DISEASES = {
     symptomaticProcedure: /deep brain stimulation|\bDBS\b|focused ultrasound|\bMRgFUS\b|\bFUS\b|thalamotomy|pallidotomy|subthalamotomy|transcranial magnetic|\brTMS\b|\bTMS\b|\btDCS\b|transcranial direct|transcranial alternating|spinal cord stimulation|vagus nerve stimulation|\bVNS\b|neuromodulation|stimulat/i,
     minStudies: 3000,
   },
+
+  ad: {
+    id: 'ad',
+    name: "Alzheimer's",
+    // Includes prevention trials in people with amyloid but no symptoms yet
+    // (A4, API, DIAN-TU), which test the same drugs as treatment trials.
+    progressionFocus: "Slowing or preventing Alzheimer's",
+    searches: [
+      { cond: 'Alzheimer Disease', names: /alzheimer/i },
+    ],
+    names: /alzheimer/i,
+    isrctnQuery: 'condition:"alzheimer"',
+    ctisTerms: ["alzheimer's disease", 'alzheimer disease'],
+    euctrQueries: ['alzheimer'],
+    euctrMaxPages: 80,
+    // Memory and thinking problems are the disease itself, so they aren't
+    // symptom words here: cognitive-symptom drugs (cholinesterase inhibitors,
+    // memantine) are recognised by drug class below. These are the behavioural
+    // and psychological symptoms of dementia, and formulation studies.
+    symptom: /agitation|aggress|psychos|hallucinat|delusion|apathy|depress|anxiety|sleep|insomnia|sundown|wandering|behaviou?ral (and psychological )?symptom|\bBPSD\b|neuropsychiatric|irritab|disinhibit|\bpain\b|incontinen|appetite|weight loss|constipat|delirium|seizure|epilep|symptomatic (treatment|therapy|relief|effect)|cognitive enhanc|adjunct|add-on|bioavailab|bioequivalen|formulation|transdermal|\bpatch\b|(extended|sustained|immediate|controlled)[- ]release/i,
+    support: new RegExp(`${SUPPORT_COMMON}|tai chi|qigong|yoga|\\bdanc|aerobic|resistance training|strength training|walking|virtual reality|exergam|massage|acupunct|\\bnurs|self[- ]management|education|coaching|smartphone|\\bapp\\b|wearable|art therap|cognitive training|brain training|cognitive rehabilitation|cognitive stimulation|reminiscence|cognitive[- ]behavio|\\bCBT\\b|counsel|training program|physical activity|fitness|lifestyle|multidomain|care home|long[- ]term care|residential|person[- ]cent|dementia care|care model|care management|support group|respite|befriend|robot|technology|social|carer|caregiv|family|anesthe|anaesthe|sedation|perioperative|postoperative`, 'i'),
+    inTitle: /alzheimer/i,
+    likeConditions: /alzheimer|\bAD\b|dementia|cognit|\bMCI\b|memory|amyloid|\btau\b|neurodegenerat|healthy|aging|ageing|elderly|older adult|agitation|apathy|psychos|depress|anxiety|sleep|insomnia|delirium|caregiv|down syndrome/i,
+    background: /^(donepezil|aricept|memantine|namenda|ebixa|rivastigmine|exelon|galantamine|razadyne|reminyl)\b/i,
+    // Cognitive-symptom drugs and the drugs used for behavioural symptoms.
+    symptomaticTargets: new Set([
+      'Acetylcholinesterase', 'NMDA receptor', 'Muscarinic receptors', 'Nicotinic receptors', 'Serotonin receptors', '5-HT6 receptor',
+      'Histamine H3 receptor', 'Dopamine and serotonin receptors', '5-HT2A receptor', '5-HT1A receptor', 'Serotonin transporter',
+      'Noradrenaline transporter', 'Monoamine reuptake', 'Dopamine transporter', 'Dopamine D2 receptor', 'Dopamine D2/D3 receptors',
+      'Orexin receptors', 'Melatonin receptors', 'Cannabinoid receptors', 'α1-adrenergic receptor', 'α2-adrenergic receptor', 'GABA-A receptor',
+      'Opioid receptors', 'Voltage-gated calcium channels (α2δ)', 'Glutamate release', 'TAAR1',
+    ]),
+    progressionCue: /progression|disease[- ]modif|delay|slow|prevent|preclinical|presymptomatic|asymptomatic|at[- ]risk|neuroprotect|amyloid|\btau\b|plaque|tangle/i,
+    nonDrugDefault: true,
+    research: /role of|mechanism|pathophysiolog|understanding|characteri[sz]|neural (basis|correlat)|brain activity|cortical|physiolog|biomarker|imaging|\bEEG\b|\bMEG\b|\bfMRI\b|\bPET\b|resonance|oscillat|connectivity|network|perception|learning|assessment of|evaluation of|measur/i,
+    // Brain stimulation aimed at memory and thinking.
+    symptomaticProcedure: /transcranial magnetic|\brTMS\b|\bTMS\b|\btDCS\b|transcranial direct|transcranial alternating|\btACS\b|deep brain stimulation|\bDBS\b|neuromodulation/i,
+    minStudies: 3000,
+  },
 }
 
 export function diseaseFrom(argv) {

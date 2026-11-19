@@ -31,6 +31,7 @@ function routeFromHash(): Route {
 const TITLES: Record<Disease['id'], string> = {
   als: 'ALS Clinical Trials Dashboard',
   pd: "Parkinson's Disease Clinical Trials Dashboard",
+  ad: "Alzheimer's Disease Clinical Trials Dashboard",
 }
 
 const NO_FEATURED = new Set<string>()

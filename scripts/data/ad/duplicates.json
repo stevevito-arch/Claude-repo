@@ -1,0 +1,4 @@
+{
+ "about": "Trials registered in another registry that are the same trial as a ClinicalTrials.gov record, checked by hand (sponsor, drug, design, countries and dates) because the other record doesn't cross-reference the NCT number and differs too much in wording, dates or country lists for the automatic matching in scripts/fetch-registry.mjs. Keyed by the other registry's number; the value is the NCT number it duplicates.",
+ "duplicates": {}
+}

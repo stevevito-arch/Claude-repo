@@ -36,6 +36,13 @@ const MODALITY_BADGE_COLOR: Record<string, string> = {
 // What a study is mainly for, set by scripts/fetch-registry.mjs. The catalog
 // opens on trials aimed at slowing the disease itself (the disease's
 // progressionFocus), listed first.
+// How the intro describes each disease's default focus.
+const FOCUS_INTRO: Record<string, string> = {
+  als: 'slowing ALS itself',
+  pd: "slowing or reversing Parkinson's itself (including cell and gene therapies that aim to restore dopamine neurons)",
+  ad: "slowing or preventing Alzheimer's itself (including prevention trials in people with amyloid but no symptoms yet)",
+}
+
 const OTHER_FOCUS_OPTIONS = [
   'Symptom management',
   'Supportive care',
@@ -288,7 +295,7 @@ export function RegistryCatalog({ featuredIds, onOpenFeatured }: RegistryCatalog
         trial registers (CTIS and the older EU Clinical Trials Register) — {snapshot.studies.length.toLocaleString()} in total
         {otherRegistries > 0 && <>, {otherRegistries.toLocaleString()} of them from outside ClinicalTrials.gov</>}, as of{' '}
         {new Date(snapshot.generatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}. It opens on
-        trials aimed at {disease.id === 'pd' ? "slowing or reversing Parkinson's itself (including cell and gene therapies that aim to restore dopamine neurons)" : 'slowing ALS itself'}; use Focus to see symptom, supportive-care, diagnostic and other studies. These
+        trials aimed at {FOCUS_INTRO[disease.id]}; use Focus to see symptom, supportive-care, diagnostic and other studies. These
         entries are the registries’ own records, not curated summaries. Coverage before about 2000 is thin, and trials registered
         only in other countries’ registries (Australia, China, Japan and others) are not included yet.
       </p>

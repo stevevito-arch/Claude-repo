@@ -4,7 +4,7 @@ import { createContext, useContext } from 'react'
 // public/data/<id>-registry.json, built by scripts/fetch-registry.mjs with the
 // settings in scripts/diseases.mjs.
 export interface Disease {
-  id: 'als' | 'pd'
+  id: 'als' | 'pd' | 'ad'
   /** Short name used in running text: "ALS trial", "Parkinson's trial". */
   short: string
   /** Name for headings and the first mention. */
@@ -32,6 +32,14 @@ export const DISEASES: Disease[] = [
     full: "Parkinson's disease",
     hash: 'parkinsons',
     progressionFocus: "Slowing or reversing Parkinson's",
+    hasFeatured: false,
+  },
+  {
+    id: 'ad',
+    short: "Alzheimer's",
+    full: "Alzheimer's disease",
+    hash: 'alzheimers',
+    progressionFocus: "Slowing or preventing Alzheimer's",
     hasFeatured: false,
   },
 ]

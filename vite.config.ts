@@ -30,9 +30,9 @@ export default defineConfig(({ command }) => ({
         ],
       },
       manifest: {
-        name: "ALS and Parkinson's Clinical Trials Dashboard",
+        name: "ALS, Parkinson's and Alzheimer's Clinical Trials Dashboard",
         short_name: 'Trials Dashboard',
-        description: "Every registered ALS and Parkinson's disease study: therapy target, modality, phase, outcome and development timeline.",
+        description: "Every registered ALS, Parkinson's and Alzheimer's disease study: therapy target, modality, phase, outcome and development timeline.",
         display: 'standalone',
         background_color: '#0d0d0d',
         theme_color: '#2a78d6',
