@@ -111,7 +111,7 @@ export const DISEASES = {
       'Histamine H3 receptor', 'Dopamine and serotonin receptors', '5-HT2A receptor', '5-HT1A receptor', 'Serotonin transporter',
       'Noradrenaline transporter', 'Monoamine reuptake', 'Dopamine transporter', 'Dopamine D2 receptor', 'Dopamine D2/D3 receptors',
       'Orexin receptors', 'Melatonin receptors', 'Cannabinoid receptors', 'α1-adrenergic receptor', 'α2-adrenergic receptor', 'GABA-A receptor',
-      'Opioid receptors', 'Voltage-gated calcium channels (α2δ)', 'Glutamate release', 'TAAR1',
+      'Opioid receptors', 'Voltage-gated calcium channels (α2δ)', 'TAAR1', 'Phosphodiesterase 9', 'AMPA receptor',
     ]),
     progressionCue: /progression|disease[- ]modif|delay|slow|prevent|preclinical|presymptomatic|asymptomatic|at[- ]risk|neuroprotect|amyloid|\btau\b|plaque|tangle/i,
     nonDrugDefault: true,
