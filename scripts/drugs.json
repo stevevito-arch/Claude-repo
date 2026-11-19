@@ -1,6 +1,1321 @@
 {
- "about": "Drug table used by scripts/fetch-registry.mjs. For each drug: the names and codes it is matched by (an intervention matches the first entry with a name it starts with, so specific products come before the generic ingredients they contain), other names, its target(s) and modality, and a source. Entries for company codes cite the public source that identifies the code. Entries for well-characterised drugs give a source where one was checked (e.g. ChEMBL); entries with source null state standard, widely documented pharmacology. Entries marked group: true cover a class of different products (e.g. various mesenchymal stem-cell preparations), so they are not treated as one drug when tracking whether a drug went on to a later phase. approvals notes, per disease (als, pd), a drug approved for that disease by a major regulator (and withdrawn, if it was), shown at the end of its development timeline. The table is shared by every disease's catalog. Drugs whose target could not be established are left out and show as 'Not yet classified'.",
+ "about": "Drug table used by scripts/fetch-registry.mjs. For each drug: the names and codes it is matched by (an intervention matches the first entry with a name it starts with, so specific products come before the generic ingredients they contain), other names, its target(s) and modality, and a source. Entries for company codes cite the public source that identifies the code. Entries for well-characterised drugs give a source where one was checked (e.g. ChEMBL); entries with source null state standard, widely documented pharmacology. Entries marked group: true cover a class of different products (e.g. various mesenchymal stem-cell preparations), so they are not treated as one drug when tracking whether a drug went on to a later phase. approvals notes, per disease (als, pd, ad), a drug approved for that disease by a major regulator (and withdrawn, if it was), shown at the end of its development timeline. The table is shared by every disease's catalog. Drugs whose target could not be established are left out and show as 'Not yet classified'.",
  "drugs": [
+  {
+   "match": [
+    "aducanumab",
+    "BIIB037",
+    "aduhelm"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://clinicaltrials.gov/study/NCT05469009",
+   "approvals": {
+    "ad": {
+     "text": "US accelerated approval for Alzheimer's disease 2021; discontinued by Biogen in 2024",
+     "withdrawn": true
+    }
+   }
+  },
+  {
+   "match": [
+    "donanemab",
+    "LY3002813",
+    "kisunla"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297245",
+   "approvals": {
+    "ad": {
+     "text": "Approved for early Alzheimer's disease (US 2024)"
+    }
+   }
+  },
+  {
+   "match": [
+    "gantenerumab",
+    "RO4909832",
+    "RG1450"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1743025"
+  },
+  {
+   "match": [
+    "solanezumab",
+    "LY2062430"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1743072"
+  },
+  {
+   "match": [
+    "crenezumab",
+    "MABT5102A",
+    "RG7412"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1743004"
+  },
+  {
+   "match": [
+    "bapineuzumab",
+    "AAB-001"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2108576"
+  },
+  {
+   "match": [
+    "ponezumab",
+    "PF-04360365"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1743058"
+  },
+  {
+   "match": [
+    "remternetug",
+    "LY3372993"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL5095484"
+  },
+  {
+   "match": [
+    "trontinemab",
+    "RO7126209"
+   ],
+   "names": [],
+   "what": "Anti-amyloid antibody with a brain-shuttle module",
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL5095377"
+  },
+  {
+   "match": [
+    "sabirnetug",
+    "ACU193"
+   ],
+   "names": [],
+   "what": "Antibody against soluble amyloid-β oligomers",
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://clinicaltrials.gov/study/NCT06511570"
+  },
+  {
+   "match": [
+    "GSK933776"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Antibody",
+   "source": "https://clinicaltrials.gov/study/NCT01424436"
+  },
+  {
+   "match": [
+    "semorinemab",
+    "RO7105705",
+    "MTAU9937A"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4298093"
+  },
+  {
+   "match": [
+    "gosuranemab",
+    "BIIB092"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3990042"
+  },
+  {
+   "match": [
+    "tilavonemab",
+    "ABBV-8E12"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297860"
+  },
+  {
+   "match": [
+    "zagotenemab",
+    "LY3303560"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4298021"
+  },
+  {
+   "match": [
+    "bepranemab",
+    "UCB0107"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4594612"
+  },
+  {
+   "match": [
+    "etalanetug",
+    "E2814"
+   ],
+   "names": [],
+   "what": "Antibody against the microtubule-binding region of tau",
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antibody",
+   "source": "https://clinicaltrials.gov/study/NCT06602258"
+  },
+  {
+   "match": [
+    "posdinemab",
+    "JNJ-63733657"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antibody",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650402"
+  },
+  {
+   "match": [
+    "BIIB080",
+    "diranersen"
+   ],
+   "names": [],
+   "what": "Antisense oligonucleotide that lowers tau production",
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://clinicaltrials.gov/study/NCT05399888"
+  },
+  {
+   "match": [
+    "NIO752"
+   ],
+   "names": [],
+   "what": "Lowers tau production",
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Antisense oligonucleotide",
+   "source": "https://clinicaltrials.gov/study/NCT06372821"
+  },
+  {
+   "match": [
+    "ceperognastat",
+    "LY3372689"
+   ],
+   "names": [],
+   "targets": [
+    "O-GlcNAcase (tau)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL5095251"
+  },
+  {
+   "match": [
+    "hydromethylthionine",
+    "TRx0237",
+    "LMTM",
+    "leuco-methylthioninium",
+    "TRx0014",
+    "TRx0037",
+    "methylthioninium chloride",
+    "rember"
+   ],
+   "names": [],
+   "what": "Tau aggregation inhibitor (methylene blue derivative)",
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL549963"
+  },
+  {
+   "match": [
+    "CAD106",
+    "amilomotide"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Vaccine",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2108328"
+  },
+  {
+   "match": [
+    "ACC-001",
+    "vanutide cridificar"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Vaccine",
+   "source": "https://clinicaltrials.gov/study/NCT01227564"
+  },
+  {
+   "match": [
+    "UB-311"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Vaccine",
+   "source": "https://clinicaltrials.gov/study/NCT03531710"
+  },
+  {
+   "match": [
+    "ABvac40"
+   ],
+   "names": [],
+   "what": "Vaccine against the C-terminal end of amyloid-β40",
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Vaccine",
+   "source": "https://clinicaltrials.gov/study/NCT03461276"
+  },
+  {
+   "match": [
+    "Lu AF20513"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Vaccine",
+   "source": "https://clinicaltrials.gov/study/NCT03819699"
+  },
+  {
+   "match": [
+    "ACI-24"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Vaccine",
+   "source": "https://clinicaltrials.gov/study/NCT05462106"
+  },
+  {
+   "match": [
+    "AADvac1"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Vaccine",
+   "source": "https://clinicaltrials.gov/study/NCT07167966"
+  },
+  {
+   "match": [
+    "ACI-35"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Vaccine",
+   "source": "https://clinicaltrials.gov/study/NCT04445831"
+  },
+  {
+   "match": [
+    "verubecestat",
+    "MK-8931"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3301601"
+  },
+  {
+   "match": [
+    "lanabecestat",
+    "AZD3293",
+    "LY3314814"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3989948"
+  },
+  {
+   "match": [
+    "atabecestat",
+    "JNJ-54861911"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3916243"
+  },
+  {
+   "match": [
+    "elenbecestat",
+    "E2609"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4204869"
+  },
+  {
+   "match": [
+    "umibecestat",
+    "CNP520"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT03131453"
+  },
+  {
+   "match": [
+    "LY2886721"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2396989"
+  },
+  {
+   "match": [
+    "LY3202626"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT03367403"
+  },
+  {
+   "match": [
+    "PF-06751979"
+   ],
+   "names": [],
+   "targets": [
+    "BACE1"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297807"
+  },
+  {
+   "match": [
+    "semagacestat",
+    "LY450139"
+   ],
+   "names": [],
+   "targets": [
+    "γ-secretase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL520733"
+  },
+  {
+   "match": [
+    "avagacestat",
+    "BMS-708163"
+   ],
+   "names": [],
+   "targets": [
+    "γ-secretase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1090771"
+  },
+  {
+   "match": [
+    "begacestat",
+    "GSI-953"
+   ],
+   "names": [],
+   "targets": [
+    "γ-secretase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL463981"
+  },
+  {
+   "match": [
+    "tarenflurbil",
+    "MPC-7869",
+    "flurizan"
+   ],
+   "names": [],
+   "targets": [
+    "γ-secretase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL190083"
+  },
+  {
+   "match": [
+    "itanapraced",
+    "CHF 5074",
+    "CHF5074"
+   ],
+   "names": [],
+   "targets": [
+    "γ-secretase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT01723670"
+  },
+  {
+   "match": [
+    "NGP 555",
+    "NGP555"
+   ],
+   "names": [],
+   "what": "γ-secretase modulator that lowers amyloid-β42",
+   "targets": [
+    "γ-secretase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT02537938"
+  },
+  {
+   "match": [
+    "valiltramiprosate",
+    "ALZ-801"
+   ],
+   "names": [],
+   "what": "Prodrug of tramiprosate; blocks amyloid-β oligomer formation",
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650301"
+  },
+  {
+   "match": [
+    "tramiprosate",
+    "alzhemed",
+    "3APS"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL149082"
+  },
+  {
+   "match": [
+    "scyllo-inositol",
+    "ELND005"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL468154"
+  },
+  {
+   "match": [
+    "contraloid"
+   ],
+   "names": [],
+   "what": "D-peptide designed to break up amyloid-β oligomers",
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Peptide",
+   "source": "https://clinicaltrials.gov/study/NCT06182085"
+  },
+  {
+   "match": [
+    "varoglutamstat",
+    "PQ912"
+   ],
+   "names": [],
+   "what": "Blocks formation of pyroglutamate amyloid-β",
+   "targets": [
+    "Glutaminyl cyclase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT03919162"
+  },
+  {
+   "match": [
+    "namzaric",
+    "memantine/donepezil",
+    "memantine and donepezil"
+   ],
+   "names": [],
+   "targets": [
+    "NMDA receptor",
+    "Acetylcholinesterase"
+   ],
+   "modality": "Small molecule",
+   "source": null,
+   "approvals": {
+    "ad": {
+     "text": "Approved for moderate-to-severe Alzheimer's disease (US 2014)"
+    }
+   }
+  },
+  {
+   "match": [
+    "CPC-201"
+   ],
+   "names": [],
+   "what": "Donepezil with solifenacin to block its gut side effects",
+   "targets": [
+    "Acetylcholinesterase",
+    "Muscarinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT02860065"
+  },
+  {
+   "match": [
+    "KarXT",
+    "KarX-EC",
+    "xanomeline/trospium",
+    "xanomeline and trospium",
+    "xanomeline-trospium",
+    "cobenfy",
+    "xanomeline"
+   ],
+   "names": [],
+   "what": "M1/M4 muscarinic agonist xanomeline, with trospium to block its effects outside the brain",
+   "targets": [
+    "Muscarinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL21536"
+  },
+  {
+   "match": [
+    "talsaclidine"
+   ],
+   "names": [],
+   "targets": [
+    "Muscarinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT02249351"
+  },
+  {
+   "match": [
+    "HTL0009936"
+   ],
+   "names": [],
+   "targets": [
+    "Muscarinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT02710188"
+  },
+  {
+   "match": [
+    "idalopirdine",
+    "Lu AE58054"
+   ],
+   "names": [],
+   "targets": [
+    "5-HT6 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3286580"
+  },
+  {
+   "match": [
+    "intepirdine",
+    "RVT-101",
+    "SB-742457"
+   ],
+   "names": [],
+   "targets": [
+    "5-HT6 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1083390"
+  },
+  {
+   "match": [
+    "masupirdine",
+    "SUVN-502"
+   ],
+   "names": [],
+   "targets": [
+    "5-HT6 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4117187"
+  },
+  {
+   "match": [
+    "SAM-531"
+   ],
+   "names": [],
+   "targets": [
+    "5-HT6 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2103880"
+  },
+  {
+   "match": [
+    "encenicline",
+    "EVP-6124"
+   ],
+   "names": [],
+   "targets": [
+    "Nicotinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2151572"
+  },
+  {
+   "match": [
+    "ABT-126"
+   ],
+   "names": [],
+   "targets": [
+    "Nicotinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3545231"
+  },
+  {
+   "match": [
+    "ispronicline",
+    "AZD3480"
+   ],
+   "names": [],
+   "targets": [
+    "Nicotinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL188462"
+  },
+  {
+   "match": [
+    "pozanicline",
+    "ABT-089"
+   ],
+   "names": [],
+   "targets": [
+    "Nicotinic receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL127071"
+  },
+  {
+   "match": [
+    "GSK239512"
+   ],
+   "names": [],
+   "targets": [
+    "Histamine H3 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT01009255"
+  },
+  {
+   "match": [
+    "ABT-288"
+   ],
+   "names": [],
+   "targets": [
+    "Histamine H3 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT01018875"
+  },
+  {
+   "match": [
+    "osoresnontrine",
+    "BI 409306",
+    "BI-409306"
+   ],
+   "names": [],
+   "targets": [
+    "Phosphodiesterase 9"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4206492"
+  },
+  {
+   "match": [
+    "PF-04447943"
+   ],
+   "names": [],
+   "targets": [
+    "Phosphodiesterase 9"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2179105"
+  },
+  {
+   "match": [
+    "zatolmilast",
+    "BPN14770"
+   ],
+   "names": [],
+   "targets": [
+    "Phosphodiesterases (PDE3/4/5/10)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT03817684"
+  },
+  {
+   "match": [
+    "mirodenafil",
+    "AR1001"
+   ],
+   "names": [],
+   "what": "PDE5 inhibitor",
+   "targets": [
+    "Phosphodiesterases (PDE3/4/5/10)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297518"
+  },
+  {
+   "match": [
+    "PRX-03140"
+   ],
+   "names": [],
+   "what": "5-HT4 receptor partial agonist",
+   "targets": [
+    "Serotonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3306918"
+  },
+  {
+   "match": [
+    "lecozotan"
+   ],
+   "names": [],
+   "targets": [
+    "5-HT1A receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL372205"
+  },
+  {
+   "match": [
+    "mibampator",
+    "LY451395"
+   ],
+   "names": [],
+   "targets": [
+    "AMPA receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1277001"
+  },
+  {
+   "match": [
+    "ORM-12741"
+   ],
+   "names": [],
+   "what": "α2C-adrenoceptor antagonist",
+   "targets": [
+    "α2-adrenergic receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT02471196"
+  },
+  {
+   "match": [
+    "GSK2647544"
+   ],
+   "names": [],
+   "targets": [
+    "Lp-PLA2"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT01978327"
+  },
+  {
+   "match": [
+    "brexpiprazole",
+    "OPC-34712",
+    "rexulti"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine and serotonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2105760",
+   "approvals": {
+    "ad": {
+     "text": "Approved for agitation associated with dementia due to Alzheimer's disease (US 2023)"
+    }
+   }
+  },
+  {
+   "match": [
+    "AXS-05",
+    "dextromethorphan-bupropion",
+    "dextromethorphan/bupropion",
+    "auvelity"
+   ],
+   "names": [],
+   "what": "Dextromethorphan with bupropion",
+   "targets": [
+    "NMDA receptor",
+    "SIGMAR1 (sigma-1 receptor)",
+    "Monoamine reuptake"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT06736509"
+  },
+  {
+   "match": [
+    "AVP-786",
+    "deudextromethorphan"
+   ],
+   "names": [],
+   "what": "Deuterated dextromethorphan with low-dose quinidine",
+   "targets": [
+    "NMDA receptor",
+    "SIGMAR1 (sigma-1 receptor)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT04464564"
+  },
+  {
+   "match": [
+    "lumateperone",
+    "ITI-007"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine and serotonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3306803"
+  },
+  {
+   "match": [
+    "piromelatine",
+    "Neu-P11"
+   ],
+   "names": [],
+   "targets": [
+    "Melatonin receptors",
+    "5-HT1A receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT05267535"
+  },
+  {
+   "match": [
+    "daridorexant"
+   ],
+   "names": [],
+   "targets": [
+    "Orexin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT07213349"
+  },
+  {
+   "match": [
+    "blarcamesine",
+    "ANAVEX2-73",
+    "ANAVEX 2-73"
+   ],
+   "names": [],
+   "targets": [
+    "SIGMAR1 (sigma-1 receptor)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297224"
+  },
+  {
+   "match": [
+    "simufilam",
+    "PTI-125"
+   ],
+   "names": [],
+   "targets": [
+    "Filamin A"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650230"
+  },
+  {
+   "match": [
+    "zervimesine",
+    "CT1812"
+   ],
+   "names": [],
+   "targets": [
+    "Sigma-2 receptor (TMEM97)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT05531656"
+  },
+  {
+   "match": [
+    "troriluzole",
+    "BHV-4157"
+   ],
+   "names": [],
+   "what": "Prodrug of riluzole",
+   "targets": [
+    "Glutamate release"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4297586"
+  },
+  {
+   "match": [
+    "AGB101"
+   ],
+   "names": [],
+   "what": "Low-dose extended-release levetiracetam",
+   "targets": [
+    "SV2A"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT05986721"
+  },
+  {
+   "match": [
+    "fosgonimeton",
+    "ATH-1017"
+   ],
+   "names": [],
+   "what": "Positive modulator of the HGF/MET system",
+   "targets": [
+    "HGF"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL5095419"
+  },
+  {
+   "match": [
+    "atuzaginstat",
+    "COR388"
+   ],
+   "names": [],
+   "targets": [
+    "Gingipains (P. gingivalis)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL5095230"
+  },
+  {
+   "match": [
+    "sodium oligomannate",
+    "GV-971",
+    "oligomannate",
+    "sodium oligo-mannurarate"
+   ],
+   "names": [],
+   "targets": [
+    "Gut microbiome"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4650397"
+  },
+  {
+   "match": [
+    "azeliragon",
+    "TTP488",
+    "PF-04494700"
+   ],
+   "names": [],
+   "targets": [
+    "RAGE"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3989929"
+  },
+  {
+   "match": [
+    "neflamapimod",
+    "VX-745"
+   ],
+   "names": [],
+   "targets": [
+    "p38α MAPK"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL119385"
+  },
+  {
+   "match": [
+    "pegipanermin",
+    "XPro1595"
+   ],
+   "names": [],
+   "what": "Blocks soluble TNF",
+   "targets": [
+    "TNF-α"
+   ],
+   "modality": "Protein",
+   "source": "https://clinicaltrials.gov/study/NCT05321498"
+  },
+  {
+   "match": [
+    "tricaprilin",
+    "AC-1202",
+    "axona",
+    "AC-OLE"
+   ],
+   "names": [],
+   "what": "Medium-chain triglyceride that raises ketone bodies",
+   "targets": [
+    "Mitochondrial and energy metabolism"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1406148"
+  },
+  {
+   "match": [
+    "T3D-959"
+   ],
+   "names": [],
+   "what": "PPAR-δ/γ agonist",
+   "targets": [
+    "PPARγ",
+    "PPAR-δ"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT06964230"
+  },
+  {
+   "match": [
+    "MIB-626"
+   ],
+   "names": [],
+   "targets": [
+    "NAD+ metabolism"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT07278492"
+  },
+  {
+   "match": [
+    "dasatinib + quercetin",
+    "dasatinib and quercetin",
+    "dasatinib plus quercetin"
+   ],
+   "names": [],
+   "targets": [
+    "Senescent cells"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "LX1001"
+   ],
+   "names": [],
+   "what": "Gene therapy for people with two copies of APOE4",
+   "targets": [
+    "APOE"
+   ],
+   "modality": "Gene therapy",
+   "source": "https://clinicaltrials.gov/study/NCT05400330"
+  },
+  {
+   "match": [
+    "lomecel-B"
+   ],
+   "names": [],
+   "targets": [
+    "Stem-cell trophic and immune support"
+   ],
+   "modality": "Cell therapy",
+   "source": "https://clinicaltrials.gov/study/NCT05233774"
+  },
+  {
+   "match": [
+    "AstroStem"
+   ],
+   "names": [],
+   "what": "Autologous adipose-derived mesenchymal stem cells",
+   "targets": [
+    "Stem-cell trophic and immune support"
+   ],
+   "modality": "Cell therapy",
+   "source": "https://clinicaltrials.gov/study/NCT04482413"
+  },
+  {
+   "match": [
+    "RB-ADSC"
+   ],
+   "names": [],
+   "what": "Autologous adipose-derived stem cells",
+   "targets": [
+    "Stem-cell trophic and immune support"
+   ],
+   "modality": "Cell therapy",
+   "source": "https://clinicaltrials.gov/study/NCT07205601"
+  },
+  {
+   "match": [
+    "REM0046127"
+   ],
+   "names": [],
+   "targets": [
+    "Orai calcium channels"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT05478031"
+  },
+  {
+   "match": [
+    "young fresh frozen plasma",
+    "young plasma",
+    "plasma from young"
+   ],
+   "names": [],
+   "targets": [
+    "Plasma fractions"
+   ],
+   "modality": "Protein",
+   "source": null,
+   "group": true
+  },
+  {
+   "match": [
+    "APN-1607",
+    "[18F]APN-1607",
+    "[18F]-APN-1607",
+    "PMPBB3",
+    "F-18 PMPBB3",
+    "GTP1",
+    "[18F]GTP1",
+    "RO6958948",
+    "[18F]RO6958948",
+    "THK-5351",
+    "[18F]THK-5351",
+    "18F-THK-5351"
+   ],
+   "names": [],
+   "targets": [
+    "Tau"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "NAV4694",
+    "[18F]NAV4694",
+    "flutafuranol",
+    "MK-3328",
+    "[18F]MK-3328",
+    "18F-florbetaben",
+    "C-11 PiB",
+    "amyvid",
+    "vizamyl",
+    "neuraceq"
+   ],
+   "names": [],
+   "targets": [
+    "Amyloid-β"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
+  {
+   "match": [
+    "fluorodeoxyglucose",
+    "FDG",
+    "F-18 FDG",
+    "18F-FDG",
+    "[18F]FDG",
+    "[18F]-FDG"
+   ],
+   "names": [],
+   "targets": [
+    "Glucose metabolism (FDG)"
+   ],
+   "modality": "Diagnostic",
+   "source": null
+  },
   {
    "match": [
     "ABBV-951",
@@ -930,6 +2245,9 @@
   },
   {
    "match": [
+    "[18F]T807",
+    "18F-T807",
+    "T807",
     "[18F]PI-2620",
     "PI-2620",
     "18F-PI-2620",
@@ -2153,14 +3471,21 @@
   },
   {
    "match": [
-    "memantine"
+    "memantine",
+    "namenda",
+    "ebixa"
    ],
    "names": [],
    "targets": [
     "NMDA receptor"
    ],
    "modality": "Small molecule",
-   "source": null
+   "source": null,
+   "approvals": {
+    "ad": {
+     "text": "Approved for moderate-to-severe Alzheimer's disease (EU 2002, US 2003)"
+    }
+   }
   },
   {
    "match": [
@@ -3693,7 +5018,9 @@
     "[18F]DPA-714",
     "[18F]PBR06",
     "[18F] GE-180",
-    "18F-DPA-714"
+    "18F-DPA-714",
+    "11C-ER176",
+    "[11C]ER176"
    ],
    "names": [],
    "targets": [
@@ -4388,14 +5715,20 @@
   {
    "match": [
     "donepezil",
-    "aricept"
+    "aricept",
+    "E2020"
    ],
    "names": [],
    "targets": [
     "Acetylcholinesterase"
    ],
    "modality": "Small molecule",
-   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL502"
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL502",
+   "approvals": {
+    "ad": {
+     "text": "Approved for Alzheimer's disease (US 1996)"
+    }
+   }
   },
   {
    "match": [
@@ -4411,19 +5744,29 @@
    "approvals": {
     "pd": {
      "text": "Approved for dementia in Parkinson's disease (US and EU 2006)"
+    },
+    "ad": {
+     "text": "Approved for Alzheimer's disease (US 2000)"
     }
    }
   },
   {
    "match": [
-    "galantamine"
+    "galantamine",
+    "razadyne",
+    "reminyl"
    ],
    "names": [],
    "targets": [
     "Acetylcholinesterase"
    ],
    "modality": "Small molecule",
-   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL659"
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL659",
+   "approvals": {
+    "ad": {
+     "text": "Approved for Alzheimer's disease (US 2001)"
+    }
+   }
   },
   {
    "match": [
@@ -4664,7 +6007,12 @@
     "Orexin receptors"
    ],
    "modality": "Small molecule",
-   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1083659"
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1083659",
+   "approvals": {
+    "ad": {
+     "text": "Approved in the US for insomnia, including in people with Alzheimer's disease (2020)"
+    }
+   }
   },
   {
    "match": [
@@ -5188,14 +6536,21 @@
   },
   {
    "match": [
-    "lecanemab"
+    "lecanemab",
+    "BAN2401",
+    "leqembi"
    ],
    "names": [],
    "targets": [
     "Amyloid-β"
    ],
    "modality": "Antibody",
-   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3833321"
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL3833321",
+   "approvals": {
+    "ad": {
+     "text": "Approved for early Alzheimer's disease (US 2023)"
+    }
+   }
   },
   {
    "match": [
@@ -5374,6 +6729,434 @@
    ],
    "modality": "Small molecule",
    "source": null
+  },
+  {
+   "match": [
+    "tacrine",
+    "cognex"
+   ],
+   "names": [],
+   "targets": [
+    "Acetylcholinesterase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL95",
+   "approvals": {
+    "ad": {
+     "text": "Approved for Alzheimer's disease (US 1993); withdrawn in 2013 over liver toxicity",
+     "withdrawn": true
+    }
+   }
+  },
+  {
+   "match": [
+    "huperzine A",
+    "huperzine"
+   ],
+   "names": [],
+   "targets": [
+    "Acetylcholinesterase"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL395280"
+  },
+  {
+   "match": [
+    "ladostigil"
+   ],
+   "names": [],
+   "targets": [
+    "Acetylcholinesterase",
+    "MAO-B"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL255231"
+  },
+  {
+   "match": [
+    "latrepirdine",
+    "dimebon",
+    "PF-01913539"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial and energy metabolism"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL589390"
+  },
+  {
+   "match": [
+    "risperidone"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine and serotonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL85"
+  },
+  {
+   "match": [
+    "aripiprazole"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine and serotonin receptors"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1112"
+  },
+  {
+   "match": [
+    "haloperidol"
+   ],
+   "names": [],
+   "targets": [
+    "Dopamine D2 receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL54"
+  },
+  {
+   "match": [
+    "prazosin"
+   ],
+   "names": [],
+   "targets": [
+    "α1-adrenergic receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL2"
+  },
+  {
+   "match": [
+    "bupropion"
+   ],
+   "names": [],
+   "targets": [
+    "Monoamine reuptake"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL894"
+  },
+  {
+   "match": [
+    "rosiglitazone",
+    "avandia"
+   ],
+   "names": [],
+   "targets": [
+    "PPARγ"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL121"
+  },
+  {
+   "match": [
+    "insulin",
+    "intranasal insulin",
+    "humulin",
+    "novolin",
+    "insulin glulisine",
+    "insulin detemir",
+    "regular insulin"
+   ],
+   "names": [],
+   "targets": [
+    "Insulin receptor"
+   ],
+   "modality": "Protein",
+   "source": null
+  },
+  {
+   "match": [
+    "nicotinamide riboside"
+   ],
+   "names": [],
+   "targets": [
+    "NAD+ metabolism"
+   ],
+   "modality": "Supplement or diet",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL438497"
+  },
+  {
+   "match": [
+    "nicotinamide",
+    "niacinamide"
+   ],
+   "names": [],
+   "targets": [
+    "NAD+ metabolism"
+   ],
+   "modality": "Supplement or diet",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1140"
+  },
+  {
+   "match": [
+    "benfotiamine"
+   ],
+   "names": [],
+   "targets": [
+    "Mitochondrial and energy metabolism"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL4303665"
+  },
+  {
+   "match": [
+    "dasatinib"
+   ],
+   "names": [],
+   "targets": [
+    "SRC/ABL kinases"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1421"
+  },
+  {
+   "match": [
+    "quercetin"
+   ],
+   "names": [],
+   "targets": [
+    "Senescent cells"
+   ],
+   "modality": "Supplement or diet",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL50"
+  },
+  {
+   "match": [
+    "lenalidomide"
+   ],
+   "names": [],
+   "targets": [
+    "Immune modulation"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL848"
+  },
+  {
+   "match": [
+    "bryostatin",
+    "bryostatin 1"
+   ],
+   "names": [],
+   "targets": [
+    "Protein kinase C"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT04538066"
+  },
+  {
+   "match": [
+    "etanercept"
+   ],
+   "names": [],
+   "targets": [
+    "TNF-α"
+   ],
+   "modality": "Protein",
+   "source": "https://clinicaltrials.gov/study/NCT06585384"
+  },
+  {
+   "match": [
+    "nilvadipine"
+   ],
+   "names": [],
+   "targets": [
+    "L-type calcium channels"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL517427"
+  },
+  {
+   "match": [
+    "telmisartan"
+   ],
+   "names": [],
+   "targets": [
+    "Angiotensin II receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT02471833"
+  },
+  {
+   "match": [
+    "candesartan"
+   ],
+   "names": [],
+   "targets": [
+    "Angiotensin II receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT07135245"
+  },
+  {
+   "match": [
+    "losartan"
+   ],
+   "names": [],
+   "targets": [
+    "Angiotensin II receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL191"
+  },
+  {
+   "match": [
+    "valsartan"
+   ],
+   "names": [],
+   "targets": [
+    "Angiotensin II receptor"
+   ],
+   "modality": "Small molecule",
+   "source": null
+  },
+  {
+   "match": [
+    "atorvastatin"
+   ],
+   "names": [],
+   "targets": [
+    "HMG-CoA reductase (statins)"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL1487"
+  },
+  {
+   "match": [
+    "ibuprofen"
+   ],
+   "names": [],
+   "targets": [
+    "COX-1/COX-2"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL521"
+  },
+  {
+   "match": [
+    "naproxen"
+   ],
+   "names": [],
+   "targets": [
+    "COX-1/COX-2"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL154"
+  },
+  {
+   "match": [
+    "rofecoxib"
+   ],
+   "names": [],
+   "targets": [
+    "COX-2"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL122"
+  },
+  {
+   "match": [
+    "estradiol",
+    "estrogen",
+    "conjugated estrogens",
+    "premarin"
+   ],
+   "names": [],
+   "targets": [
+    "Estrogen receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL135"
+  },
+  {
+   "match": [
+    "raloxifene"
+   ],
+   "names": [],
+   "targets": [
+    "Estrogen receptor"
+   ],
+   "modality": "Small molecule",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL81"
+  },
+  {
+   "match": [
+    "curcumin"
+   ],
+   "names": [],
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Supplement or diet",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL140"
+  },
+  {
+   "match": [
+    "docosahexaenoic acid",
+    "DHA",
+    "omega-3",
+    "omega 3",
+    "fish oil"
+   ],
+   "names": [],
+   "targets": [
+    "Omega-3 fatty acids"
+   ],
+   "modality": "Supplement or diet",
+   "source": "https://www.ebi.ac.uk/chembl/explore/compound/CHEMBL367149"
+  },
+  {
+   "match": [
+    "vitamin D",
+    "cholecalciferol"
+   ],
+   "names": [],
+   "targets": [
+    "Vitamin D receptor"
+   ],
+   "modality": "Supplement or diet",
+   "source": "https://clinicaltrials.gov/study/NCT04939792"
+  },
+  {
+   "match": [
+    "ginkgo",
+    "EGb 761",
+    "EGb761"
+   ],
+   "names": [],
+   "targets": [
+    "Oxidative stress"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "souvenaid",
+    "fortasyn"
+   ],
+   "names": [],
+   "what": "Nutrient combination for synapse formation",
+   "targets": [
+    "Synapse regeneration"
+   ],
+   "modality": "Supplement or diet",
+   "source": null
+  },
+  {
+   "match": [
+    "obicetrapib"
+   ],
+   "names": [],
+   "targets": [
+    "CETP"
+   ],
+   "modality": "Small molecule",
+   "source": "https://clinicaltrials.gov/study/NCT07794670"
   }
  ]
 }

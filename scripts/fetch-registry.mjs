@@ -77,8 +77,9 @@ function startsWithName(name, term) {
   // Same code written with different separators, e.g. "ISIS-333611".
   return norm(name) === norm(term)
 }
-// "Cohort 1: Nilotinib", "Arm A - Drug X": the arm label isn't part of the name.
-const ARM_PREFIX = /^(cohort|arm|group|part|stage|period)\s*[a-z0-9]{1,3}\s*[:\-–]\s*/i
+// "Cohort 1: Nilotinib", "Arm A - Drug X", "High dose ANAVEX2-73": the arm
+// label or dose level isn't part of the name.
+const ARM_PREFIX = /^((cohort|arm|group|part|stage|period)\s*[a-z0-9]{1,3}\s*[:\-–]\s*|(high|mid|middle|medium|low|standard)[- ]dose\s+(of\s+)?)/i
 function entryFor(intervention) {
   for (const raw of [intervention.name, ...(intervention.otherNames ?? [])]) {
     const name = raw.replace(ARM_PREFIX, '')
